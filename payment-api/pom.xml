@@ -21,11 +21,6 @@
             <groupId>live.lingting</groupId>
             <artifactId>payment-biz</artifactId>
         </dependency>
-        <dependency>
-            <groupId>live.lingting</groupId>
-            <artifactId>payment-sdk</artifactId>
-            <version>${sdk-version}</version>
-        </dependency>
         <!--监控 server-->
         <dependency>
             <groupId>de.codecentric</groupId>
