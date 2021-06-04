@@ -185,7 +185,6 @@
                             <artifactId>spring-boot-configuration-processor</artifactId>
                             <version>${spring-boot.version}</version>
                         </path>
-                        >
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
