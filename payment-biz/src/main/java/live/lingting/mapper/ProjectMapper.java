@@ -16,7 +16,7 @@ public interface ProjectMapper extends ExtendMapper<Project> {
 	default Wrapper<Project> getWrapper(Project project) {
 		return WrappersX.<Project>lambdaQueryX()
 				// 名称
-				.eqIfPresent(Project::getName, project.getName())
+				.likeIfPresent(Project::getName, project.getName())
 				// key
 				.eqIfPresent(Project::getApiKey, project.getApiKey())
 				// 禁用
