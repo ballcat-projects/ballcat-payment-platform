@@ -16,6 +16,11 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
     <dependencies>
+        <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <!--webmvc-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -45,10 +50,10 @@
             <groupId>com.hccake</groupId>
             <artifactId>ballcat-admin-core</artifactId>
             <exclusions>
-                <exclusion>
-                    <groupId>com.hccake</groupId>
-                    <artifactId>ballcat-notify-controller</artifactId>
-                </exclusion>
+<!--                <exclusion>-->
+<!--                    <groupId>com.hccake</groupId>-->
+<!--                    <artifactId>ballcat-notify-controller</artifactId>-->
+<!--                </exclusion>-->
             </exclusions>
         </dependency>
         <!-- web socket -->

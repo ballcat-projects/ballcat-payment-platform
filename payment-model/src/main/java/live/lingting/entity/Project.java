@@ -8,12 +8,16 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-/**项目
+/**
+ * 项目
+ *
  * @author lingting 2021/6/4 0:42
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 @TableName("project")
 public class Project {
 
