@@ -16,14 +16,14 @@ DROP TABLE IF EXISTS `project_history`;
 CREATE TABLE IF NOT EXISTS `project_history`
 (
     `id`           int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `use_id`       int(11)             NOT NULL COMMENT '操作人',
+    `user_id`       int(11)             NOT NULL COMMENT '操作人',
     `project_id`   int(11)             NOT NULL COMMENT '项目ID',
     `name`         varchar(50)         NOT NULL COMMENT '项目名',
     `disabled`     tinyint(1) DEFAULT 1 COMMENT '是否禁用',
     `api_key`      char(16)   DEFAULT '',
     `api_security` char(32)   DEFAULT '',
     `create_time`  datetime(4),
-    KEY `idx_user_project` (`use_id`, `project_id`)
+    KEY `idx_user_project` (`user_id`, `project_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='项目修改记录';
