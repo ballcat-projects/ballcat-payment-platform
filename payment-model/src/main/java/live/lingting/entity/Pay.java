@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import live.lingting.enums.NotifyStatus;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.Mode;
@@ -89,6 +90,7 @@ public class Pay {
 	/**
 	 * 描述
 	 */
+	@TableField("`desc`")
 	private String desc;
 
 	/**
@@ -96,6 +98,12 @@ public class Pay {
 	 */
 	private String notifyUrl;
 
+	/**
+	 * 通知状态, 当某个回调成功时: SUCCESS, 所有回调失败时: FAIL, 还有剩余回调次数时: WAIT
+	 */
+	private NotifyStatus notifyStatus;
+
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
+
 }

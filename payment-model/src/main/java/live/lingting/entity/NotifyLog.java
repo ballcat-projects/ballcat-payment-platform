@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import live.lingting.enums.NotifyStatus;
 
 /**
@@ -15,6 +16,7 @@ import live.lingting.enums.NotifyStatus;
 @Getter
 @Setter
 @TableName("notify_log")
+@Accessors(chain = true)
 public class NotifyLog {
 
 	@TableId
