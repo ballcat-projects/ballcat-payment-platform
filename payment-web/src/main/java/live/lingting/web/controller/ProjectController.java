@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import live.lingting.Page;
 import live.lingting.entity.Project;
+import live.lingting.entity.ProjectHistory;
+import live.lingting.service.ProjectHistoryService;
 import live.lingting.service.ProjectService;
 
 /**
@@ -25,6 +27,8 @@ import live.lingting.service.ProjectService;
 public class ProjectController {
 
 	private final ProjectService service;
+
+	private final ProjectHistoryService historyService;
 
 	@GetMapping
 	@PreAuthorize("@per.hasPermission('project:read')")
@@ -51,6 +55,12 @@ public class ProjectController {
 	public R<?> disabled(@PathVariable Integer id, @PathVariable Boolean disabled) {
 		service.disabled(id, disabled);
 		return R.ok();
+	}
+
+	@GetMapping("history/{id}")
+	@PreAuthorize("@per.hasPermission('project:read')")
+	public R<PageResult<ProjectHistory>> history(Page<ProjectHistory> page, @PathVariable Integer id) {
+		return R.ok(historyService.listByProject(page, id));
 	}
 
 }
