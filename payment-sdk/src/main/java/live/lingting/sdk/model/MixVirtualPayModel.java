@@ -2,8 +2,11 @@ package live.lingting.sdk.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.SdkContract;
+import live.lingting.sdk.exception.MixException;
+import live.lingting.sdk.exception.MixRequestParamsValidException;
 
 /**
  * 虚拟货币 - 预下单
@@ -19,5 +22,29 @@ public class MixVirtualPayModel extends MixModel {
 	private SdkContract contract;
 
 	private Chain chain;
+
+	@Override
+	public void valid() throws MixException {
+		validNotifyUrl();
+		String field;
+
+		if (!StringUtils.hasText(getProjectTradeNo())) {
+			field = "项目交易号";
+		}
+		else if (getContract() == null) {
+			field = "合约";
+		}
+		else if (getChain() == null) {
+			field = "链";
+		}
+		else {
+			field = null;
+		}
+
+		if (StringUtils.hasText(field)) {
+			throw new MixRequestParamsValidException(field + "不能为空");
+		}
+
+	}
 
 }

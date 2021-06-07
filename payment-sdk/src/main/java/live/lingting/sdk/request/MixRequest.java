@@ -34,18 +34,6 @@ public interface MixRequest<M extends MixModel, R extends MixResponse<?>> {
 	Map<String, String> getParams() throws MixException;
 
 	/**
-	 * <p>
-	 * 校验请求参数是否有效
-	 * </p>
-	 * <p>
-	 * 仅在 getModel() 返回值不为 null 时执行
-	 * </p>
-	 * @author lingting 2021-06-07 19:27
-	 * @exception MixException 校验失败抛出,参数有效性异常
-	 */
-	void valid() throws MixException;
-
-	/**
 	 * 获取http请求配置
 	 * @return live.lingting.sdk.domain.HttpProperties
 	 * @author lingting 2021-06-07 20:43
