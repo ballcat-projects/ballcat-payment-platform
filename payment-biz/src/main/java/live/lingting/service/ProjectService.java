@@ -40,5 +40,12 @@ public interface ProjectService extends ExtendService<Project> {
 	 * @author lingting 2021-06-04 17:26
 	 */
 	void disabled(Integer id, Boolean disabled);
+/**
+ * 根据apiKey 获取项目信息
+  * @param key	key
+ * @return live.lingting.entity.Project
+ * @author lingting 2021-06-07 16:39
+ */
+	Project getByApiKey(String key);
 
 }

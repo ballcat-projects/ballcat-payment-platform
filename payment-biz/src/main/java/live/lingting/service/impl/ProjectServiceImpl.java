@@ -53,6 +53,11 @@ public class ProjectServiceImpl extends ExtendServiceImpl<ProjectMapper, Project
 		update(history, project.setDisabled(disabled));
 	}
 
+	@Override
+	public Project getByApiKey(String key) {
+		return baseMapper.selectOne(baseMapper.getWrapper(new Project().setApiKey(key)));
+	}
+
 	private void update(ProjectHistory history, Project project) {
 		updateById(project);
 		historyService.save(history);
