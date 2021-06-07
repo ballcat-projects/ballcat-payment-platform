@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS `payment` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE IF NOT EXISTS `project`
 (
@@ -12,11 +13,12 @@ CREATE TABLE IF NOT EXISTS `project`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='项目';
+
 DROP TABLE IF EXISTS `project_history`;
 CREATE TABLE IF NOT EXISTS `project_history`
 (
     `id`           int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `user_id`       int(11)             NOT NULL COMMENT '操作人',
+    `user_id`      int(11)             NOT NULL COMMENT '操作人',
     `project_id`   int(11)             NOT NULL COMMENT '项目ID',
     `name`         varchar(50)         NOT NULL COMMENT '项目名',
     `disabled`     tinyint(1) DEFAULT 1 COMMENT '是否禁用',
@@ -27,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `project_history`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='项目修改记录';
+
 DROP TABLE IF EXISTS `pay`;
 CREATE TABLE IF NOT EXISTS `pay`
 (
@@ -44,15 +47,18 @@ CREATE TABLE IF NOT EXISTS `pay`
     `mode`                varchar(10)             DEFAULT '' COMMENT '支付模式',
     `desc`                varchar(255)            DEFAULT '' COMMENT '描述',
     `notify_url`          varchar(200) NOT NULL COMMENT '通知地址',
+    `notify_status`       varchar(10)             DEFAULT 'WAIT' COMMENT '通知状态',
     `create_time`         datetime(4),
     KEY `idx_project` (`project_id`) USING BTREE,
     KEY `idx_project_trade` (`project_trade_no`) USING BTREE,
     KEY `idx_third_trade` (`third_part_trade_no`) USING BTREE,
     KEY `idx_status` (`status`) USING BTREE,
-    KEY `idx_currency` (`currency`) USING BTREE
+    KEY `idx_currency` (`currency`) USING BTREE,
+    KEY `idx_notify_status` (`notify_status`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='支付信息';
+
 DROP TABLE IF EXISTS `notify_log`;
 CREATE TABLE IF NOT EXISTS `notify_log`
 (

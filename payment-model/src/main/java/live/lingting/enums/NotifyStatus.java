@@ -14,6 +14,10 @@ public enum NotifyStatus {
 	 */
 	WAIT,
 	/**
+	 * 通知中
+	 */
+	ING,
+	/**
 	 * SUCCESS
 	 */
 	SUCCESS,
