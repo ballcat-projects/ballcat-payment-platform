@@ -24,6 +24,14 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hccake</groupId>
+            <artifactId>ballcat-common-util</artifactId>
+        </dependency>
         <!-- bean 转换工具类 -->
         <dependency>
             <groupId>org.mapstruct</groupId>
