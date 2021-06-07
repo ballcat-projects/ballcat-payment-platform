@@ -9,6 +9,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum NotifyStatus {
+
 	/**
 	 * WAIT
 	 */
@@ -27,4 +28,5 @@ public enum NotifyStatus {
 	FAIL,
 
 	;
+
 }

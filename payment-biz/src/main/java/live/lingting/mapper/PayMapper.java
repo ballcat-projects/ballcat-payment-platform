@@ -15,7 +15,7 @@ public interface PayMapper extends ExtendMapper<Pay> {
 
 	/**
 	 * 组装sql
-	  * @param pay 条件
+	 * @param pay 条件
 	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.Pay>
 	 * @author lingting 2021-06-07 14:08
 	 */

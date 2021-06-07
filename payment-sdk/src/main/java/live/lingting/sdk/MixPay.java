@@ -50,22 +50,6 @@ public class MixPay {
 		this.client = client;
 	}
 
-	public MixVirtualPayResponse virtualPay(String projectTradeNo, SdkContract contract, Chain chain)
-			throws MixException {
-		MixVirtualPayModel model = new MixVirtualPayModel();
-		model.setChain(chain);
-		model.setContract(contract);
-		model.setProjectTradeNo(projectTradeNo);
-		model.setNotifyUrl(notifyUrl);
-		return virtualPay(model);
-	}
-
-	public MixVirtualPayResponse virtualPay(MixVirtualPayModel model) throws MixException {
-		MixVirtualPayRequest request = new MixVirtualPayRequest();
-		request.setModel(model);
-		return client.execute(request);
-	}
-
 	/**
 	 * 签名
 	 * @param security security
@@ -124,6 +108,22 @@ public class MixPay {
 
 		// 参数中的签名与生成的签名一致, 则成功
 		return params.get(FIELD_SIGN).equals(sign(security, params));
+	}
+
+	public MixVirtualPayResponse virtualPay(String projectTradeNo, SdkContract contract, Chain chain)
+			throws MixException {
+		MixVirtualPayModel model = new MixVirtualPayModel();
+		model.setChain(chain);
+		model.setContract(contract);
+		model.setProjectTradeNo(projectTradeNo);
+		model.setNotifyUrl(notifyUrl);
+		return virtualPay(model);
+	}
+
+	public MixVirtualPayResponse virtualPay(MixVirtualPayModel model) throws MixException {
+		MixVirtualPayRequest request = new MixVirtualPayRequest();
+		request.setModel(model);
+		return client.execute(request);
 	}
 
 }
