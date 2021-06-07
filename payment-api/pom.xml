@@ -21,6 +21,26 @@
             <groupId>live.lingting</groupId>
             <artifactId>payment-biz</artifactId>
         </dependency>
+        <!-- common -->
+        <dependency>
+            <groupId>com.hccake</groupId>
+            <artifactId>ballcat-common-conf</artifactId>
+        </dependency>
+        <!-- log -->
+        <dependency>
+            <groupId>com.hccake</groupId>
+            <artifactId>ballcat-spring-boot-starter-log</artifactId>
+        </dependency>
+        <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!--mybatis plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
         <!--监控 server-->
         <dependency>
             <groupId>de.codecentric</groupId>

@@ -79,3 +79,19 @@ CREATE TABLE IF NOT EXISTS `notify_log`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='通知日志';
+
+DROP TABLE IF EXISTS `virtual_address`;
+CREATE TABLE IF NOT EXISTS `virtual_address`
+(
+    `id`          int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `chain`       varchar(10)  DEFAULT '' COMMENT '链',
+    `address`     varchar(120) DEFAULT '' COMMENT '地址',
+    `disabled`    tinyint(1)   DEFAULT 1 COMMENT '是否禁用',
+    `using`       tinyint(1)   DEFAULT 1 COMMENT '是否使用中',
+    `create_time` datetime(4)         NOT NULL,
+    KEY `idx_chain` (`chain`) USING BTREE,
+    UNIQUE KEY `uk_address` (`address`) USING BTREE,
+    KEY `idx_disabled_using` (`disabled`, `using`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE utf8mb4_general_ci COMMENT ='通知日志';
