@@ -6,6 +6,7 @@ import lombok.Setter;
 
 /**
  * 请求参数基础数据
+ *
  * @author lingting 2021/6/7 19:24
  */
 @Getter

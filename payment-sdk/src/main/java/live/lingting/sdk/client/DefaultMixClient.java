@@ -34,16 +34,16 @@ public class DefaultMixClient implements MixClient {
 
 	private static final HostnameVerifier VERIFIER;
 
+	static {
+		// 不允许URL的主机名和服务器的标识主机名不匹配的情况
+		VERIFIER = (hostname, session) -> false;
+	}
+
 	private final String serverUrl;
 
 	private final String apiKey;
 
 	private final String apiSecurity;
-
-	static {
-		// 不允许URL的主机名和服务器的标识主机名不匹配的情况
-		VERIFIER = (hostname, session) -> false;
-	}
 
 	@Override
 	public <M extends MixModel, R extends MixResponse<?>> R execute(MixRequest<M, R> request) throws MixException {

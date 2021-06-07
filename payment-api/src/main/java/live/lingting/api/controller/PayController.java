@@ -15,5 +15,4 @@ public class PayController {
 
 	private final ProjectService service;
 
-
 }

@@ -10,21 +10,24 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ApiResponseCode implements ResultCode {
+
 	/**
 	 * 重复请求!
 	 */
-	REPEAT_REQUEST(20000,"重复请求!"),
+	REPEAT_REQUEST(20000, "重复请求!"),
 	/**
 	 * 签名异常!
 	 */
-	SIGN_ERROR(20001,"签名异常!"),
+	SIGN_ERROR(20001, "签名异常!"),
 	/**
 	 * 禁止访问!
 	 */
-	DISABLED(20002,"禁止访问!"),
+	DISABLED(20002, "禁止访问!"),
 
 	;
 
 	private final Integer code;
+
 	private final String message;
+
 }

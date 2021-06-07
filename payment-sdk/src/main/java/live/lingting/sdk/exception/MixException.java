@@ -3,7 +3,7 @@ package live.lingting.sdk.exception;
 /**
  * @author lingting 2021/6/7 20:10
  */
-public class MixException extends Exception{
+public class MixException extends Exception {
 
 	public MixException() {
 	}
