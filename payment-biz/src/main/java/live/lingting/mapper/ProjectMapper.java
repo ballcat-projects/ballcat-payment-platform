@@ -13,6 +13,12 @@ import live.lingting.entity.Project;
  */
 public interface ProjectMapper extends ExtendMapper<Project> {
 
+	/**
+	 * 组装sql
+	 * @param project 条件
+	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.Project>
+	 * @author lingting 2021-06-07 14:08
+	 */
 	default Wrapper<Project> getWrapper(Project project) {
 		return WrappersX.<Project>lambdaQueryX()
 				// 名称
