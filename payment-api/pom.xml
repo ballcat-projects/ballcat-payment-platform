@@ -21,6 +21,14 @@
             <groupId>live.lingting</groupId>
             <artifactId>payment-biz</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.hccake</groupId>
+            <artifactId>ballcat-spring-boot-starter-datascope</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.hccake</groupId>-->
+<!--            <artifactId>ballcat-oauth-controller</artifactId>-->
+<!--        </dependency>-->
         <!-- common -->
         <dependency>
             <groupId>com.hccake</groupId>

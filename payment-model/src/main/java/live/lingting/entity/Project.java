@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -19,7 +20,9 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 @TableName("project")
-public class Project {
+public class Project implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@TableId
 	private Integer id;

@@ -34,6 +34,7 @@ public class VirtualAddress {
 	/**
 	 * 是否使用中
 	 */
+	@TableField("`using`")
 	private Boolean using;
 
 	@TableField(fill = FieldFill.INSERT)
