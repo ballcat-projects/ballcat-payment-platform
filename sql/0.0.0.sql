@@ -94,4 +94,4 @@ CREATE TABLE IF NOT EXISTS `virtual_address`
     KEY `idx_disabled_using` (`disabled`, `using`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
-  COLLATE utf8mb4_general_ci COMMENT ='通知日志';
+  COLLATE utf8mb4_general_ci COMMENT ='虚拟货币地址';

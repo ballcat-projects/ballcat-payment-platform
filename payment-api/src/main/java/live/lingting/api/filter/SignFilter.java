@@ -2,9 +2,12 @@ package live.lingting.api.filter;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
+import com.hccake.ballcat.common.core.request.wrapper.RepeatBodyRequestWrapper;
 import com.hccake.ballcat.common.util.JsonUtils;
 import com.hccake.ballcat.common.util.json.TypeReference;
 import java.io.IOException;
+import java.util.Base64;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.token.store.redis.JdkSerializationStrategy;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStoreSerializationStrategy;
 import org.springframework.web.filter.OncePerRequestFilter;
 import live.lingting.Redis;
 import live.lingting.api.enums.ApiResponseCode;
@@ -43,11 +52,20 @@ public class SignFilter extends OncePerRequestFilter {
 
 	public static final String LOCK_PREFIX = "api_request_lock";
 
+	/**
+	 * 缓存指定时间的oauth信息
+	 */
+	public static final Long OAUTH_TIME = TimeUnit.HOURS.toSeconds(1);
+
+	public static final String OAUTH_PREFIX = "api_request_oauth";
+
 	private final Set<String> allowUris = new HashSet<>(16);
 
 	private final ProjectService projectService;
 
 	private final Redis redis;
+
+	private final RedisTokenStoreSerializationStrategy tokenSerialization = new JdkSerializationStrategy();
 
 	@SneakyThrows
 	public SignFilter(ProjectService projectService, Redis redis) {
@@ -61,6 +79,10 @@ public class SignFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		if (!(request instanceof RepeatBodyRequestWrapper)) {
+			request = new RepeatBodyRequestWrapper(request);
+		}
+
 		Map<String, String> params = getParams(request);
 		// 没有 sign 参数 或 key 参数 或 nonce 参数, 直接判定签名错误
 		if (!params.containsKey(SdkConstants.FIELD_SIGN) || !params.containsKey(SdkConstants.FIELD_KEY)
@@ -90,6 +112,10 @@ public class SignFilter extends OncePerRequestFilter {
 		final boolean verify = MixPay.verifySign(project.getApiSecurity(), params);
 
 		if (verify) {
+			// 生成要 注入 oauth 的信息
+			Authentication authentication = generate(request, project);
+			// 注入 oauth 信息
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 			// 验签通过
 			filterChain.doFilter(request, response);
 		}
@@ -100,6 +126,42 @@ public class SignFilter extends OncePerRequestFilter {
 			// 未通过
 			signFail(response);
 		}
+	}
+
+	/**
+	 * 生成 UserDetails
+	 * @author lingting 2021-04-30 10:42
+	 */
+	@SneakyThrows
+	private Authentication generate(HttpServletRequest request, Project project) {
+		final String key = StrUtil.format("{}_{}", OAUTH_PREFIX, project.getApiKey());
+
+		if (redis.hasKey(key)) {
+			return deserialize(key, redis.get(key));
+		}
+
+		// 生成用于注入的数据
+		final Authentication authentication = toAuthentication(key, project);
+		// 鉴权信息序列化
+		String val = serialize(project);
+		// 缓存info, 一小时后过期
+		redis.set(key, val, OAUTH_TIME);
+		return authentication;
+	}
+
+	private Authentication toAuthentication(String key, Object obj) {
+		return new AnonymousAuthenticationToken(key, obj,
+				Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")));
+	}
+
+	private Authentication deserialize(String key, String serializeStr) {
+		byte[] serialize = Base64.getDecoder().decode(serializeStr);
+		return toAuthentication(key, tokenSerialization.deserialize(serialize, Project.class));
+	}
+
+	private String serialize(Object obj) {
+		final byte[] serialize = tokenSerialization.serialize(obj);
+		return Base64.getEncoder().encodeToString(serialize);
 	}
 
 	/**

@@ -16,6 +16,16 @@ public enum ResponseCode implements ResultCode {
 	 */
 	PROJECT_NOT_FOUND(233001, "未找到项目!"),
 
+	/**
+	 * 暂无可用地址!
+	 */
+	NO_ADDRESS_AVAILABLE(233002, "暂无可用地址!"),
+
+	/**
+	 * 支付信息保存失败!
+	 */
+	PAY_SAVE_FAIL(233003, "支付信息保存失败!"),
+
 	;
 
 	private final Integer code;
