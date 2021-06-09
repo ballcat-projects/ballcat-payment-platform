@@ -53,7 +53,7 @@ public class VirtualManager {
 		if (!MixUtils.validHash(pay.getChain(), model.getHash())) {
 			throw new BusinessException(ResponseCode.HASH_ERROR);
 		}
-		if (!payService.virtualSubmit(pay.getTradeNo(), model.getHash())) {
+		if (!payService.virtualSubmit(pay, model.getHash())) {
 			throw new BusinessException(ResponseCode.HASH_SUBMIT_FAIL);
 		}
 	}

@@ -37,6 +37,10 @@ public enum ResponseCode implements ResultCode {
 	 * Hash提交失败
 	 */
 	HASH_SUBMIT_FAIL(233006, "Hash提交失败!"),
+	/**
+	 * Hash已被使用
+	 */
+	HASH_EXIST(233007, "Hash已被使用!"),
 
 	;
 

@@ -1,5 +1,7 @@
 package live.lingting.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.hccake.ballcat.common.core.exception.BusinessException;
 import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
@@ -101,8 +103,23 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
-	public boolean virtualSubmit(String tradeNo, String hash) {
-		return baseMapper.virtualSubmit(tradeNo, hash);
+	public boolean virtualSubmit(Pay pay, String hash) {
+		String key = PayConstants.getVirtualHashLock(pay.getChain(), hash);
+		if (!redis.setIfAbsent(key, "", TimeUnit.DAYS.toSeconds(1))) {
+			throw new BusinessException(ResponseCode.HASH_EXIST);
+		}
+
+		final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
+				// hash
+				.eq(Pay::getThirdPartTradeNo, hash)
+				// 限制状态
+				.in(Pay::getStatus, PayStatus.WAIT, PayStatus.SUCCESS);
+
+		if (baseMapper.selectCount(wrapper) > 0) {
+			throw new BusinessException(ResponseCode.HASH_EXIST);
+		}
+
+		return baseMapper.virtualSubmit(pay.getTradeNo(), hash);
 	}
 
 	@Override
