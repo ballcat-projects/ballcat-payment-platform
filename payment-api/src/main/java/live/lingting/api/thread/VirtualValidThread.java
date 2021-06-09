@@ -17,7 +17,7 @@ import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.service.PayService;
 import live.lingting.virtual.VirtualHandler;
-import live.lingting.virtual.VirtualManager;
+import live.lingting.api.manager.VirtualManager;
 import live.lingting.virtual.currency.bitcoin.contract.OmniContract;
 import live.lingting.virtual.currency.core.Contract;
 import live.lingting.virtual.currency.core.enums.TransactionStatus;

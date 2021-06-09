@@ -1,4 +1,4 @@
-package live.lingting.virtual;
+package live.lingting.api.manager;
 
 import com.hccake.ballcat.common.core.exception.BusinessException;
 import java.time.LocalDateTime;
@@ -6,13 +6,14 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import live.lingting.Redis;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
-import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ResponseCode;
-import live.lingting.sdk.enums.PayStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
+import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.response.MixVirtualPayResponse;
+import live.lingting.sdk.util.MixUtils;
 import live.lingting.service.PayService;
 import live.lingting.service.VirtualAddressService;
 
@@ -25,6 +26,8 @@ public class VirtualManager {
 
 	public static final Long EXPIRE_TIME = TimeUnit.HOURS.toMinutes(2);
 
+	private final Redis redis;
+
 	private final PayService payService;
 
 	private final VirtualAddressService virtualAddressService;
@@ -35,24 +38,24 @@ public class VirtualManager {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project) {
-		VirtualAddress va = virtualAddressService.lock(model);
-
-		if (va == null) {
-			throw new BusinessException(ResponseCode.NO_ADDRESS_AVAILABLE);
-		}
-
-		final Pay pay = new Pay().setAddress(va.getAddress()).setChain(model.getChain())
-				.setCurrency(model.getContract().getCurrency()).setNotifyUrl(model.getNotifyUrl())
-				.setProjectTradeNo(model.getProjectTradeNo()).setProjectId(project.getId()).setStatus(PayStatus.WAIT);
-
-		if (!payService.save(pay)) {
-			throw new BusinessException(ResponseCode.PAY_SAVE_FAIL);
-		}
+		final Pay pay = payService.virtualCreate(model, project);
 		final MixVirtualPayResponse.Data data = new MixVirtualPayResponse.Data();
-		data.setAddress(va.getAddress());
+		data.setAddress(pay.getAddress());
 		data.setExpireTime(LocalDateTime.now().plusMinutes(EXPIRE_TIME));
 		data.setTradeNo(pay.getTradeNo());
 		return data;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public void submit(MixVirtualSubmitModel model) {
+		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
+		model.setHash(MixUtils.clearHash(model.getHash()));
+		if (!MixUtils.validHash(pay.getChain(), model.getHash())) {
+			throw new BusinessException(ResponseCode.HASH_ERROR);
+		}
+		if (!payService.virtualSubmit(pay.getTradeNo(), model.getHash())) {
+			throw new BusinessException(ResponseCode.HASH_SUBMIT_FAIL);
+		}
 	}
 
 	@Transactional(rollbackFor = Exception.class)
