@@ -12,7 +12,7 @@ import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.service.PayService;
 import live.lingting.util.SpringUtils;
-import live.lingting.virtual.VirtualManager;
+import live.lingting.api.manager.VirtualManager;
 
 /**
  * @author lingting 2021/6/9 13:58

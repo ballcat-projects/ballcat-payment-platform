@@ -68,6 +68,25 @@ public interface PayMapper extends ExtendMapper<Pay> {
 	}
 
 	/**
+	 * 虚拟货币支付 提交hash
+	 * @param tradeNo 交易号
+	 * @param hash hash
+	 * @return boolean
+	 * @author lingting 2021-06-09 17:49
+	 */
+	default boolean virtualSubmit(String tradeNo, String hash) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限定支付信息
+				.eq(Pay::getTradeNo, tradeNo)
+				// 限定未提交hash
+				.eq(Pay::getThirdPartTradeNo, "")
+				// 更新hash
+				.set(Pay::getThirdPartTradeNo, hash);
+
+		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
 	 * 虚拟支付超时未提交
 	 * @param tradeNo 交易号
 	 * @param desc 描述

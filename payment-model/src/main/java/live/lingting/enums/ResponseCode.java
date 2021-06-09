@@ -25,6 +25,18 @@ public enum ResponseCode implements ResultCode {
 	 * 支付信息保存失败!
 	 */
 	PAY_SAVE_FAIL(233003, "支付信息保存失败!"),
+	/**
+	 * 项目交易号已存在
+	 */
+	PROJECT_NO_REPEAT(233004, "项目交易号已存在!"),
+	/**
+	 * Hash无效
+	 */
+	HASH_ERROR(233005, "Hash无效!"),
+	/**
+	 * Hash提交失败
+	 */
+	HASH_SUBMIT_FAIL(233006, "Hash提交失败!"),
 
 	;
 

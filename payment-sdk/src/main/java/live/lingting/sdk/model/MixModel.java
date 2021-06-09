@@ -51,4 +51,14 @@ public abstract class MixModel implements Serializable {
 		}
 	}
 
+	/**
+	 * 交易 项目交易号和 交易号
+	 * @author lingting 2021-06-09 17:05
+	 */
+	public void validNo() throws MixException {
+		if (!StringUtils.hasText(getProjectTradeNo()) && !StringUtils.hasText(getTradeNo())) {
+			throw new MixRequestParamsValidException("项目交易号和交易号不能同时为空");
+		}
+	}
+
 }
