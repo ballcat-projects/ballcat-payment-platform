@@ -105,6 +105,8 @@ public class Pay {
 	 */
 	private NotifyStatus notifyStatus;
 
+	private LocalDateTime completeTime;
+
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
 

@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS `pay`
     `desc`                varchar(255)            DEFAULT '' COMMENT '描述',
     `notify_url`          varchar(200) NOT NULL COMMENT '通知地址',
     `notify_status`       varchar(10)             DEFAULT 'WAIT' COMMENT '通知状态',
+    `complete_time`         datetime(4),
     `create_time`         datetime(4),
     KEY `idx_project` (`project_id`) USING BTREE,
     KEY `idx_project_trade` (`project_trade_no`) USING BTREE,

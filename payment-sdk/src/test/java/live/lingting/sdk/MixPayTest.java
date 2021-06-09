@@ -12,14 +12,14 @@ import live.lingting.sdk.response.MixVirtualPayResponse;
  * @author lingting 2021/6/7 23:08
  */
 @Slf4j
-public class MixPayTest {
+class MixPayTest {
 
 	private static MixPay mixPay;
 
 	@BeforeAll
 	public static void init() {
 		mixPay = new MixPay("http://127.0.0.1:23302", "h8u45pyloe8zmefy", "f528dc13cc87416e9734716221f67244",
-				"http://www.baidu.com");
+				"https://www.baidu.com");
 	}
 
 	@SneakyThrows
