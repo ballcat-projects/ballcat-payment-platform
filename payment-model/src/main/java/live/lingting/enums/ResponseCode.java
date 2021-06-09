@@ -41,6 +41,10 @@ public enum ResponseCode implements ResultCode {
 	 * Hash已被使用
 	 */
 	HASH_EXIST(233007, "Hash已被使用!"),
+	/**
+	 * 禁止提交Hash
+	 */
+	HASH_DISABLED(233008, "禁止提交Hash"),
 
 	;
 

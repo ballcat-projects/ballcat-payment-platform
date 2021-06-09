@@ -10,6 +10,7 @@ import live.lingting.Redis;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
 import live.lingting.enums.ResponseCode;
+import live.lingting.sdk.enums.PayStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.response.MixVirtualPayResponse;
@@ -49,6 +50,10 @@ public class VirtualManager {
 	@Transactional(rollbackFor = Exception.class)
 	public void submit(MixVirtualSubmitModel model) {
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
+		// 非虚拟支付 或者 非等待支付状态
+		if (!pay.getCurrency().getVirtual() || !PayStatus.WAIT.equals(pay.getStatus())) {
+			throw new BusinessException(ResponseCode.HASH_DISABLED);
+		}
 		model.setHash(MixUtils.clearHash(model.getHash()));
 		if (!MixUtils.validHash(pay.getChain(), model.getHash())) {
 			throw new BusinessException(ResponseCode.HASH_ERROR);
