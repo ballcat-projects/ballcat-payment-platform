@@ -3,6 +3,7 @@ package live.lingting.sdk.response;
 import lombok.Getter;
 import lombok.Setter;
 import live.lingting.sdk.constant.SdkConstants;
+import live.lingting.sdk.util.JacksonUtils;
 
 /**
  * @author lingting 2021/6/7 17:25
@@ -23,6 +24,11 @@ public abstract class MixResponse<D> {
 	 */
 	public boolean isSuccess() {
 		return code != null && code.equals(SdkConstants.SUCCESS_CODE);
+	}
+
+	@Override
+	public String toString() {
+		return JacksonUtils.toJson(this);
 	}
 
 }

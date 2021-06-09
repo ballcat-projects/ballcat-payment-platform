@@ -5,7 +5,6 @@ import static live.lingting.sdk.constant.SdkConstants.FORWARD_SLASH;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
-import com.hccake.ballcat.common.util.JsonUtils;
 import java.io.IOException;
 import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
@@ -18,6 +17,7 @@ import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixModel;
 import live.lingting.sdk.request.MixRequest;
 import live.lingting.sdk.response.MixResponse;
+import live.lingting.sdk.util.JacksonUtils;
 
 /**
  * @author lingting 2021/6/7 20:00
@@ -69,7 +69,7 @@ public class DefaultMixClient implements MixClient {
 	}
 
 	private <M extends MixModel, R extends MixResponse<?>> R getResponse(MixRequest<M, R> request,
-			Map<String, String> params) throws MixException, IOException {
+			Map<String, String> params) {
 		final HttpProperties hp = request.getProperties();
 		final HttpRequest post = HttpUtil.createPost(getUrlStr(request));
 
@@ -79,7 +79,7 @@ public class DefaultMixClient implements MixClient {
 		post.header("Accept", SdkConstants.HTTP_TYPE_JSON);
 		post.header("User-Agent", "live-lingting-sdk");
 		post.header("Content-Type", SdkConstants.HTTP_TYPE_JSON);
-		post.body(JsonUtils.toJson(params));
+		post.body(JacksonUtils.toJson(params));
 
 		return request.convert(post.execute().body());
 	}
