@@ -1,4 +1,4 @@
-package live.lingting;
+package live.lingting.virtual;
 
 import com.hccake.ballcat.common.core.exception.BusinessException;
 import java.time.LocalDateTime;
@@ -10,6 +10,7 @@ import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ResponseCode;
+import live.lingting.sdk.enums.PayStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.service.PayService;
@@ -42,7 +43,7 @@ public class VirtualManager {
 
 		final Pay pay = new Pay().setAddress(va.getAddress()).setChain(model.getChain())
 				.setCurrency(model.getContract().getCurrency()).setNotifyUrl(model.getNotifyUrl())
-				.setProjectTradeNo(model.getProjectTradeNo()).setProjectId(project.getId());
+				.setProjectTradeNo(model.getProjectTradeNo()).setProjectId(project.getId()).setStatus(PayStatus.WAIT);
 
 		if (!payService.save(pay)) {
 			throw new BusinessException(ResponseCode.PAY_SAVE_FAIL);
@@ -52,6 +53,20 @@ public class VirtualManager {
 		data.setExpireTime(LocalDateTime.now().plusMinutes(EXPIRE_TIME));
 		data.setTradeNo(pay.getTradeNo());
 		return data;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public void success(Pay pay) {
+		if (payService.success(pay)) {
+			virtualAddressService.unlock(pay.getAddress());
+		}
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public void fail(Pay pay, String desc, LocalDateTime retryEndTime) {
+		if (payService.fail(pay.getTradeNo(), desc, retryEndTime)) {
+			virtualAddressService.unlock(pay.getAddress());
+		}
 	}
 
 }

@@ -1,15 +1,20 @@
-package live.lingting;
+package live.lingting.virtual;
 
 import cn.hutool.core.util.StrUtil;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import live.lingting.Redis;
+import live.lingting.entity.Pay;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.virtual.currency.bitcoin.BitcoinServiceImpl;
 import live.lingting.virtual.currency.bitcoin.endpoints.BitcoinEndpoints;
 import live.lingting.virtual.currency.bitcoin.properties.BitcoinProperties;
 import live.lingting.virtual.currency.core.PlatformService;
+import live.lingting.virtual.currency.core.model.TransactionInfo;
 import live.lingting.virtual.currency.etherscan.EtherscanServiceImpl;
 import live.lingting.virtual.currency.etherscan.endpoints.EtherscanEndpoints;
 import live.lingting.virtual.currency.etherscan.properties.EtherscanProperties;
@@ -20,6 +25,7 @@ import live.lingting.virtual.currency.tronscan.properties.TronscanProperties;
 /**
  * @author lingting 2021/6/8 15:23
  */
+@Slf4j
 @Component
 public class VirtualHandler {
 
@@ -61,6 +67,16 @@ public class VirtualHandler {
 			return etherscan;
 		default:
 			return tronscan;
+		}
+	}
+
+	public Optional<TransactionInfo> getTransaction(Pay pay) {
+		try {
+			return getService(pay.getChain()).getTransactionByHash(pay.getThirdPartTradeNo());
+		}
+		catch (Exception e) {
+			log.error("获取交易信息时异常!");
+			return Optional.empty();
 		}
 	}
 

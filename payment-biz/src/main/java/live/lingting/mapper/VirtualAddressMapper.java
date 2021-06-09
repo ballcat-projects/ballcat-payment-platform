@@ -69,6 +69,24 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 	}
 
 	/**
+	 * 解锁指定地址
+	 * @param address 地址
+	 * @return boolean
+	 * @author lingting 2021-06-09 15:41
+	 */
+	default boolean unlock(String address) {
+		final LambdaUpdateWrapper<VirtualAddress> wrapper = Wrappers.<VirtualAddress>lambdaUpdate()
+				// 限定地址
+				.eq(VirtualAddress::getAddress, address)
+				// 限定使用状态
+				.eq(VirtualAddress::getUsing, true)
+				// 改为未使用
+				.set(VirtualAddress::getUsing, false);
+
+		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
 	 * 禁用指定地址
 	 * @param id 地址id
 	 * @param disabled 禁用

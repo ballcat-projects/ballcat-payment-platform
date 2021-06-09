@@ -22,6 +22,14 @@ public interface VirtualAddressService extends ExtendService<VirtualAddress> {
 	VirtualAddress lock(MixVirtualPayModel model);
 
 	/**
+	 * 解锁指定地址
+	 * @param address 指定地址
+	 * @return boolean
+	 * @author lingting 2021-06-09 15:40
+	 */
+	boolean unlock(String address);
+
+	/**
 	 * 查询
 	 * @param page 分页
 	 * @param qo 条件
