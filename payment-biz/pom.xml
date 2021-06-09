@@ -32,5 +32,20 @@
             <groupId>com.hccake</groupId>
             <artifactId>ballcat-log-biz</artifactId>
         </dependency>
+        <!-- 虚拟货币 -->
+        <dependency>
+            <groupId>com.hccake</groupId>
+            <artifactId>ballcat-extend-pay-virtual</artifactId>
+        </dependency>
+        <!-- 微信 -->
+        <dependency>
+            <groupId>com.hccake</groupId>
+            <artifactId>ballcat-extend-pay-wx</artifactId>
+        </dependency>
+        <!-- 支付宝 -->
+        <dependency>
+            <groupId>com.hccake</groupId>
+            <artifactId>ballcat-extend-pay-ali</artifactId>
+        </dependency>
     </dependencies>
 </project>
