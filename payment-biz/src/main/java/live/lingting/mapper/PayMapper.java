@@ -80,6 +80,8 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				.eq(Pay::getTradeNo, tradeNo)
 				// 限定未提交hash
 				.eq(Pay::getThirdPartTradeNo, "")
+				// 限定状态
+				.eq(Pay::getStatus, PayStatus.WAIT)
 				// 更新hash
 				.set(Pay::getThirdPartTradeNo, hash);
 
