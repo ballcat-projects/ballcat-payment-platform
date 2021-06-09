@@ -59,12 +59,12 @@ public interface PayService extends ExtendService<Pay> {
 
 	/**
 	 * 虚拟货币支付 提交hash
-	 * @param tradeNo 交易号
+	 * @param pay 支付信息
 	 * @param hash hash
 	 * @return boolean
 	 * @author lingting 2021-06-09 17:49
 	 */
-	boolean virtualSubmit(String tradeNo, String hash);
+	boolean virtualSubmit(Pay pay, String hash);
 
 	/**
 	 * 支付失败
