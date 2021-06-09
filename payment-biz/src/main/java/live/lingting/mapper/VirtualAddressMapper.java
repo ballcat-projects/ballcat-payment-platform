@@ -68,4 +68,20 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 		return SqlHelper.retBool(update(null, wrapper));
 	}
 
+	/**
+	 * 禁用指定地址
+	 * @param id 地址id
+	 * @param disabled 禁用
+	 * @author lingting 2021-06-08 14:07
+	 */
+	default void disabled(Integer id, Boolean disabled) {
+		final LambdaUpdateWrapper<VirtualAddress> wrapper = Wrappers.<VirtualAddress>lambdaUpdate()
+				// 限定地址
+				.eq(VirtualAddress::getId, id)
+				// 设置禁用
+				.set(VirtualAddress::getDisabled, disabled);
+
+		update(null, wrapper);
+	}
+
 }

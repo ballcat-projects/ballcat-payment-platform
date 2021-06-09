@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `virtual_address`
     `chain`       varchar(10)  DEFAULT '' COMMENT '链',
     `address`     varchar(120) DEFAULT '' COMMENT '地址',
     `disabled`    tinyint(1)   DEFAULT 1 COMMENT '是否禁用',
-    `using`       tinyint(1)   DEFAULT 1 COMMENT '是否使用中',
+    `using`       tinyint(1)   DEFAULT 0 COMMENT '是否使用中',
     `create_time` datetime(4)         NOT NULL,
     KEY `idx_chain` (`chain`) USING BTREE,
     UNIQUE KEY `uk_address` (`address`) USING BTREE,
