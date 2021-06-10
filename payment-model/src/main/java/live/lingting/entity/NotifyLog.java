@@ -11,6 +11,8 @@ import lombok.experimental.Accessors;
 import live.lingting.sdk.enums.NotifyStatus;
 
 /**
+ * 通知记录
+ *
  * @author lingting 2021/6/4 13:22
  */
 @Getter
@@ -23,6 +25,11 @@ public class NotifyLog {
 	private Long id;
 
 	/**
+	 * 所属通知
+	 */
+	private Long notifyId;
+
+	/**
 	 * 所属项目
 	 */
 	private Integer projectId;
@@ -33,6 +40,11 @@ public class NotifyLog {
 	private String tradeNo;
 
 	private String notifyUrl;
+
+	/**
+	 * 通知状态
+	 */
+	private NotifyStatus status;
 
 	/**
 	 * 请求参数
@@ -48,16 +60,6 @@ public class NotifyLog {
 	 * 请求返回值
 	 */
 	private String res;
-
-	/**
-	 * 通知时间
-	 */
-	private LocalDateTime time;
-
-	/**
-	 * 通知状态
-	 */
-	private NotifyStatus status;
 
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
