@@ -22,9 +22,9 @@ import live.lingting.virtual.VirtualHandler;
 public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressMapper, VirtualAddress>
 		implements VirtualAddressService {
 
-	private final VirtualHandler handler;
-
 	private static final Integer SHUFFLE_MIN = 3;
+
+	private final VirtualHandler handler;
 
 	@Override
 	public VirtualAddress lock(MixVirtualPayModel model) {

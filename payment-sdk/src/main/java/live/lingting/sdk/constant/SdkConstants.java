@@ -32,6 +32,8 @@ public class SdkConstants {
 
 	public static final String MIX_RETRY_PAY_PATH = "pay/virtual/retry";
 
+	public static final String MIX_QUERY_PATH = "query";
+
 	/**
 	 * -------------------------------HTTP-----------------------------------------
 	 */

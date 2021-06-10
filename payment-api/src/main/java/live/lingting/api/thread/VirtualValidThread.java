@@ -59,6 +59,22 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 
 	private final VirtualHandler handler;
 
+	public static Long getEmptyTimeout() {
+		if (!SpringUtils.isProd()) {
+			// 测试服 2分钟
+			return TimeUnit.MINUTES.toMinutes(1);
+		}
+		return EMPTY_TIMEOUT;
+	}
+
+	public static Long getRetryTime() {
+		if (!SpringUtils.isProd()) {
+			// 测试服1分钟
+			return TimeUnit.MINUTES.toMinutes(1);
+		}
+		return RETRY_TIME;
+	}
+
 	@Override
 	public void run() {
 		final BaseMapper<Pay> mapper = service.getBaseMapper();
@@ -137,22 +153,6 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 		}
 
 		return null;
-	}
-
-	public static Long getEmptyTimeout() {
-		if (!SpringUtils.isProd()) {
-			// 测试服 2分钟
-			return TimeUnit.MINUTES.toMinutes(1);
-		}
-		return EMPTY_TIMEOUT;
-	}
-
-	public static Long getRetryTime() {
-		if (!SpringUtils.isProd()) {
-			// 测试服1分钟
-			return TimeUnit.MINUTES.toMinutes(1);
-		}
-		return RETRY_TIME;
 	}
 
 	private void fail(Pay pay, String desc) {

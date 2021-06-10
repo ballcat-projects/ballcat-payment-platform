@@ -8,7 +8,7 @@ import live.lingting.sdk.exception.MixRequestParamsValidException;
 import live.lingting.sdk.util.MixUtils;
 
 /**
- * 虚拟货币 - 提交 hash
+ * 虚拟货币 - 重试
  *
  * @author lingting 2021/6/7 17:17
  */

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.SdkContract;
+import live.lingting.sdk.response.MixQueryResponse;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
@@ -19,9 +20,9 @@ import live.lingting.sdk.response.MixVirtualSubmitResponse;
 @Slf4j
 class MixPayTest {
 
-	private static MixPay mixPay;
-
 	private static final Snowflake SNOWFLAKE = IdUtil.createSnowflake(1, 1);
+
+	private static MixPay mixPay;
 
 	private MixVirtualPayResponse mixVirtualPayResponse;
 
@@ -57,10 +58,18 @@ class MixPayTest {
 	@Test
 	void virtualRetry() {
 		String tradeNo = "111402847045450076160";
-		//String hash = "";
+		// String hash = "";
 		String hash = RandomUtil.randomString(64);
 		mixVirtualRetryResponse = mixPay.virtualRetry(tradeNo, "", hash);
 		log.info(mixVirtualRetryResponse.toString());
+	}
+
+	@Test
+	@SneakyThrows
+	void query() {
+		String tradeNo = "111402847045450076160";
+		final MixQueryResponse response = mixPay.query(tradeNo, "");
+		log.info(response.toString());
 	}
 
 }
