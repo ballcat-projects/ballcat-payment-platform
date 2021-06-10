@@ -32,6 +32,14 @@ public interface PayService extends ExtendService<Pay> {
 	List<Pay> list(Pay pay);
 
 	/**
+	 * 查询虚拟货币未提交hash的超时支付
+	  * @param maxTime 支付信息最大创建时间
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-06-10 10:06
+	 */
+	List<Pay> listVirtualTimeout(LocalDateTime maxTime);
+
+	/**
 	 * 根据交易号或者项目交易获取信息
 	 * @param tradeNo 交易号
 	 * @param projectTradeNo 项目交易号
@@ -94,5 +102,6 @@ public interface PayService extends ExtendService<Pay> {
 	 * @author lingting 2021-06-09 15:33
 	 */
 	boolean success(Pay pay);
+
 
 }

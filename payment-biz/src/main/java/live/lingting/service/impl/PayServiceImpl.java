@@ -46,6 +46,11 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
+	public List<Pay> listVirtualTimeout(LocalDateTime maxTime) {
+		return baseMapper.listVirtualTimeout(maxTime);
+	}
+
+	@Override
 	public Pay getByNo(String tradeNo, String projectTradeNo) {
 		Pay pay = new Pay();
 
