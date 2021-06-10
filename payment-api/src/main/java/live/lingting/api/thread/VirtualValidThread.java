@@ -142,7 +142,7 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 	public static Long getEmptyTimeout() {
 		if (!SpringUtils.isProd()) {
 			// 测试服 2分钟
-			return TimeUnit.MINUTES.toMinutes(2);
+			return TimeUnit.MINUTES.toMinutes(1);
 		}
 		return EMPTY_TIMEOUT;
 	}

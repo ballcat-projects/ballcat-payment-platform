@@ -14,6 +14,7 @@ import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.api.manager.VirtualManager;
+import live.lingting.sdk.response.MixVirtualRetryResponse;
 
 /**
  * @author lingting 2021/6/7 17:05
@@ -40,10 +41,9 @@ public class PayController {
 	}
 
 	@PostMapping("virtual/retry")
-	public R<?> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException {
+	public R<MixVirtualRetryResponse> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException {
 		model.valid();
-		manager.retry(model);
-		return R.ok();
+		return R.ok(manager.retry(model));
 	}
 
 }
