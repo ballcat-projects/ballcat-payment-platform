@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import live.lingting.sdk.enums.Chain;
+import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.SdkContract;
 import live.lingting.sdk.response.MixQueryResponse;
+import live.lingting.sdk.response.MixRateResponse;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
@@ -69,6 +71,13 @@ class MixPayTest {
 	void query() {
 		String tradeNo = "111402847045450076160";
 		final MixQueryResponse response = mixPay.query(tradeNo, "");
+		log.info(response.toString());
+	}
+
+	@Test
+	@SneakyThrows
+	void rate() {
+		final MixRateResponse response = mixPay.rate(Currency.USDT);
 		log.info(response.toString());
 	}
 

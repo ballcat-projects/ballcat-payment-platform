@@ -14,17 +14,21 @@ import lombok.SneakyThrows;
 import live.lingting.sdk.client.DefaultMixClient;
 import live.lingting.sdk.client.MixClient;
 import live.lingting.sdk.enums.Chain;
+import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.SdkContract;
 import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixQueryModel;
+import live.lingting.sdk.model.MixRateModel;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.request.MixQueryRequest;
+import live.lingting.sdk.request.MixRateRequest;
 import live.lingting.sdk.request.MixVirtualPayRequest;
 import live.lingting.sdk.request.MixVirtualRetryRequest;
 import live.lingting.sdk.request.MixVirtualSubmitRequest;
 import live.lingting.sdk.response.MixQueryResponse;
+import live.lingting.sdk.response.MixRateResponse;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
@@ -190,6 +194,22 @@ public class MixPay {
 
 	private MixQueryResponse query(MixQueryModel model) throws MixException {
 		MixQueryRequest request = new MixQueryRequest();
+		request.setModel(model);
+		return client.execute(request);
+	}
+
+	/**
+	 * 汇率
+	 * @author lingting 2021-06-10 14:28
+	 */
+	public MixRateResponse rate(Currency currency) throws MixException {
+		MixRateModel model = new MixRateModel();
+		model.setCurrency(currency);
+		return rate(model);
+	}
+
+	private MixRateResponse rate(MixRateModel model) throws MixException {
+		MixRateRequest request = new MixRateRequest();
 		request.setModel(model);
 		return client.execute(request);
 	}
