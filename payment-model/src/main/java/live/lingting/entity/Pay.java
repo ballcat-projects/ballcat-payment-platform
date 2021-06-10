@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import live.lingting.enums.NotifyStatus;
+import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.Mode;

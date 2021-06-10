@@ -16,12 +16,15 @@ import live.lingting.sdk.client.MixClient;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.SdkContract;
 import live.lingting.sdk.exception.MixException;
+import live.lingting.sdk.model.MixQueryModel;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
+import live.lingting.sdk.request.MixQueryRequest;
 import live.lingting.sdk.request.MixVirtualPayRequest;
 import live.lingting.sdk.request.MixVirtualRetryRequest;
 import live.lingting.sdk.request.MixVirtualSubmitRequest;
+import live.lingting.sdk.response.MixQueryResponse;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
@@ -170,6 +173,23 @@ public class MixPay {
 
 	public MixVirtualRetryResponse virtualRetry(MixVirtualRetryModel model) throws MixException {
 		MixVirtualRetryRequest request = new MixVirtualRetryRequest();
+		request.setModel(model);
+		return client.execute(request);
+	}
+
+	/**
+	 * 查询
+	 * @author lingting 2021-06-10 13:40
+	 */
+	public MixQueryResponse query(String tradeNo, String projectTradeNo) throws MixException {
+		MixQueryModel model = new MixQueryModel();
+		model.setTradeNo(tradeNo);
+		model.setProjectTradeNo(projectTradeNo);
+		return query(model);
+	}
+
+	private MixQueryResponse query(MixQueryModel model) throws MixException {
+		MixQueryRequest request = new MixQueryRequest();
 		request.setModel(model);
 		return client.execute(request);
 	}

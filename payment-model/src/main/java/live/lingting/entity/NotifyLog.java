@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import live.lingting.enums.NotifyStatus;
+import live.lingting.sdk.enums.NotifyStatus;
 
 /**
  * @author lingting 2021/6/4 13:22
