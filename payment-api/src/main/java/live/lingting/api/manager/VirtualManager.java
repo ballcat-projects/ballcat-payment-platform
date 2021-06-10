@@ -69,7 +69,7 @@ public class VirtualManager {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public MixVirtualRetryResponse retry(MixVirtualRetryModel model) {
+	public MixVirtualRetryResponse.Data retry(MixVirtualRetryModel model) {
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非失败支付 或 重试结束时间小于等于当前时间
 		if (!PayStatus.RETRY.equals(pay.getStatus()) || pay.getRetryEndTime().compareTo(LocalDateTime.now()) < 1) {
@@ -82,12 +82,10 @@ public class VirtualManager {
 		if (!payService.virtualRetry(pay, model.getHash())) {
 			throw new BusinessException(ResponseCode.RETRY_FAIL);
 		}
-		MixVirtualRetryResponse response = new MixVirtualRetryResponse();
 		final MixVirtualRetryResponse.Data data = new MixVirtualRetryResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
 		data.setRetryEndTime(pay.getRetryEndTime());
-		response.setData(data);
-		return response;
+		return data;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
