@@ -34,6 +34,8 @@ public class SdkConstants {
 
 	public static final String MIX_QUERY_PATH = "query";
 
+	public static final String MIX_RATE_PATH = "rate";
+
 	/**
 	 * -------------------------------HTTP-----------------------------------------
 	 */
