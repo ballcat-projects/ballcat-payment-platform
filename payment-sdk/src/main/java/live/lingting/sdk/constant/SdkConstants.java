@@ -30,6 +30,8 @@ public class SdkConstants {
 
 	public static final String MIX_SUBMIT_PAY_PATH = "pay/virtual/submit";
 
+	public static final String MIX_RETRY_PAY_PATH = "pay/virtual/retry";
+
 	/**
 	 * -------------------------------HTTP-----------------------------------------
 	 */

@@ -15,6 +15,10 @@ public enum PayStatus {
 	 */
 	WAIT("等待支付"),
 	/**
+	 * 重试
+	 */
+	RETRY("重试"),
+	/**
 	 * 成功
 	 */
 	SUCCESS("成功"),

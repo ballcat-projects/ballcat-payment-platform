@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import live.lingting.api.util.SecurityUtils;
 import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixVirtualPayModel;
+import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.api.manager.VirtualManager;
@@ -35,6 +36,13 @@ public class PayController {
 	public R<?> virtualSubmit(@RequestBody MixVirtualSubmitModel model) throws MixException {
 		model.valid();
 		manager.submit(model);
+		return R.ok();
+	}
+
+	@PostMapping("virtual/retry")
+	public R<?> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException {
+		model.valid();
+		manager.retry(model);
 		return R.ok();
 	}
 

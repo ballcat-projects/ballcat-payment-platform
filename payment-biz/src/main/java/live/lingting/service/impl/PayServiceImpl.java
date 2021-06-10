@@ -51,6 +51,11 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
+	public List<Pay> listVirtualRetryTimeout() {
+		return baseMapper.listVirtualRetryTimeout();
+	}
+
+	@Override
 	public Pay getByNo(String tradeNo, String projectTradeNo) {
 		Pay pay = new Pay();
 
@@ -109,6 +114,18 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean virtualSubmit(Pay pay, String hash) {
+		validateHash(pay, hash);
+
+		return baseMapper.virtualSubmit(pay.getTradeNo(), hash);
+	}
+
+	@Override
+	public boolean virtualRetry(Pay pay, String hash) {
+		validateHash(pay, hash);
+		return baseMapper.virtualRetry(pay.getTradeNo(), hash);
+	}
+
+	private void validateHash(Pay pay, String hash) {
 		String key = PayConstants.getVirtualHashLock(pay.getChain(), hash);
 		if (!redis.setIfAbsent(key, "", TimeUnit.DAYS.toSeconds(1))) {
 			throw new BusinessException(ResponseCode.HASH_EXIST);
@@ -123,13 +140,11 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		if (baseMapper.selectCount(wrapper) > 0) {
 			throw new BusinessException(ResponseCode.HASH_EXIST);
 		}
-
-		return baseMapper.virtualSubmit(pay.getTradeNo(), hash);
 	}
 
 	@Override
-	public boolean fail(String tradeNo, String desc, LocalDateTime retryEndTime) {
-		return baseMapper.fail(tradeNo, desc, retryEndTime);
+	public boolean fail(Pay pay, String desc, LocalDateTime retryEndTime) {
+		return baseMapper.fail(pay, desc, retryEndTime);
 	}
 
 	@Override

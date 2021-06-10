@@ -33,11 +33,18 @@ public interface PayService extends ExtendService<Pay> {
 
 	/**
 	 * 查询虚拟货币未提交hash的超时支付
-	  * @param maxTime 支付信息最大创建时间
+	 * @param maxTime 支付信息最大创建时间
 	 * @return java.util.List<live.lingting.entity.Pay>
 	 * @author lingting 2021-06-10 10:06
 	 */
 	List<Pay> listVirtualTimeout(LocalDateTime maxTime);
+/**
+ * 查询重试超时的支付信息
+ * @return java.util.List<live.lingting.entity.Pay>
+ * @author lingting 2021-06-10 11:27
+ */
+	List<Pay> listVirtualRetryTimeout();
+
 
 	/**
 	 * 根据交易号或者项目交易获取信息
@@ -75,25 +82,34 @@ public interface PayService extends ExtendService<Pay> {
 	boolean virtualSubmit(Pay pay, String hash);
 
 	/**
+	 * 虚拟货币支付重试
+	 * @param pay 支付信息
+	 * @param hash 新hash
+	 * @return boolean
+	 * @author lingting 2021-06-10 10:56
+	 */
+	boolean virtualRetry(Pay pay, String hash);
+
+	/**
 	 * 支付失败
-	 * @param tradeNo 交易号
+	 * @param pay 支付信息
 	 * @param desc 描述
 	 * @return boolean 执行结果
 	 * @author lingting 2021-06-09 14:16
 	 */
-	default boolean fail(String tradeNo, String desc) {
-		return fail(tradeNo, desc, LocalDateTime.now());
+	default boolean fail(Pay pay, String desc) {
+		return fail(pay, desc, null);
 	}
 
 	/**
 	 * 支付失败
-	 * @param tradeNo 交易号
+	 * @param pay 支付信息
 	 * @param desc 描述
 	 * @param retryEndTime 重试截止时间
 	 * @return boolean 执行结果
 	 * @author lingting 2021-06-09 14:16
 	 */
-	boolean fail(String tradeNo, String desc, LocalDateTime retryEndTime);
+	boolean fail(Pay pay, String desc, LocalDateTime retryEndTime);
 
 	/**
 	 * 已完成支付
