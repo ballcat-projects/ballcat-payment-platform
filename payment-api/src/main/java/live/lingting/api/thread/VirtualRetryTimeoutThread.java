@@ -7,19 +7,17 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import live.lingting.api.manager.VirtualManager;
 import live.lingting.entity.Pay;
-import live.lingting.sdk.enums.Currency;
-import live.lingting.sdk.enums.PayStatus;
 import live.lingting.service.PayService;
 import live.lingting.util.SpringUtils;
-import live.lingting.api.manager.VirtualManager;
 
 /**
  * @author lingting 2021/6/9 13:58
  */
 @Component
 @RequiredArgsConstructor
-public class VirtualTimeoutThread extends Thread implements InitializingBean {
+public class VirtualRetryTimeoutThread extends Thread implements InitializingBean {
 
 	/**
 	 * 超时时间, 单位: 分钟
@@ -33,9 +31,10 @@ public class VirtualTimeoutThread extends Thread implements InitializingBean {
 	@Override
 	public void run() {
 		while (!isInterrupted()) {
-			final List<Pay> list = service.listVirtualTimeout(getMaxTime());
+			final List<Pay> list = service.listVirtualRetryTimeout();
+
 			for (Pay pay : list) {
-				manager.fail(pay, "超时未提交!", LocalDateTime.now());
+				manager.fail(pay, null, null);
 			}
 
 			ThreadUtil.sleep(TimeUnit.MINUTES.toMillis(1));
@@ -56,7 +55,7 @@ public class VirtualTimeoutThread extends Thread implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		setName("virtual-timeout");
+		setName("virtual-retry-timeout");
 		this.start();
 	}
 

@@ -1,6 +1,7 @@
 package live.lingting.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -10,6 +11,7 @@ import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
 import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.util.StringUtils;
 import live.lingting.Page;
 import live.lingting.entity.Pay;
 import live.lingting.sdk.enums.Currency;
@@ -92,6 +94,23 @@ public interface PayMapper extends ExtendMapper<Pay> {
 	}
 
 	/**
+	 * 查询重试超时的支付信息
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-06-10 11:27
+	 */
+	default List<Pay> listVirtualRetryTimeout() {
+		final LambdaQueryWrapperX<Pay> wrapper = WrappersX.<Pay>lambdaQueryX()
+				// status
+				.eq(Pay::getStatus, PayStatus.RETRY)
+				// currency
+				.eq(Pay::getCurrency, Currency.USDT)
+				// 已超过重试时间
+				.le(Pay::getRetryEndTime, LocalDateTime.now());
+
+		return selectList(wrapper);
+	}
+
+	/**
 	 * 虚拟货币支付 提交hash
 	 * @param tradeNo 交易号
 	 * @param hash hash
@@ -113,27 +132,56 @@ public interface PayMapper extends ExtendMapper<Pay> {
 	}
 
 	/**
-	 * 虚拟支付超时未提交
+	 * 虚拟货币支付重试
 	 * @param tradeNo 交易号
+	 * @param hash 新hash
+	 * @return boolean
+	 * @author lingting 2021-06-10 10:56
+	 */
+	default boolean virtualRetry(String tradeNo, String hash) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限定支付信息
+				.eq(Pay::getTradeNo, tradeNo)
+				// 限定已提交hash
+				.ne(Pay::getThirdPartTradeNo, "")
+				// 限定状态
+				.eq(Pay::getStatus, PayStatus.RETRY)
+				// 如果hash值不为空, 则更新hash
+				.set(StringUtils.hasText(hash), Pay::getThirdPartTradeNo, hash)
+				// 状态更新为等待支付
+				.set(Pay::getStatus, PayStatus.WAIT);
+
+		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
+	 * 虚拟支付超时未提交
+	 * @param pay 支付信息
 	 * @param desc 描述
 	 * @param retryEndTime 重试截止时间
 	 * @return boolean 执行结果
 	 * @author lingting 2021-06-09 14:16
 	 */
-	default boolean fail(String tradeNo, String desc, LocalDateTime retryEndTime) {
-		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+	default boolean fail(Pay pay, String desc, LocalDateTime retryEndTime) {
+		final boolean isRetry = PayStatus.RETRY.equals(pay.getStatus());
+		LambdaUpdateWrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
 				// 限制交易信息
-				.eq(Pay::getTradeNo, tradeNo)
-				// 限制原状态
-				.eq(Pay::getStatus, PayStatus.WAIT)
+				.eq(Pay::getTradeNo, pay.getTradeNo())
+				// 限制原状态 - 重试支付限制为重试, 其他支付限制为等待
+				.eq(Pay::getStatus, isRetry ? PayStatus.RETRY : PayStatus.WAIT)
 				// 设置目标状态
-				.set(Pay::getStatus, PayStatus.FAIL)
+				.set(Pay::getStatus, retryEndTime == null ? PayStatus.FAIL : PayStatus.RETRY)
 				// 设置描述
-				.set(Pay::getDesc, desc)
-				// 时间
-				.set(Pay::getRetryEndTime, retryEndTime)
+				.set(StringUtils.hasText(desc), Pay::getDesc, desc)
 				// 完成时间
 				.set(Pay::getCompleteTime, LocalDateTime.now());
+
+		// 仅在 重试时间不为空 且 非重试支付才更新重试结束时间
+		if (retryEndTime != null && !isRetry) {
+			// 重试结束时间 - 如果已有重试结束时间, 不更新
+			wrapper.setSql(
+					String.format(" retry_end_time=IF(retry_end_time is NULL, '%s' , retry_end_time) ", retryEndTime));
+		}
 
 		return SqlHelper.retBool(update(null, wrapper));
 	}

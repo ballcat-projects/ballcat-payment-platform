@@ -45,6 +45,14 @@ public enum ResponseCode implements ResultCode {
 	 * 禁止提交Hash
 	 */
 	HASH_DISABLED(233008, "禁止提交Hash"),
+	/**
+	 * 禁止重试!
+	 */
+	RETRY_DISABLES(233008, "禁止重试!"),
+	/**
+	 * 重试失败
+	 */
+	RETRY_FAIL(233006, "重试失败!"),
 
 	;
 

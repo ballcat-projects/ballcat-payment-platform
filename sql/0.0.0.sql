@@ -48,14 +48,15 @@ CREATE TABLE IF NOT EXISTS `pay`
     `desc`                varchar(255)            DEFAULT '' COMMENT '描述',
     `notify_url`          varchar(200) NOT NULL COMMENT '通知地址',
     `notify_status`       varchar(10)             DEFAULT 'WAIT' COMMENT '通知状态',
-    `complete_time`         datetime(4),
+    `complete_time`       datetime(4),
     `create_time`         datetime(4),
     KEY `idx_project` (`project_id`) USING BTREE,
     KEY `idx_project_trade` (`project_trade_no`) USING BTREE,
     KEY `idx_third_trade` (`third_part_trade_no`) USING BTREE,
     KEY `idx_status` (`status`) USING BTREE,
     KEY `idx_currency` (`currency`) USING BTREE,
-    KEY `idx_notify_status` (`notify_status`) USING BTREE
+    KEY `idx_notify_status` (`notify_status`) USING BTREE,
+    KEY `idx_address` (`address`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='支付信息';
@@ -92,7 +93,8 @@ CREATE TABLE IF NOT EXISTS `virtual_address`
     `create_time` datetime(4)         NOT NULL,
     KEY `idx_chain` (`chain`) USING BTREE,
     UNIQUE KEY `uk_address` (`address`) USING BTREE,
-    KEY `idx_disabled_using` (`disabled`, `using`) USING BTREE
+    KEY `idx_disabled` (`disabled`) USING BTREE,
+    KEY `idx_using` (`using`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='虚拟货币地址';
