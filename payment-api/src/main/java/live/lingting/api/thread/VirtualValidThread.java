@@ -1,8 +1,6 @@
 package live.lingting.api.thread;
 
-import cn.hutool.core.thread.ThreadUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -10,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import live.lingting.api.manager.VirtualManager;
 import live.lingting.entity.Pay;
@@ -31,7 +28,7 @@ import live.lingting.virtual.currency.tronscan.contract.TronscanContract;
  */
 @Component
 @RequiredArgsConstructor
-public class VirtualValidThread extends Thread implements InitializingBean {
+public class VirtualValidThread extends AbstractThread<Pay> {
 
 	/**
 	 * 未获取到支付状态超时时间, 单位: 分钟
@@ -59,6 +56,12 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 
 	private final VirtualHandler handler;
 
+	private final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
+			// 限制 hash 不为空
+			.ne(Pay::getThirdPartTradeNo, "")
+			// 状态为等待
+			.eq(Pay::getStatus, PayStatus.WAIT);
+
 	public static Long getEmptyTimeout() {
 		if (!SpringUtils.isProd()) {
 			// 测试服 2分钟
@@ -76,44 +79,35 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 	}
 
 	@Override
-	public void run() {
-		final BaseMapper<Pay> mapper = service.getBaseMapper();
-		final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
-				// 限制 hash 不为空
-				.ne(Pay::getThirdPartTradeNo, "")
-				// 状态为等待
-				.eq(Pay::getStatus, PayStatus.WAIT);
-		while (!isInterrupted()) {
-			final List<Pay> list = mapper.selectList(wrapper);
+	public List<Pay> listData() {
+		return service.getBaseMapper().selectList(wrapper);
+	}
 
-			for (Pay pay : list) {
-				final Optional<TransactionInfo> optional = handler.getTransaction(pay);
-				// 订单已创建时长
-				final long minutes = Duration.between(pay.getCreateTime(), LocalDateTime.now()).toMinutes();
+	@Override
+	public void handler(Pay pay) {
+		final Optional<TransactionInfo> optional = handler.getTransaction(pay);
+		// 订单已创建时长
+		final long minutes = Duration.between(pay.getCreateTime(), LocalDateTime.now()).toMinutes();
 
-				// 没有获取到信息
-				if (!optional.isPresent()) {
-					// 获取允许的超时时间
-					final Long timeout = getEmptyTimeout();
-					// 超时
-					if (minutes >= timeout) {
-						fail(pay, timeout + "分钟内未获取到交易信息!");
-					}
-					continue;
-				}
-
-				final TransactionInfo info = optional.get();
-				// 失败, 且创建时长超过 FAIL_TIME
-				if (TransactionStatus.FAIL.equals(info.getStatus()) && minutes >= FAIL_TIME) {
-					fail(pay, "支付失败!");
-				}
-				// 成功交易
-				else if (TransactionStatus.SUCCESS.equals(info.getStatus())) {
-					successHandler(pay, info);
-				}
+		// 没有获取到信息
+		if (!optional.isPresent()) {
+			// 获取允许的超时时间
+			final Long timeout = getEmptyTimeout();
+			// 超时
+			if (minutes >= timeout) {
+				fail(pay, timeout + "分钟内未获取到交易信息!");
 			}
+			return;
+		}
 
-			ThreadUtil.sleep(TimeUnit.MINUTES.toMillis(1));
+		final TransactionInfo info = optional.get();
+		// 失败, 且创建时长超过 FAIL_TIME
+		if (TransactionStatus.FAIL.equals(info.getStatus()) && minutes >= FAIL_TIME) {
+			fail(pay, "支付失败!");
+		}
+		// 成功交易
+		else if (TransactionStatus.SUCCESS.equals(info.getStatus())) {
+			successHandler(pay, info);
 		}
 	}
 
@@ -157,12 +151,6 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 
 	private void fail(Pay pay, String desc) {
 		manager.fail(pay, desc, LocalDateTime.now().plusMinutes(getRetryTime()));
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		setName("virtual-valid");
-		this.start();
 	}
 
 }

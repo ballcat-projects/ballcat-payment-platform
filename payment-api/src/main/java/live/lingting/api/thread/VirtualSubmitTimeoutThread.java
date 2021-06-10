@@ -1,11 +1,9 @@
 package live.lingting.api.thread;
 
-import cn.hutool.core.thread.ThreadUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import live.lingting.api.manager.VirtualManager;
 import live.lingting.entity.Pay;
@@ -17,7 +15,7 @@ import live.lingting.util.SpringUtils;
  */
 @Component
 @RequiredArgsConstructor
-public class VirtualSubmitTimeoutThread extends Thread implements InitializingBean {
+public class VirtualSubmitTimeoutThread extends AbstractThread<Pay> {
 
 	/**
 	 * 超时时间, 单位: 分钟
@@ -29,15 +27,13 @@ public class VirtualSubmitTimeoutThread extends Thread implements InitializingBe
 	private final PayService service;
 
 	@Override
-	public void run() {
-		while (!isInterrupted()) {
-			final List<Pay> list = service.listVirtualTimeout(getMaxTime());
-			for (Pay pay : list) {
-				manager.fail(pay, "超时未提交!", LocalDateTime.now());
-			}
+	public List<Pay> listData() {
+		return service.listVirtualTimeout(getMaxTime());
+	}
 
-			ThreadUtil.sleep(TimeUnit.MINUTES.toMillis(1));
-		}
+	@Override
+	public void handler(Pay pay) {
+		manager.fail(pay, "超时未提交!", LocalDateTime.now());
 	}
 
 	/**
@@ -50,12 +46,6 @@ public class VirtualSubmitTimeoutThread extends Thread implements InitializingBe
 			return LocalDateTime.now().minusMinutes(1);
 		}
 		return LocalDateTime.now().minusMinutes(TIMEOUT);
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		setName("virtual-submit-timeout");
-		this.start();
 	}
 
 }
