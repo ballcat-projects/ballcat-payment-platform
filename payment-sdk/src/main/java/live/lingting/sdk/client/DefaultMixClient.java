@@ -5,11 +5,11 @@ import static live.lingting.sdk.constant.SdkConstants.FORWARD_SLASH;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
-import java.io.IOException;
 import java.util.Map;
 import javax.net.ssl.HostnameVerifier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import live.lingting.sdk.MixPay;
 import live.lingting.sdk.constant.SdkConstants;
 import live.lingting.sdk.domain.HttpProperties;
@@ -22,6 +22,7 @@ import live.lingting.sdk.util.JacksonUtils;
 /**
  * @author lingting 2021/6/7 20:00
  */
+@Slf4j
 @Getter
 @RequiredArgsConstructor
 public class DefaultMixClient implements MixClient {
@@ -45,13 +46,12 @@ public class DefaultMixClient implements MixClient {
 		try {
 			return request(request);
 		}
-		catch (IOException e) {
+		catch (Exception e) {
 			throw new MixException("请求异常!", e);
 		}
 	}
 
-	private <M extends MixModel, R extends MixResponse<?>> R request(MixRequest<M, R> request)
-			throws MixException, IOException {
+	private <M extends MixModel, R extends MixResponse<?>> R request(MixRequest<M, R> request) throws MixException {
 
 		final M model = request.getModel();
 		if (model == null) {
@@ -76,12 +76,23 @@ public class DefaultMixClient implements MixClient {
 		post.setConnectionTimeout(hp.getConnectTimeout());
 		post.setReadTimeout(hp.getReadTimeout());
 
-		post.header("Accept", SdkConstants.HTTP_TYPE_JSON);
+		final String type = SdkConstants.HTTP_TYPE_JSON;
+		post.header("Accept", type);
 		post.header("User-Agent", "live-lingting-sdk");
-		post.header("Content-Type", SdkConstants.HTTP_TYPE_JSON);
-		post.body(JacksonUtils.toJson(params));
+		post.header("Content-Type", type);
+		final String body = JacksonUtils.toJson(params);
+		post.body(body);
 
-		return request.convert(post.execute().body());
+		if (log.isDebugEnabled()) {
+			log.debug("[MixPay请求数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, body);
+		}
+
+		final String resStr = post.execute().body();
+
+		if (log.isDebugEnabled()) {
+			log.debug("[MixPay请求返回数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, resStr);
+		}
+		return request.convert(resStr);
 	}
 
 	private <M extends MixModel, R extends MixResponse<?>> String getUrlStr(MixRequest<M, R> request) {
