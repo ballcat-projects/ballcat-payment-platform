@@ -17,6 +17,7 @@ import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.response.MixVirtualPayResponse;
+import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.util.MixUtils;
 import live.lingting.service.PayService;
 import live.lingting.service.VirtualAddressService;
@@ -68,10 +69,10 @@ public class VirtualManager {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void retry(MixVirtualRetryModel model) {
+	public MixVirtualRetryResponse retry(MixVirtualRetryModel model) {
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非失败支付 或 重试结束时间小于等于当前时间
-		if (!PayStatus.FAIL.equals(pay.getStatus()) || pay.getRetryEndTime().compareTo(LocalDateTime.now()) < 1) {
+		if (!PayStatus.RETRY.equals(pay.getStatus()) || pay.getRetryEndTime().compareTo(LocalDateTime.now()) < 1) {
 			throw new BusinessException(ResponseCode.RETRY_DISABLES);
 		}
 		// 更新hash, 且 hash校验不通过
@@ -81,6 +82,12 @@ public class VirtualManager {
 		if (!payService.virtualRetry(pay, model.getHash())) {
 			throw new BusinessException(ResponseCode.RETRY_FAIL);
 		}
+		MixVirtualRetryResponse response = new MixVirtualRetryResponse();
+		final MixVirtualRetryResponse.Data data = new MixVirtualRetryResponse.Data();
+		data.setTradeNo(pay.getTradeNo());
+		data.setRetryEndTime(pay.getRetryEndTime());
+		response.setData(data);
+		return response;
 	}
 
 	@Transactional(rollbackFor = Exception.class)

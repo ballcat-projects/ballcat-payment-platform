@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import live.lingting.sdk.constant.SdkConstants;
-import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
-import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
 
 /**

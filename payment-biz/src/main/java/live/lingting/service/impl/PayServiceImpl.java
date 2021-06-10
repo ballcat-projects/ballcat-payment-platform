@@ -121,7 +121,9 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean virtualRetry(Pay pay, String hash) {
-		validateHash(pay, hash);
+		if (StringUtils.hasText(hash)) {
+			validateHash(pay, hash);
+		}
 		return baseMapper.virtualRetry(pay.getTradeNo(), hash);
 	}
 

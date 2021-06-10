@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.SdkContract;
 import live.lingting.sdk.response.MixVirtualPayResponse;
+import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
 
 /**
@@ -25,6 +26,8 @@ class MixPayTest {
 	private MixVirtualPayResponse mixVirtualPayResponse;
 
 	private MixVirtualSubmitResponse mixVirtualSubmitResponse;
+
+	private MixVirtualRetryResponse mixVirtualRetryResponse;
 
 	@BeforeAll
 	public static void init() {
@@ -48,6 +51,16 @@ class MixPayTest {
 			mixVirtualSubmitResponse = mixPay.virtualSubmit(mixVirtualPayResponse.getTradeNo(), "", hash);
 			log.info(mixVirtualSubmitResponse.toString());
 		}
+	}
+
+	@SneakyThrows
+	@Test
+	void virtualRetry() {
+		String tradeNo = "111402847045450076160";
+		//String hash = "";
+		String hash = RandomUtil.randomString(64);
+		mixVirtualRetryResponse = mixPay.virtualRetry(tradeNo, "", hash);
+		log.info(mixVirtualRetryResponse.toString());
 	}
 
 }
