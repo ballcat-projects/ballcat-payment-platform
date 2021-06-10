@@ -17,8 +17,11 @@ import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.SdkContract;
 import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixVirtualPayModel;
+import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.request.MixVirtualPayRequest;
+import live.lingting.sdk.request.MixVirtualSubmitRequest;
 import live.lingting.sdk.response.MixVirtualPayResponse;
+import live.lingting.sdk.response.MixVirtualSubmitResponse;
 
 /**
  * 混合支付
@@ -110,6 +113,10 @@ public class MixPay {
 		return params.get(FIELD_SIGN).equals(sign(security, params));
 	}
 
+	/**
+	 * 虚拟货币 - 下单
+	 * @author lingting 2021-06-10 09:49
+	 */
 	public MixVirtualPayResponse virtualPay(String projectTradeNo, SdkContract contract, Chain chain)
 			throws MixException {
 		MixVirtualPayModel model = new MixVirtualPayModel();
@@ -122,6 +129,25 @@ public class MixPay {
 
 	public MixVirtualPayResponse virtualPay(MixVirtualPayModel model) throws MixException {
 		MixVirtualPayRequest request = new MixVirtualPayRequest();
+		request.setModel(model);
+		return client.execute(request);
+	}
+
+	/**
+	 * 虚拟货币 - 提交hash
+	 * @author lingting 2021-06-10 09:49
+	 */
+	public MixVirtualSubmitResponse virtualSubmit(String tradeNo, String projectTradeNo, String hash)
+			throws MixException {
+		MixVirtualSubmitModel model = new MixVirtualSubmitModel();
+		model.setTradeNo(tradeNo);
+		model.setProjectTradeNo(projectTradeNo);
+		model.setHash(hash);
+		return virtualSubmit(model);
+	}
+
+	public MixVirtualSubmitResponse virtualSubmit(MixVirtualSubmitModel model) throws MixException {
+		MixVirtualSubmitRequest request = new MixVirtualSubmitRequest();
 		request.setModel(model);
 		return client.execute(request);
 	}
