@@ -33,10 +33,7 @@ public class VirtualTimeoutThread extends Thread implements InitializingBean {
 	@Override
 	public void run() {
 		while (!isInterrupted()) {
-			final Pay qo = new Pay().setCreateTime(getMaxTime()).setThirdPartTradeNo("").setStatus(PayStatus.WAIT)
-					.setCurrency(Currency.USDT);
-			final List<Pay> list = service.list(qo);
-
+			final List<Pay> list = service.listVirtualTimeout(getMaxTime());
 			for (Pay pay : list) {
 				manager.fail(pay, "超时未提交!", LocalDateTime.now());
 			}

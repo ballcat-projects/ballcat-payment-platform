@@ -12,12 +12,13 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import live.lingting.api.manager.VirtualManager;
 import live.lingting.entity.Pay;
 import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.service.PayService;
+import live.lingting.util.SpringUtils;
 import live.lingting.virtual.VirtualHandler;
-import live.lingting.api.manager.VirtualManager;
 import live.lingting.virtual.currency.bitcoin.contract.OmniContract;
 import live.lingting.virtual.currency.core.Contract;
 import live.lingting.virtual.currency.core.enums.TransactionStatus;
@@ -33,9 +34,9 @@ import live.lingting.virtual.currency.tronscan.contract.TronscanContract;
 public class VirtualValidThread extends Thread implements InitializingBean {
 
 	/**
-	 * 超时时间, 单位: 分钟
+	 * 未获取到支付状态超时时间, 单位: 分钟
 	 */
-	private static final Long TIMEOUT = TimeUnit.HOURS.toMinutes(6);
+	private static final Long EMPTY_TIMEOUT = TimeUnit.HOURS.toMinutes(6);
 
 	/**
 	 * 重试时长, 失败允许重试的时长, 单位: 分钟
@@ -58,38 +59,36 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 
 	private final VirtualHandler handler;
 
-	private final VirtualTimeoutThread timeoutThread;
-
 	@Override
 	public void run() {
 		final BaseMapper<Pay> mapper = service.getBaseMapper();
+		final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
+				// 限制 hash 不为空
+				.ne(Pay::getThirdPartTradeNo, "")
+				// 状态为等待
+				.eq(Pay::getStatus, PayStatus.WAIT);
 		while (!isInterrupted()) {
-			final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
-					// 限制 hash 不为空
-					.ne(Pay::getThirdPartTradeNo, "")
-					// 状态为等待
-					.eq(Pay::getStatus, PayStatus.WAIT)
-					// 未超时
-					.gt(Pay::getCreateTime, timeoutThread.getMaxTime());
 			final List<Pay> list = mapper.selectList(wrapper);
 
 			for (Pay pay : list) {
 				final Optional<TransactionInfo> optional = handler.getTransaction(pay);
 				// 订单已创建时长
-				final long millis = Duration.between(LocalDateTime.now(), pay.getCreateTime()).toMillis();
+				final long minutes = Duration.between(pay.getCreateTime(), LocalDateTime.now()).toMinutes();
 
 				// 没有获取到信息
 				if (!optional.isPresent()) {
+					// 获取允许的超时时间
+					final Long timeout = getEmptyTimeout();
 					// 超时
-					if (millis >= TIMEOUT) {
-						fail(pay, TIMEOUT + "分钟内未获取到交易信息!");
+					if (minutes >= timeout) {
+						fail(pay, timeout + "分钟内未获取到交易信息!");
 					}
 					continue;
 				}
 
 				final TransactionInfo info = optional.get();
 				// 失败, 且创建时长超过 FAIL_TIME
-				if (TransactionStatus.FAIL.equals(info.getStatus()) && millis >= FAIL_TIME) {
+				if (TransactionStatus.FAIL.equals(info.getStatus()) && minutes >= FAIL_TIME) {
 					fail(pay, "支付失败!");
 				}
 				// 成功交易
@@ -140,8 +139,24 @@ public class VirtualValidThread extends Thread implements InitializingBean {
 		return null;
 	}
 
+	public static Long getEmptyTimeout() {
+		if (!SpringUtils.isProd()) {
+			// 测试服 2分钟
+			return TimeUnit.MINUTES.toMinutes(2);
+		}
+		return EMPTY_TIMEOUT;
+	}
+
+	public static Long getRetryTime() {
+		if (!SpringUtils.isProd()) {
+			// 测试服1分钟
+			return TimeUnit.MINUTES.toMinutes(1);
+		}
+		return RETRY_TIME;
+	}
+
 	private void fail(Pay pay, String desc) {
-		manager.fail(pay, desc, LocalDateTime.now().plusMinutes(RETRY_TIME));
+		manager.fail(pay, desc, LocalDateTime.now().plusMinutes(getRetryTime()));
 	}
 
 	@Override

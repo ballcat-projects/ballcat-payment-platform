@@ -5,11 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.hccake.ballcat.common.model.domain.PageResult;
+import com.hccake.extend.mybatis.plus.conditions.query.LambdaQueryWrapperX;
 import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
 import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
 import java.time.LocalDateTime;
+import java.util.List;
 import live.lingting.Page;
 import live.lingting.entity.Pay;
+import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.PayStatus;
 
 /**
@@ -65,6 +68,27 @@ public interface PayMapper extends ExtendMapper<Pay> {
 		pageResult.setRecords(iPage.getRecords());
 		pageResult.setTotal(iPage.getTotal());
 		return pageResult;
+	}
+
+	/**
+	 * 查询虚拟货币未提交hash的超时支付
+	 * @param maxTime 支付信息最大创建时间
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-06-10 10:06
+	 */
+	default List<Pay> listVirtualTimeout(LocalDateTime maxTime) {
+
+		final LambdaQueryWrapperX<Pay> wrapper = WrappersX.<Pay>lambdaQueryX()
+				// thirdPartTradeNo
+				.eq(Pay::getThirdPartTradeNo, "")
+				// status
+				.eq(Pay::getStatus, PayStatus.WAIT)
+				// currency
+				.eq(Pay::getCurrency, Currency.USDT)
+				// createTime
+				.le(Pay::getCreateTime, maxTime);
+
+		return selectList(wrapper);
 	}
 
 	/**
