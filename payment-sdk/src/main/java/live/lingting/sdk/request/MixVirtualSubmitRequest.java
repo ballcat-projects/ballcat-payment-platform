@@ -8,7 +8,7 @@ import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
 
 /**
- * 虚拟货币 - 预下单
+ * 虚拟货币 - 提交Hash
  *
  * @author lingting 2021/6/7 17:21
  */

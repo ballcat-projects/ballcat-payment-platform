@@ -38,13 +38,13 @@ public interface PayService extends ExtendService<Pay> {
 	 * @author lingting 2021-06-10 10:06
 	 */
 	List<Pay> listVirtualTimeout(LocalDateTime maxTime);
-/**
- * 查询重试超时的支付信息
- * @return java.util.List<live.lingting.entity.Pay>
- * @author lingting 2021-06-10 11:27
- */
-	List<Pay> listVirtualRetryTimeout();
 
+	/**
+	 * 查询重试超时的支付信息
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-06-10 11:27
+	 */
+	List<Pay> listVirtualRetryTimeout();
 
 	/**
 	 * 根据交易号或者项目交易获取信息
@@ -118,6 +118,5 @@ public interface PayService extends ExtendService<Pay> {
 	 * @author lingting 2021-06-09 15:33
 	 */
 	boolean success(Pay pay);
-
 
 }

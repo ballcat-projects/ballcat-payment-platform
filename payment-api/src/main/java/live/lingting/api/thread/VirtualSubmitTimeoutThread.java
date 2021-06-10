@@ -7,12 +7,10 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import live.lingting.api.manager.VirtualManager;
 import live.lingting.entity.Pay;
-import live.lingting.sdk.enums.Currency;
-import live.lingting.sdk.enums.PayStatus;
 import live.lingting.service.PayService;
 import live.lingting.util.SpringUtils;
-import live.lingting.api.manager.VirtualManager;
 
 /**
  * @author lingting 2021/6/9 13:58

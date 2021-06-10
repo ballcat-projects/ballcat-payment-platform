@@ -8,7 +8,7 @@ import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
 
 /**
- * 虚拟货币 - 预下单
+ * 虚拟货币 - 重试
  *
  * @author lingting 2021/6/7 17:21
  */
