@@ -41,7 +41,7 @@ public class PayController {
 	}
 
 	@PostMapping("virtual/retry")
-	public R<MixVirtualRetryResponse> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException {
+	public R<MixVirtualRetryResponse.Data> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException {
 		model.valid();
 		return R.ok(manager.retry(model));
 	}
