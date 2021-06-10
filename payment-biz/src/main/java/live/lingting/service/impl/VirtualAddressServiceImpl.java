@@ -74,6 +74,7 @@ public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressM
 			}
 
 			try {
+				va.setDisabled(dto.getDisabled());
 				dto.setSuccess(save(va));
 				if (!dto.getSuccess()) {
 					dto.setDesc("保存失败!");
