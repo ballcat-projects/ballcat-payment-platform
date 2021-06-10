@@ -12,7 +12,7 @@ public abstract class AbstractThread<E> extends Thread implements InitializingBe
 
 	@Override
 	public void run() {
-		while (isInterrupted()) {
+		while (!isInterrupted()) {
 			for (E e : listData()) {
 				if (isInterrupted()) {
 					break;
