@@ -1,4 +1,4 @@
-package live.lingting.enums;
+package live.lingting.sdk.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
