@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import live.lingting.Rate;
+import live.lingting.rate.Rate;
 import live.lingting.entity.Pay;
 import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixQueryModel;
