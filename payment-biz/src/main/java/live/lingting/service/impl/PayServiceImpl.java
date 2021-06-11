@@ -56,6 +56,11 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
+	public List<Pay> listNotify() {
+		return baseMapper.listNotify();
+	}
+
+	@Override
 	public Pay getByNo(String tradeNo, String projectTradeNo) {
 		Pay pay = new Pay();
 

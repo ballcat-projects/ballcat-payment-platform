@@ -47,6 +47,13 @@ public interface PayService extends ExtendService<Pay> {
 	List<Pay> listVirtualRetryTimeout();
 
 	/**
+	 * 获取所有需要通知的支付信息
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-06-10 17:10
+	 */
+	List<Pay> listNotify();
+
+	/**
 	 * 根据交易号或者项目交易获取信息
 	 * @param tradeNo 交易号
 	 * @param projectTradeNo 项目交易号

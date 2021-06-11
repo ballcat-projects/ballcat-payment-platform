@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import live.lingting.Page;
 import live.lingting.entity.Pay;
 import live.lingting.sdk.enums.Currency;
+import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.enums.PayStatus;
 
 /**
@@ -106,6 +107,23 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				.eq(Pay::getCurrency, Currency.USDT)
 				// 已超过重试时间
 				.le(Pay::getRetryEndTime, LocalDateTime.now());
+
+		return selectList(wrapper);
+	}
+
+	/**
+	 * 获取所有需要通知的支付信息
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-06-10 17:10
+	 */
+	default List<Pay> listNotify() {
+		final LambdaQueryWrapperX<Pay> wrapper = WrappersX.<Pay>lambdaQueryX()
+				// 支付状态不为等待
+				.ne(Pay::getStatus, PayStatus.WAIT)
+				// 通知状态等待
+				.eq(Pay::getNotifyStatus, NotifyStatus.WAIT)
+
+		;
 
 		return selectList(wrapper);
 	}
