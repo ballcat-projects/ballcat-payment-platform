@@ -61,27 +61,6 @@ CREATE TABLE IF NOT EXISTS `pay`
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='支付信息';
 
-DROP TABLE IF EXISTS `notify_log`;
-CREATE TABLE IF NOT EXISTS `notify_log`
-(
-    `id`          int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `project_id`  int(11)             NOT NULL COMMENT '项目ID',
-    `trade_no`    char(21)            NOT NULL COMMENT '交易号',
-    `notify_url`  varchar(200)        NOT NULL COMMENT '通知地址',
-    `params`      text                NOT NULL COMMENT '请求参数',
-    `http_status` int(11)     DEFAULT 0 COMMENT '请求状态',
-    `res`         text                NOT NULL COMMENT '请求返回值',
-    `time`        datetime(4)         NOT NULL COMMENT '通知时间',
-    `status`      varchar(10) DEFAULT 'WAIT' COMMENT '通知状态',
-    `create_time` datetime(4)         NOT NULL,
-    KEY `idx_project` (`project_id`) USING BTREE,
-    KEY `idx_trade_no` (`trade_no`) USING BTREE,
-    KEY `idx_http` (`http_status`) USING BTREE,
-    KEY `idx_status` (`status`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE utf8mb4_general_ci COMMENT ='通知日志';
-
 DROP TABLE IF EXISTS `virtual_address`;
 CREATE TABLE IF NOT EXISTS `virtual_address`
 (
@@ -98,3 +77,43 @@ CREATE TABLE IF NOT EXISTS `virtual_address`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='虚拟货币地址';
+
+DROP TABLE IF EXISTS `notify`;
+CREATE TABLE IF NOT EXISTS `notify`
+(
+    `id`          bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `project_id`  int(11)                NOT NULL COMMENT '项目ID',
+    `trade_no`    char(21)               NOT NULL COMMENT '交易号',
+    `notify_url`  varchar(200)           NOT NULL COMMENT '通知地址',
+    `status`      varchar(10) DEFAULT 'WAIT' COMMENT '通知状态',
+    `next_time`   datetime(4)            NOT NULL COMMENT '下次通知时间',
+    `count`       int(11)     DEFAULT 0 COMMENT '通知次数',
+    `create_time` datetime(4)            NOT NULL,
+    KEY `idx_project` (`project_id`) USING BTREE,
+    KEY `idx_trade_no` (`trade_no`) USING BTREE,
+    KEY `idx_status` (`status`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE utf8mb4_general_ci COMMENT ='通知';
+
+DROP TABLE IF EXISTS `notify_log`;
+CREATE TABLE IF NOT EXISTS `notify_log`
+(
+    `id`          bigint(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `notify_id`   int(11)                NOT NULL COMMENT '通知ID',
+    `project_id`  int(11)                NOT NULL COMMENT '项目ID',
+    `trade_no`    char(21)               NOT NULL COMMENT '交易号',
+    `notify_url`  varchar(200)           NOT NULL COMMENT '通知地址',
+    `status`      varchar(10) DEFAULT 'WAIT' COMMENT '通知状态',
+    `params`      text                   NOT NULL COMMENT '请求参数',
+    `http_status` int(11)     DEFAULT 0 COMMENT '请求状态',
+    `res`         text                   NOT NULL COMMENT '请求返回值',
+    `create_time` datetime(4)            NOT NULL COMMENT '通知时间',
+    KEY `idx_notify` (`notify_id`) USING BTREE,
+    KEY `idx_project` (`project_id`) USING BTREE,
+    KEY `idx_trade_no` (`trade_no`) USING BTREE,
+    KEY `idx_http` (`http_status`) USING BTREE,
+    KEY `idx_status` (`status`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE utf8mb4_general_ci COMMENT ='通知日志';
