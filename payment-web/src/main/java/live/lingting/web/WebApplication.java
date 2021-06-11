@@ -1,7 +1,7 @@
 package live.lingting.web;
 
-import com.hccake.ballcat.commom.log.access.annotation.EnableAccessLog;
-import com.hccake.ballcat.commom.log.operation.annotation.EnableOperationLog;
+import com.hccake.ballcat.common.log.access.annotation.EnableAccessLog;
+import com.hccake.ballcat.common.log.operation.annotation.EnableOperationLog;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

@@ -1,0 +1,66 @@
+server:
+  port: 23302
+
+spring:
+  redis:
+    host: mix-redis
+  datasource:
+    url: jdbc:mysql://mix-mysql:3306/mix?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: mix
+    password: mix
+  profiles:
+    active: @profiles.active@
+  application:
+    name: @artifactId@
+  boot:
+    admin:
+      client:
+        # 默认关闭监控. 有需要可以自行开启, 并进行相关配置
+        enabled: false
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*Mapper.xml
+  type-enums-package: live.lingting.**.enums
+  configuration:
+    default-enum-type-handler: com.hccake.extend.mybatis.plus.type.EnumNameTypeHandler
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      logic-delete-value: "NOW()"
+
+ballcat:
+  oss:
+    endpoint: 'oss endpoint'
+    access-key: 'oss access key'
+    access-secret: 'oss access secret'
+    bucket: 'oss bucket'
+    acl: PUBLIC_READ
+  security:
+    # 16位 密码加解密密钥
+    password-secret-key: "live:lingting:25"
+    ignore-urls:
+      # 默认配置
+      - /**
+  # 监控加解密密钥
+  actuator:
+    auth: true
+    secret-id: 'mix secret id'
+    secret-key: 'mix secret key'
+  redis:
+    key-prefix: "mix:live:lingting:"
+  log:
+    access:
+      ignore-url-patterns:
+        # 默认配置
+        - /**
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
