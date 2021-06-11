@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "mix", value = "rate")
+@ConfigurationProperties("mix.rate")
 public class RateProperties {
 
 	private String code;
