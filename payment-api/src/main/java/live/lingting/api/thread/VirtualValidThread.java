@@ -125,7 +125,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 			fail(pay, "收款账户不匹配!");
 		}
 		// 支付时间比支付信息创建时间早 SUCCESS_TIMEOUT
-		else if (Duration.between(info.getTime(), pay.getCreateTime()).toMillis() >= SUCCESS_TIMEOUT) {
+		else if (Duration.between(info.getTime(), pay.getCreateTime()).toMinutes() >= SUCCESS_TIMEOUT) {
 			fail(pay, "支付时间比支付信息创建时间早" + SUCCESS_TIMEOUT + "分钟以上");
 		}
 		else {
