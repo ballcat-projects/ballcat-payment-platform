@@ -166,6 +166,8 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				.eq(Pay::getStatus, PayStatus.RETRY)
 				// 如果hash值不为空, 则更新hash
 				.set(StringUtils.hasText(hash), Pay::getThirdPartTradeNo, hash)
+				// 通知状态更新为等待通知
+				.set(Pay::getNotifyStatus, NotifyStatus.WAIT)
 				// 状态更新为等待支付
 				.set(Pay::getStatus, PayStatus.WAIT);
 

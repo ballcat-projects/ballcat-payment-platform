@@ -126,6 +126,10 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean virtualRetry(Pay pay, String hash) {
+		// 第二次请求的hash与第一次提交的一致
+		if (hash.equals(pay.getThirdPartTradeNo())) {
+			hash = "";
+		}
 		if (StringUtils.hasText(hash)) {
 			validateHash(pay, hash);
 		}
