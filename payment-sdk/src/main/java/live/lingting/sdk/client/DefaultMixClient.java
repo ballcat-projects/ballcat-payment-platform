@@ -10,7 +10,6 @@ import javax.net.ssl.HostnameVerifier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import live.lingting.sdk.MixPay;
 import live.lingting.sdk.constant.SdkConstants;
 import live.lingting.sdk.domain.HttpProperties;
 import live.lingting.sdk.exception.MixException;
@@ -18,6 +17,7 @@ import live.lingting.sdk.model.MixModel;
 import live.lingting.sdk.request.MixRequest;
 import live.lingting.sdk.response.MixResponse;
 import live.lingting.sdk.util.JacksonUtils;
+import live.lingting.sdk.util.MixUtils;
 
 /**
  * @author lingting 2021/6/7 20:00
@@ -63,7 +63,7 @@ public class DefaultMixClient implements MixClient {
 		// 填充参数, 但是不覆盖原有数据
 		params.computeIfAbsent(SdkConstants.FIELD_KEY, k -> apiKey);
 		params.computeIfAbsent(SdkConstants.FIELD_NONCE, k -> RandomUtil.randomString(6));
-		params.computeIfAbsent(SdkConstants.FIELD_SIGN, k -> MixPay.sign(apiSecurity, params));
+		params.computeIfAbsent(SdkConstants.FIELD_SIGN, k -> MixUtils.sign(apiSecurity, params));
 
 		return getResponse(request, params);
 	}

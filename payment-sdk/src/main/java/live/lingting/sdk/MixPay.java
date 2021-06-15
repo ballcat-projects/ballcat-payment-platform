@@ -1,16 +1,6 @@
 package live.lingting.sdk;
 
-import static live.lingting.sdk.constant.SdkConstants.FIELD_KEY;
-import static live.lingting.sdk.constant.SdkConstants.FIELD_NONCE;
-import static live.lingting.sdk.constant.SdkConstants.FIELD_SIGN;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Map;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import live.lingting.sdk.client.DefaultMixClient;
 import live.lingting.sdk.client.MixClient;
 import live.lingting.sdk.enums.Chain;
@@ -61,66 +51,6 @@ public class MixPay {
 		this.apiSecurity = apiSecurity;
 		this.notifyUrl = notifyUrl;
 		this.client = client;
-	}
-
-	/**
-	 * 签名
-	 * @param security security
-	 * @param params 参数
-	 * @return java.lang.String
-	 * @author lingting 2021-04-29 14:24
-	 */
-	@SneakyThrows
-	public static String sign(String security, Map<String, String> params) {
-		String[] keyArray = params.keySet().toArray(new String[0]);
-		// 参数key排序
-		Arrays.sort(keyArray);
-		// 构建排序后的用于签名的字符串
-		StringBuilder paramsStr = new StringBuilder();
-		// 参数值
-		Object val;
-		for (String k : keyArray) {
-			// sign 字段不参与签名
-			if (k.equals(FIELD_SIGN)
-					// 参数值为空，不参与签名
-					|| (val = params.get(k)) == null) {
-				continue;
-			}
-
-			paramsStr.append(k).append("=").append(val).append("&");
-		}
-		paramsStr.append("security=").append(security);
-
-		// 构建签名方式
-		final Mac mac = Mac.getInstance("HmacSHA256");
-		SecretKeySpec sk = new SecretKeySpec(security.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-		mac.init(sk);
-
-		// 签名
-		byte[] bytes = mac.doFinal(paramsStr.toString().getBytes(StandardCharsets.UTF_8));
-
-		// 构建返回的签名字符串
-		StringBuilder builder = new StringBuilder();
-
-		for (byte b : bytes) {
-			builder.append(Integer.toHexString((b & 0xFF) | 0x100), 1, 3);
-		}
-
-		return builder.toString().toUpperCase();
-	}
-
-	/**
-	 * 对参数进行验签
-	 * @author lingting 2021-06-07 16:47
-	 */
-	public static boolean verifySign(String security, Map<String, String> params) {
-		// 没有 sign 参数 或 key 参数 或 nonce 参数, 失败
-		if (!params.containsKey(FIELD_SIGN) || !params.containsKey(FIELD_KEY) || !params.containsKey(FIELD_NONCE)) {
-			return false;
-		}
-
-		// 参数中的签名与生成的签名一致, 则成功
-		return params.get(FIELD_SIGN).equals(sign(security, params));
 	}
 
 	/**
@@ -192,7 +122,7 @@ public class MixPay {
 		return query(model);
 	}
 
-	private MixQueryResponse query(MixQueryModel model) throws MixException {
+	public MixQueryResponse query(MixQueryModel model) throws MixException {
 		MixQueryRequest request = new MixQueryRequest();
 		request.setModel(model);
 		return client.execute(request);
@@ -208,7 +138,7 @@ public class MixPay {
 		return rate(model);
 	}
 
-	private MixRateResponse rate(MixRateModel model) throws MixException {
+	public MixRateResponse rate(MixRateModel model) throws MixException {
 		MixRateRequest request = new MixRateRequest();
 		request.setModel(model);
 		return client.execute(request);
