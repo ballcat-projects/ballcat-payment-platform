@@ -15,9 +15,16 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class NotifyUtils {
 
+	/**
+	 * 记录 与次数对应的通知时间, 单位: 分组
+	 */
+	static final Integer[] TIMES;
+
 	static ThreadPoolExecutor executor;
 
 	static {
+		TIMES = new Integer[] { 10, 20, 30, 60, 120, 180, 360, 720 };
+
 		BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>();
 
 		final ThreadFactory factory = new ThreadFactory() {
@@ -37,15 +44,6 @@ public class NotifyUtils {
 			}
 		};
 		executor = new ThreadPoolExecutor(100, Integer.MAX_VALUE, 2, TimeUnit.HOURS, queue, factory);
-	}
-
-	/**
-	 * 记录 与次数对应的通知时间, 单位: 分组
-	 */
-	static final Integer[] TIMES;
-
-	static {
-		TIMES = new Integer[] { 10, 20, 30, 60, 120, 180, 360, 720 };
 	}
 
 	public static LocalDateTime generateNextTime(int count) {

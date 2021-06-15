@@ -49,7 +49,7 @@ public class NotifyServiceImpl extends ExtendServiceImpl<NotifyMapper, Notify> i
 
 	@Override
 	public void notifyComplete(Notify notify, NotifyLog nl) {
-		 baseMapper.notifyComplete(notify,nl);
+		baseMapper.notifyComplete(notify, nl);
 	}
 
 }

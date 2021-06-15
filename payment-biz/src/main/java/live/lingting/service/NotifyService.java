@@ -45,7 +45,6 @@ public interface NotifyService extends ExtendService<Notify> {
 
 	/**
 	 * 通知完成
-	 *
 	 * @param notify 通知
 	 * @param nl 通知日志
 	 * @author lingting 2021-06-15 11:20
