@@ -35,6 +35,7 @@ import live.lingting.api.util.UriUtils;
 import live.lingting.entity.Project;
 import live.lingting.sdk.MixPay;
 import live.lingting.sdk.constant.SdkConstants;
+import live.lingting.sdk.util.MixUtils;
 import live.lingting.sdk.util.StreamUtils;
 import live.lingting.service.ProjectService;
 
@@ -109,7 +110,7 @@ public class SignFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		final boolean verify = MixPay.verifySign(project.getApiSecurity(), params);
+		final boolean verify = MixUtils.verifySign(project.getApiSecurity(), params);
 
 		if (verify) {
 			// 生成要 注入 oauth 的信息
