@@ -1,6 +1,7 @@
 package live.lingting.service.impl;
 
 import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,8 +49,8 @@ public class NotifyServiceImpl extends ExtendServiceImpl<NotifyMapper, Notify> i
 	}
 
 	@Override
-	public void notifyComplete(Notify notify, NotifyLog nl) {
-		baseMapper.notifyComplete(notify, nl);
+	public void notifyComplete(Notify notify, NotifyStatus status, LocalDateTime nextTime) {
+		baseMapper.notifyComplete(notify, status, nextTime);
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import live.lingting.Page;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
+import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
 
 /**
@@ -133,5 +134,13 @@ public interface PayService extends ExtendService<Pay> {
 	 * @author lingting 2021-06-09 15:33
 	 */
 	boolean success(Pay pay);
+
+	/**
+	 * 通知完成
+	 * @param pay 支付信息
+	 * @param status 新状态
+	 * @author lingting 2021-06-15 22:26
+	 */
+	void notifyComplete(Pay pay, NotifyStatus status);
 
 }

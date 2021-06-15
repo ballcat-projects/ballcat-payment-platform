@@ -9,9 +9,7 @@ import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
 import java.time.LocalDateTime;
 import java.util.List;
 import live.lingting.entity.Notify;
-import live.lingting.entity.NotifyLog;
 import live.lingting.sdk.enums.NotifyStatus;
-import live.lingting.util.NotifyUtils;
 
 /**
  * @author lingting 2021/6/10 16:33
@@ -83,16 +81,14 @@ public interface NotifyMapper extends ExtendMapper<Notify> {
 	}
 
 	/**
+	 *
 	 * 通知完成
 	 * @param notify 通知
-	 * @param nl 通知日志
-	 * @author lingting 2021-06-15 11:20
+	 * @param status 新状态
+	 * @param nextTime 下一次通知时间
+	 * @author lingting 2021-06-15 22:23
 	 */
-	default void notifyComplete(Notify notify, NotifyLog nl) {
-		final LocalDateTime nextTime = NotifyUtils.generateNextTime(notify.getCount() + 1);
-		// 通知新状态
-		NotifyStatus status = nextTime == null ? nl.getStatus() : NotifyStatus.WAIT;
-
+	default void notifyComplete(Notify notify, NotifyStatus status, LocalDateTime nextTime) {
 		final LambdaUpdateWrapper<Notify> wrapper = Wrappers.<Notify>lambdaUpdate()
 				// 限定
 				.eq(Notify::getId, notify.getId())
@@ -102,8 +98,8 @@ public interface NotifyMapper extends ExtendMapper<Notify> {
 				.set(Notify::getStatus, status)
 				// 次数
 				.setSql(" count=count+1 ")
-				// 下一次
-				.set(Notify::getNextTime, nextTime);
+				// 下一次. 下次通知时间不为null时设置
+				.set(nextTime != null, Notify::getNextTime, nextTime);
 
 		update(null, wrapper);
 	}
