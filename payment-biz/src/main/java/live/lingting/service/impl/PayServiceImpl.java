@@ -132,6 +132,11 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		return baseMapper.virtualRetry(pay.getTradeNo(), hash);
 	}
 
+	@Override
+	public boolean notifying(Pay pay) {
+		return baseMapper.notifying(pay);
+	}
+
 	private void validateHash(Pay pay, String hash) {
 		String key = PayConstants.getVirtualHashLock(pay.getChain(), hash);
 		if (!redis.setIfAbsent(key, "", TimeUnit.DAYS.toSeconds(1))) {

@@ -21,6 +21,8 @@ public class SdkConstants {
 
 	public static final Integer SUCCESS_CODE = 200;
 
+	public static final String SUCCESS_BODY = "success";
+
 	public static final String FORWARD_SLASH = "/";
 
 	/**

@@ -98,6 +98,14 @@ public interface PayService extends ExtendService<Pay> {
 	boolean virtualRetry(Pay pay, String hash);
 
 	/**
+	 * 对指定支付进行通知上锁
+	 * @param pay 支付信息
+	 * @return boolean
+	 * @author lingting 2021-06-15 09:55
+	 */
+	boolean notifying(Pay pay);
+
+	/**
 	 * 支付失败
 	 * @param pay 支付信息
 	 * @param desc 描述
