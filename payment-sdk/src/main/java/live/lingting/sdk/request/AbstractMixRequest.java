@@ -4,6 +4,7 @@ import com.hccake.ballcat.common.util.json.TypeReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import live.lingting.sdk.domain.HttpProperties;
@@ -19,22 +20,9 @@ import live.lingting.sdk.util.JacksonUtils;
 @Setter
 public abstract class AbstractMixRequest<M extends MixModel, R extends MixResponse<?>> implements MixRequest<M, R> {
 
+	private static final Map<Class<?>, Type> CACHE = new ConcurrentHashMap<>(16);
+
 	private M model;
-
-	private Type type;
-
-	public Type getType() {
-		if (type == null) {
-			final Type superclass = this.getClass().getGenericSuperclass();
-			if (superclass instanceof Class) {
-				throw new IllegalArgumentException(
-						"Internal error: TypeReference constructed without actual type information");
-			}
-
-			type = ((ParameterizedType) superclass).getActualTypeArguments()[1];
-		}
-		return type;
-	}
 
 	@Override
 	public Map<String, String> getParams() throws MixRequestParamsValidException {
@@ -55,16 +43,21 @@ public abstract class AbstractMixRequest<M extends MixModel, R extends MixRespon
 
 	@Override
 	public R convert(String resStr) {
-		final Type superclass = this.getClass().getGenericSuperclass();
-		if (superclass instanceof Class) {
-			throw new IllegalArgumentException(
-					"Internal error: TypeReference constructed without actual type information");
-		}
+		final Class<?> tc = this.getClass();
+
+		CACHE.computeIfAbsent(tc, c -> {
+			final Type superclass = c.getGenericSuperclass();
+			if (superclass instanceof Class) {
+				throw new IllegalArgumentException(
+						"Internal error: TypeReference constructed without actual type information");
+			}
+			return ((ParameterizedType) superclass).getActualTypeArguments()[1];
+		});
 
 		return JacksonUtils.toObj(resStr, new TypeReference<R>() {
 			@Override
 			public Type getType() {
-				return AbstractMixRequest.this.getType();
+				return CACHE.get(tc);
 			}
 		});
 	}
