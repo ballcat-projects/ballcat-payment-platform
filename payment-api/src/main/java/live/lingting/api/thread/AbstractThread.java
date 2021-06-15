@@ -13,12 +13,13 @@ public abstract class AbstractThread<E> extends Thread implements InitializingBe
 	@Override
 	public void run() {
 		while (!isInterrupted()) {
-			for (E e : listData()) {
-				if (isInterrupted()) {
-					break;
+			if (isContinue()) {
+				for (E e : listData()) {
+					if (isInterrupted() || !isContinue()) {
+						break;
+					}
+					handler(e);
 				}
-
-				handler(e);
 			}
 
 			ThreadUtil.sleep(getSleepTime());
@@ -46,6 +47,14 @@ public abstract class AbstractThread<E> extends Thread implements InitializingBe
 	 * @author lingting 2021-06-10 17:25
 	 */
 	public abstract void handler(E e);
+
+	/**
+	 * 是否继续运行
+	 * @author lingting 2021-06-15 10:07
+	 */
+	public boolean isContinue() {
+		return true;
+	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
