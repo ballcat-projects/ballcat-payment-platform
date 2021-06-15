@@ -79,7 +79,7 @@ public class NotifyThread extends AbstractThread<Notify> {
 			final Project project = projectService.getById(notify.getProjectId());
 			final Pay pay = payService.getById(notify.getTradeNo());
 			try {
-				final HttpRequest post = HttpUtil.createPost(pay.getNotifyUrl());
+				final HttpRequest post = HttpUtil.createPost(notify.getNotifyUrl());
 				Map<String, String> params = JsonUtils.toObj(JsonUtils.toJson(pay),
 						new TypeReference<Map<String, String>>() {
 						});
