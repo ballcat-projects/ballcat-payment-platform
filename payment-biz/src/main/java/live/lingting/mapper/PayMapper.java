@@ -173,6 +173,24 @@ public interface PayMapper extends ExtendMapper<Pay> {
 	}
 
 	/**
+	 * 对指定支付进行通知上锁
+	 * @param pay 支付信息
+	 * @return boolean
+	 * @author lingting 2021-06-15 09:55
+	 */
+	default boolean notifying(Pay pay) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限定支付信息
+				.eq(Pay::getTradeNo, pay.getTradeNo())
+				// 限定通知状态
+				.eq(Pay::getNotifyStatus, NotifyStatus.WAIT)
+				// 状态更新为等待支付
+				.set(Pay::getNotifyStatus, NotifyStatus.ING);
+
+		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
 	 * 虚拟支付超时未提交
 	 * @param pay 支付信息
 	 * @param desc 描述

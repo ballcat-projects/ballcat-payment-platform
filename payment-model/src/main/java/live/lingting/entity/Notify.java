@@ -43,7 +43,7 @@ public class Notify {
 	/**
 	 * 下次通知时间
 	 */
-	private LocalDateTime netTime;
+	private LocalDateTime nextTime;
 
 	/**
 	 * 通知次数
