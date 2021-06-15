@@ -33,7 +33,6 @@ import live.lingting.api.enums.ApiResponseCode;
 import live.lingting.api.util.HttpUtils;
 import live.lingting.api.util.UriUtils;
 import live.lingting.entity.Project;
-import live.lingting.sdk.MixPay;
 import live.lingting.sdk.constant.SdkConstants;
 import live.lingting.sdk.util.MixUtils;
 import live.lingting.sdk.util.StreamUtils;

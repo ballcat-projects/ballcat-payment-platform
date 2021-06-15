@@ -12,6 +12,7 @@ import live.lingting.sdk.enums.NotifyStatus;
 
 /**
  * 通知
+ *
  * @author lingting 2021/6/10 16:22
  */
 @Getter
