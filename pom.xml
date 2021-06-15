@@ -82,13 +82,9 @@
     </dependencyManagement>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>com.hccake</groupId>
-                    <artifactId>ballcat-dependencies</artifactId>
-                    <version>${ballcat.version}</version>
-                </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
