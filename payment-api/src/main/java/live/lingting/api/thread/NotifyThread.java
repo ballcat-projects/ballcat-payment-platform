@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import live.lingting.entity.Notify;
@@ -30,6 +31,7 @@ import live.lingting.util.NotifyUtils;
  */
 @Component
 @RequiredArgsConstructor
+@DependsOn("objectMapper")
 public class NotifyThread extends AbstractThread<Notify> {
 
 	/**
