@@ -19,6 +19,7 @@ import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ResponseCode;
 import live.lingting.mapper.PayMapper;
+import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.service.PayService;
@@ -166,6 +167,11 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	@Override
 	public boolean success(Pay pay) {
 		return baseMapper.success(pay.getTradeNo());
+	}
+
+	@Override
+	public void notifyComplete(Pay pay, NotifyStatus status) {
+		baseMapper.notifyComplete(pay, status);
 	}
 
 }

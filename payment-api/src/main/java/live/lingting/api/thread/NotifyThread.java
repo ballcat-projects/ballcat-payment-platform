@@ -6,6 +6,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.hccake.ballcat.common.util.JsonUtils;
 import com.hccake.ballcat.common.util.json.TypeReference;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -94,7 +95,23 @@ public class NotifyThread extends AbstractThread<Notify> {
 				NotifyLog nl = execute(post, json);
 
 				logService.save(nl);
-				service.notifyComplete(notify, nl);
+
+				if (nl.getStatus().equals(NotifyStatus.SUCCESS)) {
+					service.notifyComplete(notify, NotifyStatus.SUCCESS, null);
+					payService.notifyComplete(pay, NotifyStatus.SUCCESS);
+				}
+				else {
+					LocalDateTime nextTime = NotifyUtils.generateNextTime(notify.getCount() + 1);
+					// 通知新状态
+					NotifyStatus status = nextTime == null ? NotifyStatus.FAIL : NotifyStatus.WAIT;
+
+					service.notifyComplete(notify, status, nextTime);
+
+					if (status.equals(NotifyStatus.FAIL)) {
+						payService.notifyComplete(pay, NotifyStatus.FAIL);
+					}
+				}
+
 			}
 			catch (Exception e) {
 				service.unlock(notify);

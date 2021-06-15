@@ -1,10 +1,11 @@
 package live.lingting.service;
 
 import com.hccake.extend.mybatis.plus.service.ExtendService;
+import java.time.LocalDateTime;
 import java.util.List;
 import live.lingting.entity.Notify;
-import live.lingting.entity.NotifyLog;
 import live.lingting.entity.Pay;
+import live.lingting.sdk.enums.NotifyStatus;
 
 /**
  * @author lingting 2021/6/10 16:33
@@ -46,9 +47,10 @@ public interface NotifyService extends ExtendService<Notify> {
 	/**
 	 * 通知完成
 	 * @param notify 通知
-	 * @param nl 通知日志
-	 * @author lingting 2021-06-15 11:20
+	 * @param status 新状态
+	 * @param nextTime 下一次通知时间
+	 * @author lingting 2021-06-15 22:23
 	 */
-	void notifyComplete(Notify notify, NotifyLog nl);
+	void notifyComplete(Notify notify, NotifyStatus status, LocalDateTime nextTime);
 
 }

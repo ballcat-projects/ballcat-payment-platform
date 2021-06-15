@@ -246,4 +246,22 @@ public interface PayMapper extends ExtendMapper<Pay> {
 		return SqlHelper.retBool(update(null, wrapper));
 	}
 
+	/**
+	 * 通知完成
+	 * @param pay 支付信息
+	 * @param status 新状态
+	 * @author lingting 2021-06-15 22:26
+	 */
+	default void notifyComplete(Pay pay, NotifyStatus status) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限制交易信息
+				.eq(Pay::getTradeNo, pay.getTradeNo())
+				// 限制原通知状态
+				.eq(Pay::getNotifyStatus, NotifyStatus.ING)
+				// 设置目标通知状态
+				.set(Pay::getNotifyStatus, status);
+
+		update(null, wrapper);
+	}
+
 }
