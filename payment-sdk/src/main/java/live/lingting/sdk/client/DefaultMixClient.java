@@ -6,7 +6,6 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import java.util.Map;
-import javax.net.ssl.HostnameVerifier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +25,6 @@ import live.lingting.sdk.util.MixUtils;
 @Getter
 @RequiredArgsConstructor
 public class DefaultMixClient implements MixClient {
-
-	private static final HostnameVerifier VERIFIER;
-
-	static {
-		// 不允许URL的主机名和服务器的标识主机名不匹配的情况
-		VERIFIER = (hostname, session) -> false;
-	}
 
 	private final String serverUrl;
 
