@@ -89,14 +89,7 @@ public class NotifyThread extends AbstractThread<Notify> {
 				params.put(SdkConstants.FIELD_NONCE, RandomUtil.randomString(6));
 				params.put(SdkConstants.FIELD_SIGN, MixUtils.sign(project.getApiSecurity(), params));
 
-				final String json = JsonUtils.toJson(params);
-				post.body(json, MediaType.APPLICATION_JSON_VALUE);
-				// 连接超时 10 秒
-				post.setConnectionTimeout(10 * 1000);
-				// 读取超时 10 分钟
-				post.setReadTimeout(10 * 60 * 1000);
-
-				NotifyLog nl = execute(post, json);
+				NotifyLog nl = execute(post, params);
 
 				logService.save(nl);
 
@@ -123,7 +116,14 @@ public class NotifyThread extends AbstractThread<Notify> {
 			}
 		}
 
-		private NotifyLog execute(HttpRequest post, String json) {
+		private NotifyLog execute(HttpRequest post, Map<String, String> params) {
+			final String json = JsonUtils.toJson(params);
+			post.body(json, MediaType.APPLICATION_JSON_VALUE);
+			// 连接超时 10 秒
+			post.setConnectionTimeout(10 * 1000);
+			// 读取超时 5 分钟
+			post.setReadTimeout(5 * 60 * 1000);
+
 			HttpResponse response = null;
 			Exception exception = null;
 			try {
