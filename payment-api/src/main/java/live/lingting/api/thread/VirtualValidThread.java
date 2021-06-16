@@ -129,6 +129,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 			fail(pay, "支付时间比支付信息创建时间早" + SUCCESS_TIMEOUT + "分钟以上");
 		}
 		else {
+			pay.setAmount(info.getValue());
 			// 成功
 			manager.success(pay);
 		}

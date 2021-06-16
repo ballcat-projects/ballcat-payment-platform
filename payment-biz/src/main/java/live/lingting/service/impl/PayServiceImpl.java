@@ -166,7 +166,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean success(Pay pay) {
-		return baseMapper.success(pay.getTradeNo());
+		return baseMapper.success(pay.getTradeNo(), pay.getAmount());
 	}
 
 	@Override
