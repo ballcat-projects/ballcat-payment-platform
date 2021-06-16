@@ -4,6 +4,7 @@ import static live.lingting.sdk.constant.SdkConstants.FIELD_KEY;
 import static live.lingting.sdk.constant.SdkConstants.FIELD_NONCE;
 import static live.lingting.sdk.constant.SdkConstants.FIELD_SIGN;
 
+import com.hccake.ballcat.common.util.json.TypeReference;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;
+import live.lingting.sdk.domain.MixCallback;
 import live.lingting.sdk.enums.Chain;
 
 /**
@@ -143,6 +145,12 @@ public class MixUtils {
 
 		// 参数中的签名与生成的签名一致, 则成功
 		return params.get(FIELD_SIGN).equals(sign(security, params));
+	}
+
+	public static boolean verifySign(String security, MixCallback callback) {
+		return verifySign(security,
+				JacksonUtils.toObj(JacksonUtils.toJson(callback), new TypeReference<Map<String, String>>() {
+				}));
 	}
 
 }
