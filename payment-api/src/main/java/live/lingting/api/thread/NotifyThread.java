@@ -91,6 +91,10 @@ public class NotifyThread extends AbstractThread<Notify> {
 
 				final String json = JsonUtils.toJson(params);
 				post.body(json, MediaType.APPLICATION_JSON_VALUE);
+				// 连接超时 10 秒
+				post.setConnectionTimeout(10 * 1000);
+				// 读取超时 10 分钟
+				post.setReadTimeout(10 * 60 * 1000);
 
 				NotifyLog nl = execute(post, json);
 
