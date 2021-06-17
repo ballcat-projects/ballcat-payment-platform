@@ -268,4 +268,19 @@ public interface PayMapper extends ExtendMapper<Pay> {
 		update(null, wrapper);
 	}
 
+	/**
+	 * 通知转为等待
+	 * @param pay 支付信息
+	 * @author lingting 2021-06-17 15:29
+	 */
+	default void notifyWait(Pay pay) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限制交易信息
+				.eq(Pay::getTradeNo, pay.getTradeNo())
+				// 设置目标通知状态
+				.set(Pay::getNotifyStatus, NotifyStatus.WAIT);
+
+		update(null, wrapper);
+	}
+
 }
