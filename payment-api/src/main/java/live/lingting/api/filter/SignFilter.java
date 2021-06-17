@@ -30,6 +30,7 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 import org.springframework.web.filter.OncePerRequestFilter;
 import live.lingting.Redis;
 import live.lingting.api.enums.ApiResponseCode;
+import live.lingting.api.properties.ApiProperties;
 import live.lingting.api.util.HttpUtils;
 import live.lingting.api.util.UriUtils;
 import live.lingting.entity.Project;
@@ -67,10 +68,13 @@ public class SignFilter extends OncePerRequestFilter {
 
 	private final RedisTokenStoreSerializationStrategy tokenSerialization = new JdkSerializationStrategy();
 
+	private final ApiProperties properties;
+
 	@SneakyThrows
-	public SignFilter(ProjectService projectService, Redis redis) {
+	public SignFilter(ProjectService projectService, Redis redis, ApiProperties properties) {
 		this.projectService = projectService;
 		this.redis = redis;
+		this.properties = properties;
 		allowUris.add("/actuator");
 		allowUris.add("/actuator/");
 	}
@@ -109,7 +113,14 @@ public class SignFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		final boolean verify = MixUtils.verifySign(project.getApiSecurity(), params);
+		final boolean verify;
+		if (properties.isTest()) {
+			verify = true;
+			logger.error("当前使用测试用模式启动!");
+		}
+		else {
+			verify = MixUtils.verifySign(project.getApiSecurity(), params);
+		}
 
 		if (verify) {
 			// 生成要 注入 oauth 的信息

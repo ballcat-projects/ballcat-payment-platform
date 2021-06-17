@@ -1,7 +1,9 @@
 package live.lingting.api.thread;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import live.lingting.api.manager.VirtualManager;
+import live.lingting.api.properties.ApiProperties;
 import live.lingting.entity.Pay;
 import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.PayStatus;
@@ -56,6 +59,8 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	private final VirtualHandler handler;
 
+	private final ApiProperties properties;
+
 	private final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
 			// 限制 hash 不为空
 			.ne(Pay::getThirdPartTradeNo, "")
@@ -85,6 +90,14 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	@Override
 	public void handler(Pay pay) {
+		if (properties.isTest()) {
+			if (RandomUtil.randomInt(10) % 2 == 0) {
+				fail(pay, "测试失败!");
+			}
+			success(pay, new TransactionInfo().setValue(BigDecimal.TEN));
+			return;
+		}
+
 		final Optional<TransactionInfo> optional = handler.getTransaction(pay);
 		// 订单已创建时长
 		final long minutes = Duration.between(pay.getCreateTime(), LocalDateTime.now()).toMinutes();
@@ -129,10 +142,14 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 			fail(pay, "支付时间比支付信息创建时间早" + SUCCESS_TIMEOUT + "分钟以上");
 		}
 		else {
-			pay.setAmount(info.getValue());
-			// 成功
-			manager.success(pay);
+			success(pay, info);
 		}
+	}
+
+	private void success(Pay pay, TransactionInfo info) {
+		pay.setAmount(info.getValue());
+		// 成功
+		manager.success(pay);
 	}
 
 	private Contract getContract(Pay pay) {
