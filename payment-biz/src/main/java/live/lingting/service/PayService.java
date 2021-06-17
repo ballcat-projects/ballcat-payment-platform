@@ -143,4 +143,11 @@ public interface PayService extends ExtendService<Pay> {
 	 */
 	void notifyComplete(Pay pay, NotifyStatus status);
 
+	/**
+	 * 通知转为等待
+	 * @param pay 支付信息
+	 * @author lingting 2021-06-17 15:29
+	 */
+	void notifyWait(Pay pay);
+
 }

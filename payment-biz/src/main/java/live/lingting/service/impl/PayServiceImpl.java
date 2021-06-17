@@ -174,4 +174,9 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		baseMapper.notifyComplete(pay, status);
 	}
 
+	@Override
+	public void notifyWait(Pay pay) {
+		baseMapper.notifyWait(pay);
+	}
+
 }
