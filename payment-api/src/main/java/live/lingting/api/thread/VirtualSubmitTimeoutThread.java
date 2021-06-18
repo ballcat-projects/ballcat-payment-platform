@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import live.lingting.ApiConfig;
+import live.lingting.api.ApiConfig;
 import live.lingting.api.manager.VirtualManager;
 import live.lingting.entity.Pay;
 import live.lingting.service.PayService;

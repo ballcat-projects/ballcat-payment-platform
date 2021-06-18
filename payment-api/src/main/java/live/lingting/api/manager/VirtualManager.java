@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import live.lingting.ApiConfig;
+import live.lingting.api.ApiConfig;
 import live.lingting.Redis;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;

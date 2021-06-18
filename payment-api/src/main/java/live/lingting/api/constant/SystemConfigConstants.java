@@ -1,4 +1,4 @@
-package live.lingting.constant;
+package live.lingting.api.constant;
 
 import lombok.experimental.UtilityClass;
 
