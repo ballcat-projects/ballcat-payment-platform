@@ -107,7 +107,7 @@ public class SignFilter extends OncePerRequestFilter {
 
 		Project project = projectService.getByApiKey(key);
 
-		if (project.getDisabled()) {
+		if (project == null || project.getDisabled()) {
 			// 用户状态异常
 			HttpUtils.write(response, HttpStatus.BAD_REQUEST, ApiResponseCode.DISABLED);
 			return;
