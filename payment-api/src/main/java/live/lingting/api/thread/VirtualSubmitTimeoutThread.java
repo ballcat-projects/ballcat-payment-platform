@@ -2,13 +2,12 @@ package live.lingting.api.thread;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import live.lingting.ApiConfig;
 import live.lingting.api.manager.VirtualManager;
 import live.lingting.entity.Pay;
 import live.lingting.service.PayService;
-import live.lingting.util.SpringUtils;
 
 /**
  * @author lingting 2021/6/9 13:58
@@ -17,14 +16,11 @@ import live.lingting.util.SpringUtils;
 @RequiredArgsConstructor
 public class VirtualSubmitTimeoutThread extends AbstractThread<Pay> {
 
-	/**
-	 * 超时时间, 单位: 分钟
-	 */
-	private static final Long TIMEOUT = TimeUnit.HOURS.toMinutes(2);
-
 	private final VirtualManager manager;
 
 	private final PayService service;
+
+	private final ApiConfig config;
 
 	@Override
 	public List<Pay> listData() {
@@ -41,11 +37,7 @@ public class VirtualSubmitTimeoutThread extends AbstractThread<Pay> {
 	 * @author lingting 2021-06-09 14:06
 	 */
 	public LocalDateTime getMaxTime() {
-		if (!SpringUtils.isProd()) {
-			// 测试服, 一分钟未提交hash就超时
-			return LocalDateTime.now().minusMinutes(1);
-		}
-		return LocalDateTime.now().minusMinutes(TIMEOUT);
+		return LocalDateTime.now().minusMinutes(config.getVirtualSubmitTimeout());
 	}
 
 }
