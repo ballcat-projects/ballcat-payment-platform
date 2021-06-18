@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import live.lingting.ApiConfig;
+import live.lingting.api.ApiConfig;
 import live.lingting.api.manager.VirtualManager;
 import live.lingting.api.properties.ApiProperties;
 import live.lingting.entity.Pay;
