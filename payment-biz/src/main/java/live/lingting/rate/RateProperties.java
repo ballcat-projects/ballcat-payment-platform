@@ -12,10 +12,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("mix.rate")
 public class RateProperties {
 
-	private String code;
+	private Yy yy;
 
-	private String key;
+	@Getter
+	@Setter
+	public static class Yy {
 
-	private String security;
+		private String code;
+
+		private String key;
+
+		private String security;
+
+	}
 
 }
