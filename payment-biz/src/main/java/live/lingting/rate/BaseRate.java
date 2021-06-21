@@ -15,4 +15,5 @@ public interface BaseRate {
 	 * @author lingting 2021-06-11 15:54
 	 */
 	BigDecimal get(Currency currency);
+
 }

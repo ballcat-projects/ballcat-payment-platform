@@ -19,6 +19,7 @@ import live.lingting.entity.NotifyLog;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
 import live.lingting.sdk.constant.SdkConstants;
+import live.lingting.sdk.domain.MixCallback;
 import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.util.MixUtils;
 import live.lingting.service.NotifyLogService;
@@ -81,8 +82,7 @@ public class NotifyThread extends AbstractThread<Notify> {
 			final Pay pay = payService.getById(notify.getTradeNo());
 			try {
 				final HttpRequest post = HttpUtil.createPost(notify.getNotifyUrl());
-				Map<String, String> params = generateParams(project, pay);
-				NotifyLog nl = execute(post, params);
+				NotifyLog nl = execute(post, getBody(project, pay));
 
 				logService.save(nl);
 
@@ -109,9 +109,8 @@ public class NotifyThread extends AbstractThread<Notify> {
 			}
 		}
 
-		private NotifyLog execute(HttpRequest post, Map<String, String> params) {
-			final String json = JsonUtils.toJson(params);
-			post.body(json, MediaType.APPLICATION_JSON_VALUE);
+		private NotifyLog execute(HttpRequest post, String body) {
+			post.body(body, MediaType.APPLICATION_JSON_VALUE);
 			// 连接超时 10 秒
 			post.setConnectionTimeout(10 * 1000);
 			// 读取超时 5 分钟
@@ -141,19 +140,40 @@ public class NotifyThread extends AbstractThread<Notify> {
 			return new NotifyLog().setNotifyId(notify.getId()).setNotifyUrl(notify.getNotifyUrl())
 					.setTradeNo(notify.getTradeNo()).setStatus(success ? NotifyStatus.SUCCESS : NotifyStatus.FAIL)
 					.setHttpStatus(response == null ? 0 : response.getStatus()).setProjectId(notify.getProjectId())
-					.setParams(json).setRes(res);
+					.setParams(body).setRes(res);
 		}
 
-		private Map<String, String> generateParams(Project project, Pay pay) {
-			Map<String, String> params = JsonUtils.toObj(JsonUtils.toJson(pay),
+		private String getBody(Project project, Pay pay) {
+			final MixCallback callback = new MixCallback();
+			callback.setTradeNo(pay.getTradeNo());
+			callback.setProjectId(pay.getProjectId());
+			callback.setProjectTradeNo(pay.getProjectTradeNo());
+			callback.setThirdPartTradeNo(pay.getThirdPartTradeNo());
+			callback.setStatus(pay.getStatus());
+			callback.setAmount(pay.getAmount());
+			callback.setCurrency(pay.getCurrency());
+			callback.setChain(pay.getChain());
+			callback.setAddress(pay.getAddress());
+			callback.setRetryEndTime(pay.getRetryEndTime());
+			callback.setThirdPart(pay.getThirdPart());
+			callback.setMode(pay.getMode());
+			callback.setDesc(pay.getDesc());
+			callback.setNotifyUrl(pay.getNotifyUrl());
+			callback.setRate(notify.getRate());
+			callback.setNotifyStatus(pay.getNotifyStatus());
+			callback.setCompleteTime(pay.getCompleteTime());
+			callback.setCreateTime(pay.getCreateTime());
+
+			callback.setKey(project.getApiKey());
+			callback.setNonce(RandomUtil.randomString(6));
+
+			Map<String, String> params = JsonUtils.toObj(JsonUtils.toJson(callback),
 					new TypeReference<Map<String, String>>() {
 					});
 
-			params.put(SdkConstants.FIELD_RATE, notify.getRate() == null ? null : notify.getRate().toPlainString());
-			params.put(SdkConstants.FIELD_KEY, project.getApiKey());
-			params.put(SdkConstants.FIELD_NONCE, RandomUtil.randomString(6));
-			params.put(SdkConstants.FIELD_SIGN, MixUtils.sign(project.getApiSecurity(), params));
-			return params;
+			callback.setSign(MixUtils.sign(project.getApiSecurity(), params));
+
+			return JsonUtils.toJson(callback);
 		}
 
 	}
