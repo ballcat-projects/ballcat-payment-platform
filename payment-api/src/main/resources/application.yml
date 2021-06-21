@@ -64,3 +64,10 @@ management:
   endpoint:
     health:
       show-details: always
+
+mix:
+  rate:
+    yy:
+      code: "yy code"
+      key: "yy key"
+      security: "yy security"
