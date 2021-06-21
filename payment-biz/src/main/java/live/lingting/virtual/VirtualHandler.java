@@ -35,7 +35,7 @@ public class VirtualHandler {
 
 	public static final String ETHERSCAN_PROJECT_SECURITY = "40d81f800fed4b199e8b2ef4ec644be6";
 
-	public static final String TRONSCAN_API_KEY = "40d81f800fed4b199e8b2ef4ec644be6";
+	public static final String TRONSCAN_API_KEY = "0d44c0f5-9ac1-4615-9abd-c1d5ed7e1b0c";
 
 	private final Redis redis;
 
