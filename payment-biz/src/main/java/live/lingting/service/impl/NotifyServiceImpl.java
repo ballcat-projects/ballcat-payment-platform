@@ -6,9 +6,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import live.lingting.entity.Notify;
-import live.lingting.entity.NotifyLog;
 import live.lingting.entity.Pay;
 import live.lingting.mapper.NotifyMapper;
+import live.lingting.rate.Rate;
 import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.service.NotifyService;
 import live.lingting.util.NotifyUtils;
@@ -22,12 +22,14 @@ public class NotifyServiceImpl extends ExtendServiceImpl<NotifyMapper, Notify> i
 
 	private final PayServiceImpl payService;
 
+	private final Rate rate;
+
 	@Override
 	public boolean create(Pay pay) {
 		if (payService.notifying(pay)) {
 			final Notify notify = new Notify().setNotifyUrl(pay.getNotifyUrl()).setCount(0)
 					.setNextTime(NotifyUtils.generateNextTime(0)).setProjectId(pay.getProjectId())
-					.setTradeNo(pay.getTradeNo()).setStatus(NotifyStatus.WAIT);
+					.setTradeNo(pay.getTradeNo()).setStatus(NotifyStatus.WAIT).setRate(rate.get(pay.getCurrency()));
 			return save(notify);
 		}
 		return false;
