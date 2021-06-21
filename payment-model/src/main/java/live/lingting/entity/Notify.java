@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,6 +51,11 @@ public class Notify {
 	 * 通知次数
 	 */
 	private Integer count;
+
+	/**
+	 * 汇率
+	 */
+	private BigDecimal rate;
 
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;

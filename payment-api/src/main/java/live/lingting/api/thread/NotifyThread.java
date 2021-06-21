@@ -81,14 +81,7 @@ public class NotifyThread extends AbstractThread<Notify> {
 			final Pay pay = payService.getById(notify.getTradeNo());
 			try {
 				final HttpRequest post = HttpUtil.createPost(notify.getNotifyUrl());
-				Map<String, String> params = JsonUtils.toObj(JsonUtils.toJson(pay),
-						new TypeReference<Map<String, String>>() {
-						});
-
-				params.put(SdkConstants.FIELD_KEY, project.getApiKey());
-				params.put(SdkConstants.FIELD_NONCE, RandomUtil.randomString(6));
-				params.put(SdkConstants.FIELD_SIGN, MixUtils.sign(project.getApiSecurity(), params));
-
+				Map<String, String> params = generateParams(project, pay);
 				NotifyLog nl = execute(post, params);
 
 				logService.save(nl);
@@ -149,6 +142,18 @@ public class NotifyThread extends AbstractThread<Notify> {
 					.setTradeNo(notify.getTradeNo()).setStatus(success ? NotifyStatus.SUCCESS : NotifyStatus.FAIL)
 					.setHttpStatus(response == null ? 0 : response.getStatus()).setProjectId(notify.getProjectId())
 					.setParams(json).setRes(res);
+		}
+
+		private Map<String, String> generateParams(Project project, Pay pay) {
+			Map<String, String> params = JsonUtils.toObj(JsonUtils.toJson(pay),
+					new TypeReference<Map<String, String>>() {
+					});
+
+			params.put(SdkConstants.FIELD_RATE, notify.getRate() == null ? null : notify.getRate().toPlainString());
+			params.put(SdkConstants.FIELD_KEY, project.getApiKey());
+			params.put(SdkConstants.FIELD_NONCE, RandomUtil.randomString(6));
+			params.put(SdkConstants.FIELD_SIGN, MixUtils.sign(project.getApiSecurity(), params));
+			return params;
 		}
 
 	}

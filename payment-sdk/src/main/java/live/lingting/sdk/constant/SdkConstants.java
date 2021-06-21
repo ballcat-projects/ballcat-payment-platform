@@ -15,6 +15,8 @@ public class SdkConstants {
 
 	public static final String FIELD_NONCE = "nonce";
 
+	public static final String FIELD_RATE = "rate";
+
 	public static final String NOTIFY_URL_PREFIX = "http";
 
 	public static final String HTTP_PROTOCOL_HTTPS = "https";
