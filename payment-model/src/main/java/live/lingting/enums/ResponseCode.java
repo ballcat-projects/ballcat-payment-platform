@@ -48,11 +48,15 @@ public enum ResponseCode implements ResultCode {
 	/**
 	 * 禁止重试!
 	 */
-	RETRY_DISABLES(233008, "禁止重试!"),
+	RETRY_DISABLES(233009, "禁止重试!"),
 	/**
 	 * 重试失败
 	 */
-	RETRY_FAIL(233006, "重试失败!"),
+	RETRY_FAIL(233010, "重试失败!"),
+	/**
+	 * 未知支付信息!
+	 */
+	PAY_NOT_FOUND(233011, "未知支付信息!"),
 
 	;
 

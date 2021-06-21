@@ -1,5 +1,7 @@
 package live.lingting.service.impl;
 
+import static live.lingting.enums.ResponseCode.PAY_NOT_FOUND;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.hccake.ballcat.common.core.exception.BusinessException;
@@ -72,7 +74,13 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 			pay.setProjectTradeNo(projectTradeNo);
 		}
 
-		return baseMapper.selectOne(baseMapper.getWrapper(pay));
+		pay = baseMapper.selectOne(baseMapper.getWrapper(pay));
+
+		if (pay == null) {
+			throw new BusinessException(PAY_NOT_FOUND);
+		}
+
+		return pay;
 	}
 
 	@Override
