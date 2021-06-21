@@ -33,8 +33,8 @@ class MixPayTest {
 
 	@BeforeAll
 	public static void init() {
-		mixPay = new MixPay("http://192.168.1.5:23302", "h8u45pyloe8zmefy", "f528dc13cc87416e9734716221f67244",
-				"http://192.168.1.5:23302/test");
+		mixPay = new MixPay("http://192.168.1.5:23302", "f1nelus5ktvbyrih", "5384cc1276794f1f900e21126f409106",
+				"http://127.0.0.1:23302/test");
 	}
 
 	@SneakyThrows
