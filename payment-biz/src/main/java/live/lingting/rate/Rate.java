@@ -3,12 +3,14 @@ package live.lingting.rate;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import live.lingting.sdk.enums.Currency;
 
 /**
  * @author lingting 2021/6/11 15:53
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Rate {
@@ -27,10 +29,16 @@ public class Rate {
 		if (currency == Currency.CNY) {
 			return CNY_RATE;
 		}
+		BigDecimal decimal;
 		for (BaseRate rate : rates) {
-			final BigDecimal decimal = rate.get(currency);
-			if (decimal != null) {
-				return decimal;
+			try {
+				decimal = rate.get(currency);
+				if (decimal != null) {
+					return decimal;
+				}
+			}
+			catch (Exception ignored) {
+				// ignored
 			}
 		}
 		return null;

@@ -53,6 +53,9 @@ public class YyRate implements BaseRate {
 		}
 
 		final HttpRequest get = HttpUtil.createGet(URL + Req.of(code, Currency.CNY.name(), "1"));
+		get.setConnectionTimeout(CONNECT_TIMEOUT.intValue());
+		get.setReadTimeout(READ_TIMEOUT.intValue());
+
 		get.auth("APPCODE " + appCode);
 		final HttpResponse response = get.execute();
 		final BigDecimal rate = new BigDecimal(Res.of(response.body()).getBody().getMoney());
