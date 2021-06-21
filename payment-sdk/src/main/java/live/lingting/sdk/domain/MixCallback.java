@@ -90,6 +90,11 @@ public class MixCallback {
 	private String notifyUrl;
 
 	/**
+	 * 汇率
+	 */
+	private BigDecimal rate;
+
+	/**
 	 * 通知状态, 当某个回调成功时: SUCCESS, 所有回调失败时: FAIL, 还有剩余回调次数时: WAIT
 	 */
 	private NotifyStatus notifyStatus;

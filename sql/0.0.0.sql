@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `virtual_address`
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='虚拟货币地址';
 
+ALTER TABLE `notify` ADD COLUMN `rate`        decimal(12, 4) DEFAULT NULL COMMENT '汇率';
 DROP TABLE IF EXISTS `notify`;
 CREATE TABLE IF NOT EXISTS `notify`
 (
@@ -85,9 +86,10 @@ CREATE TABLE IF NOT EXISTS `notify`
     `project_id`  int(11)                NOT NULL COMMENT '项目ID',
     `trade_no`    char(21)               NOT NULL COMMENT '交易号',
     `notify_url`  varchar(200)           NOT NULL COMMENT '通知地址',
-    `status`      varchar(10) DEFAULT 'WAIT' COMMENT '通知状态',
+    `status`      varchar(10)    DEFAULT 'WAIT' COMMENT '通知状态',
     `next_time`   datetime(4)            NOT NULL COMMENT '下次通知时间',
-    `count`       int(11)     DEFAULT 0 COMMENT '通知次数',
+    `count`       int(11)        DEFAULT 0 COMMENT '通知次数',
+    `rate`        decimal(12, 4) DEFAULT NULL COMMENT '汇率',
     `create_time` datetime(4)            NOT NULL,
     KEY `idx_project` (`project_id`) USING BTREE,
     KEY `idx_trade_no` (`trade_no`) USING BTREE,
