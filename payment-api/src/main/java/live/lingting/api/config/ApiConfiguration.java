@@ -18,12 +18,14 @@ import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.schema.Column;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import live.lingting.api.filter.SignFilter;
+import live.lingting.api.properties.ApiProperties;
 import live.lingting.api.util.SecurityUtils;
 import live.lingting.constant.TableConstants;
 import live.lingting.util.SpringUtils;
@@ -34,6 +36,7 @@ import live.lingting.util.SpringUtils;
 @MapperScan(basePackages = "live.lingting.**.mapper")
 @ComponentScan(basePackages = "live.lingting")
 @Configuration(proxyBeanMethods = false)
+@EnableConfigurationProperties(ApiProperties.class)
 public class ApiConfiguration {
 
 	@Bean

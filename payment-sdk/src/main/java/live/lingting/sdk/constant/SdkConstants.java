@@ -15,11 +15,15 @@ public class SdkConstants {
 
 	public static final String FIELD_NONCE = "nonce";
 
+	public static final String FIELD_RATE = "rate";
+
 	public static final String NOTIFY_URL_PREFIX = "http";
 
 	public static final String HTTP_PROTOCOL_HTTPS = "https";
 
 	public static final Integer SUCCESS_CODE = 200;
+
+	public static final String SUCCESS_BODY = "success";
 
 	public static final String FORWARD_SLASH = "/";
 

@@ -6,11 +6,9 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import java.util.Map;
-import javax.net.ssl.HostnameVerifier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import live.lingting.sdk.MixPay;
 import live.lingting.sdk.constant.SdkConstants;
 import live.lingting.sdk.domain.HttpProperties;
 import live.lingting.sdk.exception.MixException;
@@ -18,6 +16,7 @@ import live.lingting.sdk.model.MixModel;
 import live.lingting.sdk.request.MixRequest;
 import live.lingting.sdk.response.MixResponse;
 import live.lingting.sdk.util.JacksonUtils;
+import live.lingting.sdk.util.MixUtils;
 
 /**
  * @author lingting 2021/6/7 20:00
@@ -26,13 +25,6 @@ import live.lingting.sdk.util.JacksonUtils;
 @Getter
 @RequiredArgsConstructor
 public class DefaultMixClient implements MixClient {
-
-	private static final HostnameVerifier VERIFIER;
-
-	static {
-		// 不允许URL的主机名和服务器的标识主机名不匹配的情况
-		VERIFIER = (hostname, session) -> false;
-	}
 
 	private final String serverUrl;
 
@@ -63,7 +55,7 @@ public class DefaultMixClient implements MixClient {
 		// 填充参数, 但是不覆盖原有数据
 		params.computeIfAbsent(SdkConstants.FIELD_KEY, k -> apiKey);
 		params.computeIfAbsent(SdkConstants.FIELD_NONCE, k -> RandomUtil.randomString(6));
-		params.computeIfAbsent(SdkConstants.FIELD_SIGN, k -> MixPay.sign(apiSecurity, params));
+		params.computeIfAbsent(SdkConstants.FIELD_SIGN, k -> MixUtils.sign(apiSecurity, params));
 
 		return getResponse(request, params);
 	}

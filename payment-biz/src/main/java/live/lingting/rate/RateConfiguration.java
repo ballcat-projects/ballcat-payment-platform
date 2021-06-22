@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 public class RateConfiguration {
 
 	@Bean
-	@ConditionalOnMissingBean(Rate.class)
-	@ConditionalOnProperty(prefix = "mix.rate", name = "code")
-	public Rate defaultRate(RateProperties properties) {
+	@ConditionalOnMissingBean(YyRate.class)
+	@ConditionalOnProperty(prefix = "mix.rate.yy", name = "code")
+	public YyRate defaultRate(RateProperties properties) {
 		return new YyRate(properties);
 	}
 

@@ -22,9 +22,4 @@ public class HttpProperties {
 	 */
 	private Integer readTimeout = 30000;
 
-	/**
-	 * 是否校验ssl
-	 */
-	private Boolean verifierSsl = true;
-
 }

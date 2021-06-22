@@ -17,7 +17,7 @@
 
     <properties>
         <revision>0.0.1</revision>
-        <sdk-version>0.0.1</sdk-version>
+        <sdk-version>0.0.1-SNAPSHOT</sdk-version>
 
         <spring-boot.version>2.4.3</spring-boot.version>
         <spring-javaformat-checkstyle.version>0.0.27</spring-javaformat-checkstyle.version>
@@ -82,13 +82,9 @@
     </dependencyManagement>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>com.hccake</groupId>
-                    <artifactId>ballcat-dependencies</artifactId>
-                    <version>${ballcat.version}</version>
-                </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>

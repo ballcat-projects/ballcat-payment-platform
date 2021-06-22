@@ -2,13 +2,13 @@ package live.lingting.api.manager;
 
 import com.hccake.ballcat.common.core.exception.BusinessException;
 import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import live.lingting.Redis;
+import live.lingting.api.ApiConfig;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
 import live.lingting.enums.ResponseCode;
@@ -30,13 +30,13 @@ import live.lingting.service.VirtualAddressService;
 @RequiredArgsConstructor
 public class VirtualManager {
 
-	public static final Long EXPIRE_TIME = TimeUnit.HOURS.toMinutes(2);
-
 	private final Redis redis;
 
 	private final PayService payService;
 
 	private final VirtualAddressService virtualAddressService;
+
+	private final ApiConfig config;
 
 	/**
 	 * 虚拟货币预下单
@@ -47,7 +47,7 @@ public class VirtualManager {
 		final Pay pay = payService.virtualCreate(model, project);
 		final MixVirtualPayResponse.Data data = new MixVirtualPayResponse.Data();
 		data.setAddress(pay.getAddress());
-		data.setExpireTime(LocalDateTime.now().plusMinutes(EXPIRE_TIME));
+		data.setExpireTime(LocalDateTime.now().plusMinutes(config.getVirtualSubmitTimeout()));
 		data.setTradeNo(pay.getTradeNo());
 		return data;
 	}

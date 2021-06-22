@@ -2,7 +2,6 @@ package live.lingting.sdk;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.RandomUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,8 +33,8 @@ class MixPayTest {
 
 	@BeforeAll
 	public static void init() {
-		mixPay = new MixPay("http://127.0.0.1:23302", "h8u45pyloe8zmefy", "f528dc13cc87416e9734716221f67244",
-				"https://www.baidu.com");
+		mixPay = new MixPay("http://192.168.1.5:23302", "f1nelus5ktvbyrih", "5384cc1276794f1f900e21126f409106",
+				"http://127.0.0.1:23302/test");
 	}
 
 	@SneakyThrows
@@ -49,7 +48,7 @@ class MixPayTest {
 	@Test
 	void virtualSubmit() {
 		virtualPay();
-		String hash = RandomUtil.randomString(64);
+		String hash = "33c4be98527a8fafba8e1e5ff1c8f32f45e6ddd74e923915da588b4fd707ee04";
 		if (mixVirtualPayResponse.isSuccess()) {
 			mixVirtualSubmitResponse = mixPay.virtualSubmit(mixVirtualPayResponse.getTradeNo(), "", hash);
 			log.info(mixVirtualSubmitResponse.toString());
@@ -59,9 +58,8 @@ class MixPayTest {
 	@SneakyThrows
 	@Test
 	void virtualRetry() {
-		String tradeNo = "111402847045450076160";
-		// String hash = "";
-		String hash = RandomUtil.randomString(64);
+		String tradeNo = "111404767951348961280";
+		String hash = "";
 		mixVirtualRetryResponse = mixPay.virtualRetry(tradeNo, "", hash);
 		log.info(mixVirtualRetryResponse.toString());
 	}

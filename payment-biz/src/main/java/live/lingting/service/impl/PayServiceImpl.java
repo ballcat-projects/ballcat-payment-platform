@@ -1,5 +1,7 @@
 package live.lingting.service.impl;
 
+import static live.lingting.enums.ResponseCode.PAY_NOT_FOUND;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.hccake.ballcat.common.core.exception.BusinessException;
@@ -19,6 +21,7 @@ import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ResponseCode;
 import live.lingting.mapper.PayMapper;
+import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.service.PayService;
@@ -71,7 +74,13 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 			pay.setProjectTradeNo(projectTradeNo);
 		}
 
-		return baseMapper.selectOne(baseMapper.getWrapper(pay));
+		pay = baseMapper.selectOne(baseMapper.getWrapper(pay));
+
+		if (pay == null) {
+			throw new BusinessException(PAY_NOT_FOUND);
+		}
+
+		return pay;
 	}
 
 	@Override
@@ -126,10 +135,19 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean virtualRetry(Pay pay, String hash) {
+		// 第二次请求的hash与第一次提交的一致
+		if (hash.equals(pay.getThirdPartTradeNo())) {
+			hash = "";
+		}
 		if (StringUtils.hasText(hash)) {
 			validateHash(pay, hash);
 		}
 		return baseMapper.virtualRetry(pay.getTradeNo(), hash);
+	}
+
+	@Override
+	public boolean notifying(Pay pay) {
+		return baseMapper.notifying(pay);
 	}
 
 	private void validateHash(Pay pay, String hash) {
@@ -156,7 +174,17 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean success(Pay pay) {
-		return baseMapper.success(pay.getTradeNo());
+		return baseMapper.success(pay.getTradeNo(), pay.getAmount());
+	}
+
+	@Override
+	public void notifyComplete(Pay pay, NotifyStatus status) {
+		baseMapper.notifyComplete(pay, status);
+	}
+
+	@Override
+	public void notifyWait(Pay pay) {
+		baseMapper.notifyWait(pay);
 	}
 
 }

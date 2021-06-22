@@ -16,12 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 import live.lingting.sdk.enums.Currency;
 
 /**
- * 默认使用的是在阿里云购买的 易源数据 汇率查询api
+ * 阿里云购买的 易源数据 汇率查询api
  *
  * @author lingting 2021/5/25 10:24
  */
 @Slf4j
-public class YyRate implements Rate {
+public class YyRate implements BaseRate {
 
 	private static final String URL = "https://ali-waihui.showapi.com/waihui-transform";
 
@@ -32,9 +32,10 @@ public class YyRate implements Rate {
 	private final String appSecret;
 
 	public YyRate(RateProperties properties) {
-		this.appCode = properties.getCode();
-		this.appKey = properties.getKey();
-		this.appSecret = properties.getSecurity();
+		final RateProperties.Yy yy = properties.getYy();
+		this.appCode = yy.getCode();
+		this.appKey = yy.getKey();
+		this.appSecret = yy.getSecurity();
 	}
 
 	@Override
@@ -42,7 +43,7 @@ public class YyRate implements Rate {
 		String code;
 		switch (type) {
 		case CNY:
-			return CNY_RATE;
+			return Rate.CNY_RATE;
 		case USDT:
 			code = "USD";
 			break;
@@ -52,6 +53,9 @@ public class YyRate implements Rate {
 		}
 
 		final HttpRequest get = HttpUtil.createGet(URL + Req.of(code, Currency.CNY.name(), "1"));
+		get.setConnectionTimeout(CONNECT_TIMEOUT.intValue());
+		get.setReadTimeout(READ_TIMEOUT.intValue());
+
 		get.auth("APPCODE " + appCode);
 		final HttpResponse response = get.execute();
 		final BigDecimal rate = new BigDecimal(Res.of(response.body()).getBody().getMoney());

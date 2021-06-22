@@ -9,6 +9,7 @@ import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.conditions.query.LambdaQueryWrapperX;
 import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
 import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.util.StringUtils;
@@ -166,8 +167,28 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				.eq(Pay::getStatus, PayStatus.RETRY)
 				// 如果hash值不为空, 则更新hash
 				.set(StringUtils.hasText(hash), Pay::getThirdPartTradeNo, hash)
+				// 通知状态更新为等待通知
+				.set(Pay::getNotifyStatus, NotifyStatus.WAIT)
 				// 状态更新为等待支付
 				.set(Pay::getStatus, PayStatus.WAIT);
+
+		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
+	 * 对指定支付进行通知上锁
+	 * @param pay 支付信息
+	 * @return boolean
+	 * @author lingting 2021-06-15 09:55
+	 */
+	default boolean notifying(Pay pay) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限定支付信息
+				.eq(Pay::getTradeNo, pay.getTradeNo())
+				// 限定通知状态
+				.eq(Pay::getNotifyStatus, NotifyStatus.WAIT)
+				// 状态更新为等待支付
+				.set(Pay::getNotifyStatus, NotifyStatus.ING);
 
 		return SqlHelper.retBool(update(null, wrapper));
 	}
@@ -207,10 +228,11 @@ public interface PayMapper extends ExtendMapper<Pay> {
 	/**
 	 * 已完成支付
 	 * @param tradeNo 交易号
+	 * @param amount 成功金额
 	 * @return boolean
 	 * @author lingting 2021-06-09 15:33
 	 */
-	default boolean success(String tradeNo) {
+	default boolean success(String tradeNo, BigDecimal amount) {
 		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
 				// 限制交易信息
 				.eq(Pay::getTradeNo, tradeNo)
@@ -218,12 +240,47 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				.eq(Pay::getStatus, PayStatus.WAIT)
 				// 设置目标状态
 				.set(Pay::getStatus, PayStatus.SUCCESS)
+				// 设置金额
+				.set(Pay::getAmount, amount)
 				// 设置描述
 				.set(Pay::getDesc, "支付成功")
 				// 完成时间
 				.set(Pay::getCompleteTime, LocalDateTime.now());
 
 		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
+	 * 通知完成
+	 * @param pay 支付信息
+	 * @param status 新状态
+	 * @author lingting 2021-06-15 22:26
+	 */
+	default void notifyComplete(Pay pay, NotifyStatus status) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限制交易信息
+				.eq(Pay::getTradeNo, pay.getTradeNo())
+				// 限制原通知状态
+				.eq(Pay::getNotifyStatus, NotifyStatus.ING)
+				// 设置目标通知状态
+				.set(Pay::getNotifyStatus, status);
+
+		update(null, wrapper);
+	}
+
+	/**
+	 * 通知转为等待
+	 * @param pay 支付信息
+	 * @author lingting 2021-06-17 15:29
+	 */
+	default void notifyWait(Pay pay) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限制交易信息
+				.eq(Pay::getTradeNo, pay.getTradeNo())
+				// 设置目标通知状态
+				.set(Pay::getNotifyStatus, NotifyStatus.WAIT);
+
+		update(null, wrapper);
 	}
 
 }
