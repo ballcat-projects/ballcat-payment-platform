@@ -78,7 +78,6 @@ CREATE TABLE IF NOT EXISTS `virtual_address`
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='虚拟货币地址';
 
-ALTER TABLE `notify` ADD COLUMN `rate`        decimal(12, 4) DEFAULT NULL COMMENT '汇率';
 DROP TABLE IF EXISTS `notify`;
 CREATE TABLE IF NOT EXISTS `notify`
 (
