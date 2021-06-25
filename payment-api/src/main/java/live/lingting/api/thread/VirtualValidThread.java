@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import live.lingting.api.ApiConfig;
-import live.lingting.api.manager.VirtualManager;
+import live.lingting.virtual.VirtualConfig;
+import live.lingting.virtual.VirtualManager;
 import live.lingting.api.properties.ApiProperties;
 import live.lingting.entity.Pay;
 import live.lingting.sdk.enums.Currency;
@@ -40,7 +40,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	private final ApiProperties properties;
 
-	private final ApiConfig config;
+	private final VirtualConfig config;
 
 	private final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
 			// 限制 hash 不为空
@@ -135,7 +135,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 	}
 
 	private void fail(Pay pay, String desc) {
-		manager.fail(pay, desc, LocalDateTime.now().plusMinutes(config.getRetryTimeout()));
+		manager.fail(pay, desc, config.getRetryTimeout());
 	}
 
 }

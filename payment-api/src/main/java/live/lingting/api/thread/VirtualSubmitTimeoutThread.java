@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import live.lingting.api.ApiConfig;
-import live.lingting.api.manager.VirtualManager;
+import live.lingting.virtual.VirtualConfig;
+import live.lingting.virtual.VirtualManager;
 import live.lingting.entity.Pay;
 import live.lingting.service.PayService;
 
@@ -20,7 +20,7 @@ public class VirtualSubmitTimeoutThread extends AbstractThread<Pay> {
 
 	private final PayService service;
 
-	private final ApiConfig config;
+	private final VirtualConfig config;
 
 	@Override
 	public List<Pay> listData() {
@@ -29,7 +29,7 @@ public class VirtualSubmitTimeoutThread extends AbstractThread<Pay> {
 
 	@Override
 	public void handler(Pay pay) {
-		manager.fail(pay, "超时未提交!", LocalDateTime.now());
+		manager.fail(pay, "超时未提交!", 0L);
 	}
 
 	/**

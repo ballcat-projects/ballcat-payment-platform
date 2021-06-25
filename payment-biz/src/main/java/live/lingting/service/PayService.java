@@ -110,17 +110,6 @@ public interface PayService extends ExtendService<Pay> {
 	 * 支付失败
 	 * @param pay 支付信息
 	 * @param desc 描述
-	 * @return boolean 执行结果
-	 * @author lingting 2021-06-09 14:16
-	 */
-	default boolean fail(Pay pay, String desc) {
-		return fail(pay, desc, null);
-	}
-
-	/**
-	 * 支付失败
-	 * @param pay 支付信息
-	 * @param desc 描述
 	 * @param retryEndTime 重试截止时间
 	 * @return boolean 执行结果
 	 * @author lingting 2021-06-09 14:16
@@ -149,5 +138,19 @@ public interface PayService extends ExtendService<Pay> {
 	 * @author lingting 2021-06-17 15:29
 	 */
 	void notifyWait(Pay pay);
+
+	/**
+	 * 强制重试
+	 * @param tradeNo 交易号
+	 * @author lingting 2021-06-24 21:13
+	 */
+	void forciblyRetry(String tradeNo);
+
+	/**
+	 * 强制失败
+	 * @param tradeNo 交易号
+	 * @author lingting 2021-06-24 21:13
+	 */
+	void forciblyFail(String tradeNo);
 
 }

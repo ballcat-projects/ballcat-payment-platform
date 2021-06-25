@@ -1,15 +1,15 @@
-package live.lingting.api;
+package live.lingting.virtual;
 
-import static live.lingting.api.constant.SystemConfigConstants.PAY_EMPTY_INFO_TIMEOUT;
-import static live.lingting.api.constant.SystemConfigConstants.PAY_EMPTY_INFO_TIMEOUT_DEFAULT;
-import static live.lingting.api.constant.SystemConfigConstants.PAY_FAIL_TIMEOUT;
-import static live.lingting.api.constant.SystemConfigConstants.PAY_FAIL_TIMEOUT_DEFAULT;
-import static live.lingting.api.constant.SystemConfigConstants.PAY_INFO_CREATE_TIMEOUT;
-import static live.lingting.api.constant.SystemConfigConstants.PAY_INFO_CREATE_TIMEOUT_DEFAULT;
-import static live.lingting.api.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT;
-import static live.lingting.api.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT_DEFAULT;
-import static live.lingting.api.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT;
-import static live.lingting.api.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
+import static live.lingting.constant.SystemConfigConstants.PAY_EMPTY_INFO_TIMEOUT;
+import static live.lingting.constant.SystemConfigConstants.PAY_EMPTY_INFO_TIMEOUT_DEFAULT;
+import static live.lingting.constant.SystemConfigConstants.PAY_FAIL_TIMEOUT;
+import static live.lingting.constant.SystemConfigConstants.PAY_FAIL_TIMEOUT_DEFAULT;
+import static live.lingting.constant.SystemConfigConstants.PAY_INFO_CREATE_TIMEOUT;
+import static live.lingting.constant.SystemConfigConstants.PAY_INFO_CREATE_TIMEOUT_DEFAULT;
+import static live.lingting.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT;
+import static live.lingting.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT_DEFAULT;
+import static live.lingting.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT;
+import static live.lingting.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
 
 import cn.hutool.core.convert.Convert;
 import com.hccake.ballcat.system.mapper.SysConfigMapper;
@@ -20,7 +20,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import live.lingting.api.constant.SystemConfigConstants;
+import live.lingting.constant.SystemConfigConstants;
 
 /**
  * @author lingting 2021/6/18 9:39
@@ -29,7 +29,7 @@ import live.lingting.api.constant.SystemConfigConstants;
 @Import(SysConfigServiceImpl.class)
 @MapperScan(basePackageClasses = SysConfigMapper.class)
 @RequiredArgsConstructor
-public class ApiConfig {
+public class VirtualConfig {
 
 	private final SysConfigService service;
 

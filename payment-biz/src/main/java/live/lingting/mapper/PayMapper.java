@@ -194,7 +194,7 @@ public interface PayMapper extends ExtendMapper<Pay> {
 	}
 
 	/**
-	 * 虚拟支付超时未提交
+	 * 虚拟支付失败处理
 	 * @param pay 支付信息
 	 * @param desc 描述
 	 * @param retryEndTime 重试截止时间
@@ -281,6 +281,59 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				.set(Pay::getNotifyStatus, NotifyStatus.WAIT);
 
 		update(null, wrapper);
+	}
+
+	/**
+	 * 强制重试
+	 * @param tradeNo 交易号
+	 * @param minutes 重试时长, 单位: 分钟
+	 * @return boolean
+	 * @author lingting 2021-06-24 21:13
+	 */
+	default boolean forciblyRetry(String tradeNo, long minutes) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限制交易信息
+				.eq(Pay::getTradeNo, tradeNo)
+				// 限制原状态
+				.eq(Pay::getStatus, PayStatus.WAIT)
+				// 限制货币为USDT
+				.eq(Pay::getCurrency, Currency.USDT)
+				// 限制hash不为空
+				.ne(Pay::getThirdPartTradeNo, "")
+				// 限制描述
+				.ne(Pay::getDesc, "强制重试!")
+				// 新状态
+				.set(Pay::getStatus, PayStatus.RETRY)
+				// 描述
+				.set(Pay::getDesc, "强制重试!")
+				// 重试结束时间
+				.set(Pay::getRetryEndTime, LocalDateTime.now().plusMinutes(minutes));
+
+		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
+	 * 强制失败
+	 * @param tradeNo 交易号
+	 * @return boolean
+	 * @author lingting 2021-06-24 21:13
+	 */
+	default boolean forciblyFail(String tradeNo) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限制交易信息
+				.eq(Pay::getTradeNo, tradeNo)
+				// 限制原状态
+				.in(Pay::getStatus, PayStatus.WAIT, PayStatus.RETRY)
+				// 限制描述
+				.ne(Pay::getDesc, "强制失败!")
+				// 新状态 - 虚拟货币支付为重试, 其他为失败
+				.setSql(" status=IF(currency='USDT', 'RETRY', 'FAIL' )")
+				// 描述
+				.set(Pay::getDesc, "强制失败!")
+				// 重试结束时间
+				.set(Pay::getRetryEndTime, LocalDateTime.now());
+
+		return SqlHelper.retBool(update(null, wrapper));
 	}
 
 }

@@ -3,7 +3,7 @@ package live.lingting.api.thread;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import live.lingting.api.manager.VirtualManager;
+import live.lingting.virtual.VirtualManager;
 import live.lingting.entity.Pay;
 import live.lingting.service.PayService;
 

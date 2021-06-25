@@ -21,11 +21,13 @@ import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ResponseCode;
 import live.lingting.mapper.PayMapper;
+import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.service.PayService;
 import live.lingting.service.VirtualAddressService;
+import live.lingting.virtual.VirtualConfig;
 
 /**
  * @author lingting 2021/6/4 13:40
@@ -37,6 +39,8 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	private final Redis redis;
 
 	private final VirtualAddressService virtualAddressService;
+
+	private final VirtualConfig config;
 
 	@Override
 	public PageResult<Pay> list(Page<Pay> page, Pay pay) {
@@ -185,6 +189,31 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	@Override
 	public void notifyWait(Pay pay) {
 		baseMapper.notifyWait(pay);
+	}
+
+	@Override
+	public void forciblyRetry(String tradeNo) {
+		Pay pay = getById(tradeNo);
+		if (!pay.getCurrency().equals(Currency.USDT) || !pay.getStatus().equals(PayStatus.WAIT)
+				|| !StringUtils.hasText(pay.getThirdPartTradeNo())) {
+			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
+		}
+
+		if (!baseMapper.forciblyRetry(tradeNo, config.getRetryTimeout())) {
+			throw new BusinessException(ResponseCode.OPERATION_FAILED);
+		}
+	}
+
+	@Override
+	public void forciblyFail(String tradeNo) {
+		Pay pay = getById(tradeNo);
+		if (!pay.getStatus().equals(PayStatus.WAIT) && !pay.getStatus().equals(PayStatus.RETRY)) {
+			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
+		}
+
+		if (!baseMapper.forciblyFail(tradeNo)) {
+			throw new BusinessException(ResponseCode.OPERATION_FAILED);
+		}
 	}
 
 }

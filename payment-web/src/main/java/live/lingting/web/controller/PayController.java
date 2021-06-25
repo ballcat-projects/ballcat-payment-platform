@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import live.lingting.Page;
@@ -36,6 +38,20 @@ public class PayController {
 	@PreAuthorize("@per.hasPermission('pay:read')")
 	public R<PageResult<NotifyLog>> logs(Page<NotifyLog> page, @PathVariable String tradeNo) {
 		return R.ok(logService.listByTradeNo(page, tradeNo));
+	}
+
+	@PostMapping("forcibly/retry")
+	@PreAuthorize("@per.hasPermission('pay:forcibly:retry')")
+	public R<?> forciblyRetry(@RequestBody Pay pay) {
+		service.forciblyRetry(pay.getTradeNo());
+		return R.ok();
+	}
+
+	@PostMapping("forcibly/fail")
+	@PreAuthorize("@per.hasPermission('pay:forcibly:fail')")
+	public R<?> forciblyFail(@RequestBody Pay pay) {
+		service.forciblyFail(pay.getTradeNo());
+		return R.ok();
 	}
 
 }

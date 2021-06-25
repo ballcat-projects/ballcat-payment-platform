@@ -57,6 +57,14 @@ public enum ResponseCode implements ResultCode {
 	 * 未知支付信息!
 	 */
 	PAY_NOT_FOUND(233011, "未知支付信息!"),
+	/**
+	 * 禁止执行该操作!
+	 */
+	PROHIBIT_OPERATION(233012, "禁止执行该操作!"),
+	/**
+	 * 操作失败!
+	 */
+	OPERATION_FAILED(233013, "操作失败!"),
 
 	;
 

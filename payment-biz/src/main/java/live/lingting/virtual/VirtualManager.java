@@ -1,4 +1,4 @@
-package live.lingting.api.manager;
+package live.lingting.virtual;
 
 import com.hccake.ballcat.common.core.exception.BusinessException;
 import java.time.LocalDateTime;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import live.lingting.Redis;
-import live.lingting.api.ApiConfig;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
 import live.lingting.enums.ResponseCode;
@@ -36,7 +35,7 @@ public class VirtualManager {
 
 	private final VirtualAddressService virtualAddressService;
 
-	private final ApiConfig config;
+	private final VirtualConfig config;
 
 	/**
 	 * 虚拟货币预下单
@@ -96,7 +95,9 @@ public class VirtualManager {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void fail(Pay pay, String desc, LocalDateTime retryEndTime) {
+	public void fail(Pay pay, String desc, Long minutes) {
+		LocalDateTime retryEndTime = minutes == null ? null : LocalDateTime.now().plusMinutes(minutes);
+
 		if (payService.fail(pay, desc, retryEndTime) && retryEndTime == null) {
 			virtualAddressService.unlock(pay.getAddress());
 		}
