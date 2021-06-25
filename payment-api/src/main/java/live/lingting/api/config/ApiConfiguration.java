@@ -25,6 +25,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import live.lingting.api.filter.SignFilter;
+import live.lingting.api.log.LogFilter;
 import live.lingting.api.properties.ApiProperties;
 import live.lingting.api.util.SecurityUtils;
 import live.lingting.constant.TableConstants;
@@ -58,6 +59,29 @@ public class ApiConfiguration {
 		bean.setFilter(sc.getConstructor(argumentTypes).newInstance(arguments));
 		bean.addUrlPatterns("/*");
 		bean.setOrder(Integer.MAX_VALUE);
+		return bean;
+	}
+
+	@Bean
+	@DependsOn("springUtils")
+	public FilterRegistrationBean<LogFilter> logFilterFilterRegistrationBean()
+			throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+		final Class<LogFilter> sc = LogFilter.class;
+		// 获取构造函数 参数类型
+		final Class<?>[] argumentTypes = sc.getConstructors()[0].getParameterTypes();
+
+		// 参数
+		Object[] arguments = new Object[argumentTypes.length];
+
+		for (int i = 0; i < argumentTypes.length; i++) {
+			arguments[i] = SpringUtils.getBean(argumentTypes[i]);
+		}
+
+		FilterRegistrationBean<LogFilter> bean = new FilterRegistrationBean<>();
+		bean.setFilter(sc.getConstructor(argumentTypes).newInstance(arguments));
+		bean.addUrlPatterns("/*");
+		// 比 traceId 后执行
+		bean.setOrder(Integer.MAX_VALUE - 1);
 		return bean;
 	}
 
