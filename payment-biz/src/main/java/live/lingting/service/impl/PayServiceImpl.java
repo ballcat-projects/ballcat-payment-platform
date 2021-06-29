@@ -173,7 +173,13 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean fail(Pay pay, String desc, LocalDateTime retryEndTime) {
-		return baseMapper.fail(pay, desc, retryEndTime);
+		final boolean fail = baseMapper.fail(pay, desc, retryEndTime);
+		if (fail) {
+			// 失败移除hash锁
+			final String key = PayConstants.getVirtualHashLock(pay.getChain(), pay.getThirdPartTradeNo());
+			redis.delete(key);
+		}
+		return fail;
 	}
 
 	@Override
