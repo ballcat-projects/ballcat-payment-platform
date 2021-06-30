@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import live.lingting.Redis;
@@ -27,17 +28,10 @@ import live.lingting.virtual.currency.tronscan.properties.TronscanProperties;
  */
 @Slf4j
 @Component
+@EnableConfigurationProperties(VirtualProperties.class)
 public class VirtualHandler {
 
 	public static final String OMNI_REQUEST_LOCK = "virtual:omni:request:lock";
-
-	public static final String ETHERSCAN_PROJECT_ID = "57479f626d994fc58e94199a07ce37e5";
-
-	public static final String ETHERSCAN_PROJECT_SECURITY = "40d81f800fed4b199e8b2ef4ec644be6";
-
-	public static final String TRONSCAN_API_KEY = "0d44c0f5-9ac1-4615-9abd-c1d5ed7e1b0c";
-
-	private final Redis redis;
 
 	private final BitcoinServiceImpl bitcoin;
 
@@ -45,18 +39,17 @@ public class VirtualHandler {
 
 	private final TronscanServiceImpl tronscan;
 
-	public VirtualHandler(Redis redis) {
-		this.redis = redis;
+	public VirtualHandler(Redis redis, VirtualProperties properties) {
 		bitcoin = new BitcoinServiceImpl(new BitcoinProperties().setEndpoints(BitcoinEndpoints.MAINNET)
 				// 获取锁, 8秒后自动释放
 				.setLock(() -> redis.setIfAbsent(OMNI_REQUEST_LOCK, StrUtil.EMPTY, TimeUnit.SECONDS.toSeconds(8)))
 				.setUnlock(() -> true));
 
-		etherscan = new EtherscanServiceImpl(
-				new EtherscanProperties().setEndpoints(EtherscanEndpoints.MAINNET).setProjectId(ETHERSCAN_PROJECT_ID));
+		etherscan = new EtherscanServiceImpl(new EtherscanProperties().setEndpoints(EtherscanEndpoints.MAINNET)
+				.setProjectId(properties.getEthKey()));
 
 		tronscan = new TronscanServiceImpl(
-				new TronscanProperties().setEndpoints(TronscanEndpoints.MAINNET).setApiKey(TRONSCAN_API_KEY));
+				new TronscanProperties().setEndpoints(TronscanEndpoints.MAINNET).setApiKey(properties.getTrcKey()));
 	}
 
 	public PlatformService<?> getService(Chain chain) {
