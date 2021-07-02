@@ -1,6 +1,7 @@
 package live.lingting.api.controller;
 
 import com.hccake.ballcat.common.model.result.R;
+import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,8 @@ public class CommonController {
 	@PostMapping("rate")
 	public R<String> rate(@RequestBody MixRateModel model) throws MixException {
 		model.valid();
-		return R.ok(rate.get(model.getCurrency()).toPlainString());
+		final BigDecimal decimal = rate.get(model.getCurrency());
+		return R.ok(decimal == null ? null : decimal.toPlainString());
 	}
 
 }
