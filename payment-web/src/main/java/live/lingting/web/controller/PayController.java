@@ -43,14 +43,14 @@ public class PayController {
 	@PostMapping("forcibly/retry")
 	@PreAuthorize("@per.hasPermission('pay:forcibly:retry')")
 	public R<?> forciblyRetry(@RequestBody Pay pay) {
-		service.forciblyRetry(pay.getTradeNo());
+		service.forciblyRetry(pay.getTradeNo(), null);
 		return R.ok();
 	}
 
 	@PostMapping("forcibly/fail")
 	@PreAuthorize("@per.hasPermission('pay:forcibly:fail')")
 	public R<?> forciblyFail(@RequestBody Pay pay) {
-		service.forciblyFail(pay.getTradeNo());
+		service.forciblyFail(pay.getTradeNo(), null);
 		return R.ok();
 	}
 

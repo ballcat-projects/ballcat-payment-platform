@@ -7,16 +7,22 @@ import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.SdkContract;
 import live.lingting.sdk.exception.MixException;
+import live.lingting.sdk.model.MixForciblyFailModel;
+import live.lingting.sdk.model.MixForciblyRetryModel;
 import live.lingting.sdk.model.MixQueryModel;
 import live.lingting.sdk.model.MixRateModel;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
+import live.lingting.sdk.request.MixForciblyFailRequest;
+import live.lingting.sdk.request.MixForciblyRetryRequest;
 import live.lingting.sdk.request.MixQueryRequest;
 import live.lingting.sdk.request.MixRateRequest;
 import live.lingting.sdk.request.MixVirtualPayRequest;
 import live.lingting.sdk.request.MixVirtualRetryRequest;
 import live.lingting.sdk.request.MixVirtualSubmitRequest;
+import live.lingting.sdk.response.MixForciblyFailResponse;
+import live.lingting.sdk.response.MixForciblyRetryResponse;
 import live.lingting.sdk.response.MixQueryResponse;
 import live.lingting.sdk.response.MixRateResponse;
 import live.lingting.sdk.response.MixVirtualPayResponse;
@@ -107,6 +113,40 @@ public class MixPay {
 
 	public MixVirtualRetryResponse virtualRetry(MixVirtualRetryModel model) throws MixException {
 		MixVirtualRetryRequest request = new MixVirtualRetryRequest();
+		request.setModel(model);
+		return client.execute(request);
+	}
+
+	/**
+	 * 强制重试
+	 * @author lingting 2021-06-10 13:40
+	 */
+	public MixForciblyRetryResponse forciblyRetry(String tradeNo, String projectTradeNo) throws MixException {
+		MixForciblyRetryModel model = new MixForciblyRetryModel();
+		model.setTradeNo(tradeNo);
+		model.setProjectTradeNo(projectTradeNo);
+		return forciblyRetry(model);
+	}
+
+	public MixForciblyRetryResponse forciblyRetry(MixForciblyRetryModel model) throws MixException {
+		MixForciblyRetryRequest request = new MixForciblyRetryRequest();
+		request.setModel(model);
+		return client.execute(request);
+	}
+
+	/**
+	 * 强制失败
+	 * @author lingting 2021-06-10 13:40
+	 */
+	public MixForciblyFailResponse forciblyFail(String tradeNo, String projectTradeNo) throws MixException {
+		MixForciblyFailModel model = new MixForciblyFailModel();
+		model.setTradeNo(tradeNo);
+		model.setProjectTradeNo(projectTradeNo);
+		return forciblyFail(model);
+	}
+
+	public MixForciblyFailResponse forciblyFail(MixForciblyFailModel model) throws MixException {
+		MixForciblyFailRequest request = new MixForciblyFailRequest();
 		request.setModel(model);
 		return client.execute(request);
 	}

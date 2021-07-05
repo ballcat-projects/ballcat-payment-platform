@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import live.lingting.entity.Pay;
 import live.lingting.rate.Rate;
 import live.lingting.sdk.exception.MixException;
+import live.lingting.sdk.model.MixForciblyFailModel;
+import live.lingting.sdk.model.MixForciblyRetryModel;
 import live.lingting.sdk.model.MixQueryModel;
 import live.lingting.sdk.model.MixRateModel;
 import live.lingting.service.PayService;
@@ -37,6 +39,20 @@ public class CommonController {
 		model.valid();
 		final BigDecimal decimal = rate.get(model.getCurrency());
 		return R.ok(decimal == null ? null : decimal.toPlainString());
+	}
+
+	@PostMapping("forcibly/retry")
+	public R<?> forciblyRetry(@RequestBody MixForciblyRetryModel model) throws MixException {
+		model.valid();
+		service.forciblyRetry(model.getTradeNo(), model.getProjectTradeNo());
+		return R.ok();
+	}
+
+	@PostMapping("forcibly/fail")
+	public R<?> forciblyFail(@RequestBody MixForciblyFailModel model) throws MixException {
+		model.valid();
+		service.forciblyFail(model.getTradeNo(), model.getProjectTradeNo());
+		return R.ok();
 	}
 
 }

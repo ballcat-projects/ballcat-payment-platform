@@ -142,15 +142,17 @@ public interface PayService extends ExtendService<Pay> {
 	/**
 	 * 强制重试
 	 * @param tradeNo 交易号
+	 * @param projectTradeNo 项目交易号
 	 * @author lingting 2021-06-24 21:13
 	 */
-	void forciblyRetry(String tradeNo);
+	void forciblyRetry(String tradeNo, String projectTradeNo);
 
 	/**
 	 * 强制失败
 	 * @param tradeNo 交易号
+	 * @param projectTradeNo 项目交易号
 	 * @author lingting 2021-06-24 21:13
 	 */
-	void forciblyFail(String tradeNo);
+	void forciblyFail(String tradeNo, String projectTradeNo);
 
 }

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import live.lingting.virtual.VirtualManager;
 import live.lingting.api.util.SecurityUtils;
 import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixVirtualPayModel;
@@ -15,6 +14,7 @@ import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
+import live.lingting.virtual.VirtualManager;
 
 /**
  * @author lingting 2021/6/7 17:05
