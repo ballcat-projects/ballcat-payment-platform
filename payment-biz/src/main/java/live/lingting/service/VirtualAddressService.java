@@ -5,6 +5,7 @@ import com.hccake.extend.mybatis.plus.service.ExtendService;
 import java.util.List;
 import live.lingting.Page;
 import live.lingting.dto.VirtualAddressCreateDTO;
+import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.sdk.model.MixVirtualPayModel;
 
@@ -16,10 +17,11 @@ public interface VirtualAddressService extends ExtendService<VirtualAddress> {
 	/**
 	 * 根据参数, 锁定地址
 	 * @param model 参数
+	 * @param project 项目
 	 * @return live.lingting.entity.VirtualAddress
 	 * @author lingting 2021-06-07 22:51
 	 */
-	VirtualAddress lock(MixVirtualPayModel model);
+	VirtualAddress lock(MixVirtualPayModel model, Project project);
 
 	/**
 	 * 解锁指定地址

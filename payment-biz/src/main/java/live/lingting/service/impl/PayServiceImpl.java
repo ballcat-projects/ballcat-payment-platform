@@ -94,7 +94,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public Pay virtualCreate(MixVirtualPayModel model, Project project) {
-		VirtualAddress va = virtualAddressService.lock(model);
+		VirtualAddress va = virtualAddressService.lock(model, project);
 
 		if (va == null) {
 			throw new BusinessException(ResponseCode.NO_ADDRESS_AVAILABLE);

@@ -33,14 +33,14 @@ class MixPayTest {
 
 	@BeforeAll
 	public static void init() {
-		mixPay = new MixPay("http://192.168.1.5:23302", "f1nelus5ktvbyrih", "5384cc1276794f1f900e21126f409106",
+		mixPay = new MixPay("http://192.168.1.237:23302", "phwzykzyqijanz2q", "c63ff87a2381449985d7afbc5c84f6fb",
 				"http://127.0.0.1:23302/test");
 	}
 
 	@SneakyThrows
 	@Test
 	void virtualPay() {
-		mixVirtualPayResponse = mixPay.virtualPay(SNOWFLAKE.nextIdStr(), SdkContract.USDT, Chain.OMNI);
+		mixVirtualPayResponse = mixPay.virtualPay(SNOWFLAKE.nextIdStr(), SdkContract.USDT, Chain.ETH);
 		log.info(mixVirtualPayResponse.toString());
 	}
 

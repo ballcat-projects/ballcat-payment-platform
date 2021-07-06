@@ -8,8 +8,17 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
 import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Select;
 import live.lingting.Page;
 import live.lingting.entity.VirtualAddress;
+import live.lingting.enums.ProjectMode;
+import live.lingting.mybatis.ListStringTypeHandler;
+import live.lingting.sdk.enums.Chain;
 
 /**
  * @author lingting 2021/6/7 15:43
@@ -49,6 +58,25 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 		pageResult.setTotal(iPage.getTotal());
 		return pageResult;
 	}
+
+	/**
+	 * 加载允许指定项目使用的地址
+	 * @param chain 链
+	 * @param id 项目id
+	 * @param mode 项目模式
+	 * @return java.util.List<live.lingting.entity.VirtualAddress>
+	 * @author lingting 2021-07-05 21:04
+	 */
+	@Select("SELECT\n * \nFROM\n `virtual_address` va \nWHERE\n va.`chain` = '${chain}' \n"
+			+ " AND va.`using` = 0 \n AND va.disabled = 0\n"
+			+ " \n AND (\n IF\n  (\n   '${p_mode}' = 'ALLOW',-- 可以获取所有可用的地址\n   (\n"
+			+ "    ( va.`mode` = 'INCLUDE' AND JSON_CONTAINS( va.project_ids, '${p_id}' ) ) \n"
+			+ "    OR ( va.`mode` = 'EXCLUDE' AND ( va.project_ids IS NULL OR NOT JSON_CONTAINS( va.project_ids, '${p_id}' ) ) ) \n"
+			+ "   ),-- 只能获取仅限该项目使用地址\n"
+			+ "   ( va.`mode` = 'INCLUDE' AND JSON_CONTAINS( va.project_ids, '${p_id}' ) ) \n  ) \n )")
+	@ResultMap("mybatis-plus_VirtualAddress")
+	List<VirtualAddress> load(@Param("chain") Chain chain, @Param("p_id") Integer id,
+			@Param("p_mode") ProjectMode mode);
 
 	/**
 	 * 上锁指定地址

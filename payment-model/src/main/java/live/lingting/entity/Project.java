@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.hccake.extend.mybatis.plus.type.EnumNameTypeHandler;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.JdbcType;
+import live.lingting.enums.ProjectMode;
 
 /**
  * 项目
@@ -41,6 +44,8 @@ public class Project implements Serializable {
 	private String apiKey;
 
 	private String apiSecurity;
+
+	private ProjectMode mode;
 
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;

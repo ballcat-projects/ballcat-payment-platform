@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import live.lingting.Page;
 import live.lingting.dto.VirtualAddressCreateDTO;
+import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.mapper.VirtualAddressMapper;
 import live.lingting.sdk.model.MixVirtualPayModel;
@@ -27,9 +28,8 @@ public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressM
 	private final VirtualHandler handler;
 
 	@Override
-	public VirtualAddress lock(MixVirtualPayModel model) {
-		final VirtualAddress qo = new VirtualAddress().setChain(model.getChain()).setDisabled(false).setUsing(false);
-		final List<VirtualAddress> list = baseMapper.selectList(baseMapper.getWrapper(qo));
+	public VirtualAddress lock(MixVirtualPayModel model, Project project) {
+		final List<VirtualAddress> list = baseMapper.load(model.getChain(), project.getId(), project.getMode());
 		// 乱序
 		if (list.size() > SHUFFLE_MIN) {
 			Collections.shuffle(list);
