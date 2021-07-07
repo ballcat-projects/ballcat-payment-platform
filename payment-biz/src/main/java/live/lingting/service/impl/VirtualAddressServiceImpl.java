@@ -60,33 +60,34 @@ public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressM
 	}
 
 	@Override
-	public List<VirtualAddressCreateDTO> create(List<VirtualAddressCreateDTO> list) {
-		for (VirtualAddressCreateDTO dto : list) {
-			dto.setSuccess(false);
-			final VirtualAddress va = new VirtualAddress().setAddress(dto.getAddress()).setChain(dto.getChain());
+	public VirtualAddressCreateDTO create(VirtualAddressCreateDTO dto) {
+		for (VirtualAddressCreateDTO.Va address : dto.getList()) {
+			address.setSuccess(false);
+			final VirtualAddress va = new VirtualAddress().setAddress(address.getAddress()).setChain(dto.getChain())
+					.setMode(dto.getMode()).setProjectIds(dto.getIds());
 			if (!handler.valid(va)) {
-				dto.setDesc("无效地址!");
+				address.setDesc("无效地址!");
 				continue;
 			}
 
 			if (baseMapper.selectCount(baseMapper.getWrapper(va)) > 0) {
-				dto.setDesc("已存在相同地址!");
+				address.setDesc("已存在相同地址!");
 			}
 
 			try {
 				va.setDisabled(dto.getDisabled());
-				dto.setSuccess(save(va));
-				if (!dto.getSuccess()) {
-					dto.setDesc("保存失败!");
+				address.setSuccess(save(va));
+				if (!address.getSuccess()) {
+					address.setDesc("保存失败!");
 				}
 			}
 			catch (Exception e) {
-				dto.setSuccess(false);
-				dto.setDesc("保存异常!");
+				address.setSuccess(false);
+				address.setDesc("保存异常!");
 			}
 		}
 
-		return list;
+		return dto;
 	}
 
 }

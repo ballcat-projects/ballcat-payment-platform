@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import live.lingting.Page;
+import live.lingting.dto.ProjectModeDTO;
 import live.lingting.entity.Project;
 import live.lingting.entity.ProjectHistory;
 import live.lingting.service.ProjectHistoryService;
@@ -54,6 +55,13 @@ public class ProjectController {
 	@PreAuthorize("@per.hasPermission('project:edit')")
 	public R<?> disabled(@PathVariable Integer id, @PathVariable Boolean disabled) {
 		service.disabled(id, disabled);
+		return R.ok();
+	}
+
+	@PatchMapping("set/mode")
+	@PreAuthorize("@per.hasPermission('project:edit')")
+	public R<?> mode(@Validated @RequestBody ProjectModeDTO dto) {
+		service.mode(dto.getIds(), dto.getMode());
 		return R.ok();
 	}
 

@@ -6,18 +6,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.hccake.ballcat.common.model.domain.PageResult;
+import com.hccake.extend.mybatis.plus.conditions.query.LambdaQueryWrapperX;
 import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
 import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.util.CollectionUtils;
 import live.lingting.Page;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ProjectMode;
-import live.lingting.mybatis.ListStringTypeHandler;
 import live.lingting.sdk.enums.Chain;
 
 /**
@@ -32,7 +31,8 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 	 * @author lingting 2021-06-07 14:08
 	 */
 	default Wrapper<VirtualAddress> getWrapper(VirtualAddress va) {
-		return WrappersX.<VirtualAddress>lambdaQueryX()
+
+		final LambdaQueryWrapperX<VirtualAddress> wrapperX = WrappersX.<VirtualAddress>lambdaQueryX()
 				// address
 				.eqIfPresent(VirtualAddress::getAddress, va.getAddress())
 				// chain
@@ -40,7 +40,14 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 				// disabled
 				.eqIfPresent(VirtualAddress::getDisabled, va.getDisabled())
 				// using
-				.eqIfPresent(VirtualAddress::getUsing, va.getUsing());
+				.eqIfPresent(VirtualAddress::getUsing, va.getUsing())
+				// mode
+				.eqIfPresent(VirtualAddress::getMode, va.getMode());
+		if (!CollectionUtils.isEmpty(va.getProjectIds())) {
+			wrapperX.apply(String.format(" JSON_CONTAINS(project_ids, '%s') ", va.getProjectIds().get(0)));
+		}
+
+		return wrapperX;
 	}
 
 	/**

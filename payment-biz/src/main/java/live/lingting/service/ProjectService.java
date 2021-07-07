@@ -2,8 +2,10 @@ package live.lingting.service;
 
 import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.service.ExtendService;
+import java.util.List;
 import live.lingting.Page;
 import live.lingting.entity.Project;
+import live.lingting.enums.ProjectMode;
 
 /**
  * @author lingting 2021/6/4 13:36
@@ -40,6 +42,14 @@ public interface ProjectService extends ExtendService<Project> {
 	 * @author lingting 2021-06-04 17:26
 	 */
 	void disabled(Integer id, Boolean disabled);
+
+	/**
+	 * 更新项目模式
+	 * @param ids 项目
+	 * @param mode 新模式
+	 * @author lingting 2021-07-07 10:15
+	 */
+	void mode(List<Integer> ids, ProjectMode mode);
 
 	/**
 	 * 根据apiKey 获取项目信息

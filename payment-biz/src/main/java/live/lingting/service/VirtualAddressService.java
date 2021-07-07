@@ -50,10 +50,10 @@ public interface VirtualAddressService extends ExtendService<VirtualAddress> {
 
 	/**
 	 * 添加地址
-	 * @param list 要新增的地址
+	 * @param dto 要新增的地址
 	 * @return java.util.List<live.lingting.dto.VirtualAddressCreateDTO>
 	 * @author lingting 2021-06-08 14:41
 	 */
-	List<VirtualAddressCreateDTO> create(List<VirtualAddressCreateDTO> list);
+	VirtualAddressCreateDTO create(VirtualAddressCreateDTO dto);
 
 }

@@ -35,8 +35,8 @@ public class VirtualAddressController {
 
 	@PostMapping
 	@PreAuthorize("@per.hasPermission('virtual:address:add')")
-	public R<List<VirtualAddressCreateDTO>> create(@RequestBody List<VirtualAddressCreateDTO> list) {
-		return R.ok(service.create(list));
+	public R<VirtualAddressCreateDTO> create(@RequestBody VirtualAddressCreateDTO dto) {
+		return R.ok(service.create(dto));
 	}
 
 	@PatchMapping("disabled/{id}/{disabled}")

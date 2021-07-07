@@ -3,11 +3,13 @@ package live.lingting.service.impl;
 import com.hccake.ballcat.common.core.exception.BusinessException;
 import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import live.lingting.Page;
 import live.lingting.entity.Project;
 import live.lingting.entity.ProjectHistory;
+import live.lingting.enums.ProjectMode;
 import live.lingting.enums.ResponseCode;
 import live.lingting.mapper.ProjectMapper;
 import live.lingting.service.ProjectHistoryService;
@@ -51,6 +53,11 @@ public class ProjectServiceImpl extends ExtendServiceImpl<ProjectMapper, Project
 		}
 		ProjectHistory history = ProjectHistory.of(project);
 		update(history, project.setDisabled(disabled));
+	}
+
+	@Override
+	public void mode(List<Integer> ids, ProjectMode mode) {
+		baseMapper.mode(ids, mode);
 	}
 
 	@Override
