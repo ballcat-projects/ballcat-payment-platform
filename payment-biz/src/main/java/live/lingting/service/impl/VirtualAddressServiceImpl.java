@@ -1,5 +1,6 @@
 package live.lingting.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import live.lingting.Page;
 import live.lingting.dto.VirtualAddressCreateDTO;
 import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
+import live.lingting.enums.VirtualAddressMode;
 import live.lingting.mapper.VirtualAddressMapper;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.service.VirtualAddressService;
@@ -55,8 +57,8 @@ public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressM
 	}
 
 	@Override
-	public void disabled(Integer id, Boolean disabled) {
-		baseMapper.disabled(id, disabled);
+	public void disabled(List<Integer> ids, Boolean disabled) {
+		baseMapper.disabled(ids, disabled);
 	}
 
 	@Override
@@ -88,6 +90,17 @@ public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressM
 		}
 
 		return dto;
+	}
+
+	@Override
+	public void mode(List<Integer> ids, VirtualAddressMode mode) {
+		baseMapper.mode(ids, mode);
+	}
+
+	@Override
+	public void project(List<Integer> ids, List<Integer> projectIds) {
+		System.out.println(StrUtil.join(",", projectIds.toArray()));
+		baseMapper.project(ids, projectIds);
 	}
 
 }

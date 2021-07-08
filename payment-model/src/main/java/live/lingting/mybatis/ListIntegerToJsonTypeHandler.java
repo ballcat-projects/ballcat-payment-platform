@@ -9,44 +9,51 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.TypeHandler;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 /**
  * @author lingting 2021/7/5 20:16
  */
-public class ListStringTypeHandler implements TypeHandler<List<String>> {
+@MappedJdbcTypes(JdbcType.VARCHAR)
+public class ListIntegerToJsonTypeHandler implements TypeHandler<List<Integer>> {
 
 	@Override
-	public void setParameter(PreparedStatement ps, int i, List<String> parameter, JdbcType jdbcType)
+	public void setParameter(PreparedStatement ps, int i, List<Integer> parameter, JdbcType jdbcType)
 			throws SQLException {
+		String val = "[]";
 		try {
-			ps.setString(i, JsonUtils.toJson(parameter));
+			if (!CollectionUtils.isEmpty(parameter)) {
+				val = JsonUtils.toJson(parameter);
+			}
 		}
 		catch (Exception e) {
-			ps.setString(i, "[]");
+			val = "[]";
 		}
+		ps.setString(i, val);
 	}
 
 	@Override
-	public List<String> getResult(ResultSet rs, String columnName) throws SQLException {
+	public List<Integer> getResult(ResultSet rs, String columnName) throws SQLException {
 		return resolve(rs.getString(columnName));
 	}
 
 	@Override
-	public List<String> getResult(ResultSet rs, int columnIndex) throws SQLException {
+	public List<Integer> getResult(ResultSet rs, int columnIndex) throws SQLException {
 		return resolve(rs.getString(columnIndex));
 	}
 
 	@Override
-	public List<String> getResult(CallableStatement cs, int columnIndex) throws SQLException {
+	public List<Integer> getResult(CallableStatement cs, int columnIndex) throws SQLException {
 		return resolve(cs.getString(columnIndex));
 	}
 
-	List<String> resolve(String s) {
+	List<Integer> resolve(String s) {
 		if (StringUtils.hasText(s)) {
 			try {
-				return JsonUtils.toObj(s, new TypeReference<List<String>>() {
+				return JsonUtils.toObj(s, new TypeReference<List<Integer>>() {
 				});
 			}
 			catch (Exception e) {

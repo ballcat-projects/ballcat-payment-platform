@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import live.lingting.enums.VirtualAddressMode;
-import live.lingting.mybatis.ListStringTypeHandler;
+import live.lingting.mybatis.ListIntegerToJsonTypeHandler;
 import live.lingting.sdk.enums.Chain;
 
 /**
@@ -42,8 +42,8 @@ public class VirtualAddress {
 
 	private VirtualAddressMode mode;
 
-	@TableField(typeHandler = ListStringTypeHandler.class)
-	private List<String> projectIds;
+	@TableField(typeHandler = ListIntegerToJsonTypeHandler.class)
+	private List<Integer> projectIds;
 
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;

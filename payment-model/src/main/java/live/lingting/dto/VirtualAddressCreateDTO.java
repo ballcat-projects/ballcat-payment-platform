@@ -22,7 +22,7 @@ public class VirtualAddressCreateDTO {
 	@NotNull(message = "模式不能为空!")
 	private VirtualAddressMode mode;
 
-	private List<String> ids;
+	private List<Integer> ids;
 
 	@NotEmpty(message = "地址不能为空")
 	private List<Va> list;

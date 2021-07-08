@@ -7,6 +7,7 @@ import live.lingting.Page;
 import live.lingting.dto.VirtualAddressCreateDTO;
 import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
+import live.lingting.enums.VirtualAddressMode;
 import live.lingting.sdk.model.MixVirtualPayModel;
 
 /**
@@ -42,11 +43,11 @@ public interface VirtualAddressService extends ExtendService<VirtualAddress> {
 
 	/**
 	 * 禁用指定地址
-	 * @param id 地址id
+	 * @param ids 地址id
 	 * @param disabled 禁用
 	 * @author lingting 2021-06-08 14:07
 	 */
-	void disabled(Integer id, Boolean disabled);
+	void disabled(List<Integer> ids, Boolean disabled);
 
 	/**
 	 * 添加地址
@@ -55,5 +56,21 @@ public interface VirtualAddressService extends ExtendService<VirtualAddress> {
 	 * @author lingting 2021-06-08 14:41
 	 */
 	VirtualAddressCreateDTO create(VirtualAddressCreateDTO dto);
+
+	/**
+	 * 更新模式
+	 * @param ids 地址ID
+	 * @param mode 新模式
+	 * @author lingting 2021-07-08 11:04
+	 */
+	void mode(List<Integer> ids, VirtualAddressMode mode);
+
+	/**
+	 * 更新项目id
+	 * @param ids 地址id
+	 * @param projectIds 新项目id
+	 * @author lingting 2021-07-08 11:05
+	 */
+	void project(List<Integer> ids, List<Integer> projectIds);
 
 }

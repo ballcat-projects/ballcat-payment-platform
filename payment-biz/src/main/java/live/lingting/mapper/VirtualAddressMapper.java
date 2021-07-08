@@ -13,10 +13,12 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.util.CollectionUtils;
 import live.lingting.Page;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ProjectMode;
+import live.lingting.enums.VirtualAddressMode;
 import live.lingting.sdk.enums.Chain;
 
 /**
@@ -123,18 +125,43 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 
 	/**
 	 * 禁用指定地址
-	 * @param id 地址id
+	 * @param ids 地址id
 	 * @param disabled 禁用
 	 * @author lingting 2021-06-08 14:07
 	 */
-	default void disabled(Integer id, Boolean disabled) {
+	default void disabled(List<Integer> ids, Boolean disabled) {
 		final LambdaUpdateWrapper<VirtualAddress> wrapper = Wrappers.<VirtualAddress>lambdaUpdate()
 				// 限定地址
-				.eq(VirtualAddress::getId, id)
+				.in(VirtualAddress::getId, ids)
 				// 设置禁用
 				.set(VirtualAddress::getDisabled, disabled);
 
 		update(null, wrapper);
 	}
+
+	/**
+	 * 更新模式
+	 * @param ids 地址ID
+	 * @param mode 新模式
+	 * @author lingting 2021-07-08 11:04
+	 */
+	default void mode(List<Integer> ids, VirtualAddressMode mode) {
+		final LambdaUpdateWrapper<VirtualAddress> wrapper = Wrappers.<VirtualAddress>lambdaUpdate()
+				// 限定地址
+				.in(VirtualAddress::getId, ids)
+				// 设置模式
+				.set(VirtualAddress::getMode, mode);
+
+		update(null, wrapper);
+	}
+
+	/**
+	 * 更新项目id
+	 * @param ids 地址id
+	 * @param projectIds 新项目id
+	 * @author lingting 2021-07-08 11:05
+	 */
+	@Update("UPDATE virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.mybatis.ListIntegerToJsonTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
+	void project(@Param("ids") List<Integer> ids, @Param("pIds") List<Integer> projectIds);
 
 }
