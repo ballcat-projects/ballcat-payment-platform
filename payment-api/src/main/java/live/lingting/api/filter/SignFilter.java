@@ -6,7 +6,6 @@ import com.hccake.ballcat.common.core.request.wrapper.RepeatBodyRequestWrapper;
 import com.hccake.ballcat.common.util.JsonUtils;
 import com.hccake.ballcat.common.util.json.TypeReference;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -124,7 +123,7 @@ public class SignFilter extends OncePerRequestFilter {
 
 		if (verify) {
 			// 生成要 注入 oauth 的信息
-			Authentication authentication = generate(request, project);
+			Authentication authentication = toAuthentication(project);
 			// 注入 oauth 信息
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			// 验签通过
@@ -139,40 +138,9 @@ public class SignFilter extends OncePerRequestFilter {
 		}
 	}
 
-	/**
-	 * 生成 UserDetails
-	 * @author lingting 2021-04-30 10:42
-	 */
-	@SneakyThrows
-	private Authentication generate(HttpServletRequest request, Project project) {
-		final String key = StrUtil.format("{}_{}", OAUTH_PREFIX, project.getApiKey());
-
-		if (redis.hasKey(key)) {
-			return deserialize(key, redis.get(key));
-		}
-
-		// 生成用于注入的数据
-		final Authentication authentication = toAuthentication(key, project);
-		// 鉴权信息序列化
-		String val = serialize(project);
-		// 缓存info, 一小时后过期
-		redis.set(key, val, OAUTH_TIME);
-		return authentication;
-	}
-
-	private Authentication toAuthentication(String key, Object obj) {
-		return new AnonymousAuthenticationToken(key, obj,
+	private Authentication toAuthentication(Project project) {
+		return new AnonymousAuthenticationToken(project.getApiKey(), project,
 				Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN")));
-	}
-
-	private Authentication deserialize(String key, String serializeStr) {
-		byte[] serialize = Base64.getDecoder().decode(serializeStr);
-		return toAuthentication(key, tokenSerialization.deserialize(serialize, Project.class));
-	}
-
-	private String serialize(Object obj) {
-		final byte[] serialize = tokenSerialization.serialize(obj);
-		return Base64.getEncoder().encodeToString(serialize);
 	}
 
 	/**
