@@ -100,7 +100,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 			fail(pay, "支付货币不匹配!");
 		}
 		// 收款账户不匹配
-		else if (!info.getTo().equals(pay.getAddress())) {
+		else if (!info.getTo().equalsIgnoreCase(pay.getAddress())) {
 			fail(pay, "收款账户不匹配!");
 		}
 		// 支付时间比支付信息创建时间早 SUCCESS_TIMEOUT
