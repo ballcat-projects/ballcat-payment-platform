@@ -199,8 +199,8 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public void forciblyRetry(String tradeNo, String projectTradeNo) {
-		Pay pay = getById(tradeNo);
-		if (!pay.getCurrency().equals(Currency.USDT) || !pay.getStatus().equals(PayStatus.WAIT)
+		Pay pay = getByNo(tradeNo, projectTradeNo);
+		if (pay == null || !Currency.USDT.equals(pay.getCurrency()) || !PayStatus.WAIT.equals(pay.getStatus())
 				|| !StringUtils.hasText(pay.getThirdPartTradeNo())) {
 			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
 		}
@@ -212,8 +212,10 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public void forciblyFail(String tradeNo, String projectTradeNo) {
-		Pay pay = getById(tradeNo);
-		if (!pay.getStatus().equals(PayStatus.WAIT) && !pay.getStatus().equals(PayStatus.RETRY)) {
+		Pay pay = getByNo(tradeNo, projectTradeNo);
+		final boolean prohibit = pay == null
+				|| (!PayStatus.WAIT.equals(pay.getStatus()) && !PayStatus.RETRY.equals(pay.getStatus()));
+		if (prohibit) {
 			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
 		}
 

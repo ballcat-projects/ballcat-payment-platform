@@ -30,7 +30,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import live.lingting.Redis;
 import live.lingting.api.enums.ApiResponseCode;
 import live.lingting.api.properties.ApiProperties;
-import live.lingting.api.util.HttpUtils;
+import live.lingting.api.util.ResponseUtils;
 import live.lingting.api.util.UriUtils;
 import live.lingting.entity.Project;
 import live.lingting.sdk.constant.SdkConstants;
@@ -108,7 +108,7 @@ public class SignFilter extends OncePerRequestFilter {
 
 		if (project == null || project.getDisabled()) {
 			// 用户状态异常
-			HttpUtils.write(response, HttpStatus.BAD_REQUEST, ApiResponseCode.DISABLED);
+			ResponseUtils.write(response, HttpStatus.BAD_REQUEST, ApiResponseCode.DISABLED);
 			return;
 		}
 
@@ -177,11 +177,11 @@ public class SignFilter extends OncePerRequestFilter {
 	}
 
 	private void lockFail(HttpServletResponse response) throws IOException {
-		HttpUtils.write(response, HttpStatus.NOT_ACCEPTABLE, ApiResponseCode.REPEAT_REQUEST);
+		ResponseUtils.write(response, HttpStatus.NOT_ACCEPTABLE, ApiResponseCode.REPEAT_REQUEST);
 	}
 
 	private void signFail(HttpServletResponse response) throws IOException {
-		HttpUtils.write(response, HttpStatus.UNAUTHORIZED, ApiResponseCode.SIGN_ERROR);
+		ResponseUtils.write(response, HttpStatus.UNAUTHORIZED, ApiResponseCode.SIGN_ERROR);
 	}
 
 }

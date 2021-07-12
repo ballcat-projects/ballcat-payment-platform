@@ -20,7 +20,7 @@ import org.springframework.http.MediaType;
  * @author lingting 2021/4/29 18:14
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HttpUtils {
+public class ResponseUtils {
 
 	public static final String CONTENT_TYPE = "Content-Type";
 

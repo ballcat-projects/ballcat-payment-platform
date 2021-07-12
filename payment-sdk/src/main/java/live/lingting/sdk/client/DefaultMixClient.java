@@ -3,15 +3,14 @@ package live.lingting.sdk.client;
 import static live.lingting.sdk.constant.SdkConstants.FORWARD_SLASH;
 
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpUtil;
 import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import live.lingting.sdk.constant.SdkConstants;
-import live.lingting.sdk.domain.HttpProperties;
 import live.lingting.sdk.exception.MixException;
+import live.lingting.sdk.http.HttpHeader;
+import live.lingting.sdk.http.HttpPost;
 import live.lingting.sdk.model.MixModel;
 import live.lingting.sdk.request.MixRequest;
 import live.lingting.sdk.response.MixResponse;
@@ -62,24 +61,20 @@ public class DefaultMixClient implements MixClient {
 
 	private <M extends MixModel, R extends MixResponse<?>> R getResponse(MixRequest<M, R> request,
 			Map<String, String> params) {
-		final HttpProperties hp = request.getProperties();
-		final HttpRequest post = HttpUtil.createPost(getUrlStr(request));
-
-		post.setConnectionTimeout(hp.getConnectTimeout());
-		post.setReadTimeout(hp.getReadTimeout());
+		HttpPost post = HttpPost.of(getUrlStr(request), request.getProperties());
 
 		final String type = SdkConstants.HTTP_TYPE_JSON;
-		post.header("Accept", type);
+		post.header(HttpHeader.ACCEPT, type);
 		post.header("User-Agent", "live-lingting-sdk");
 		post.header("Content-Type", type);
 		final String body = JacksonUtils.toJson(params);
-		post.body(body);
+		post.setBody(body);
 
 		if (log.isDebugEnabled()) {
 			log.debug("[MixPay请求数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, body);
 		}
 
-		final String resStr = post.execute().body();
+		final String resStr = post.exec().body();
 
 		if (log.isDebugEnabled()) {
 			log.debug("[MixPay请求返回数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, resStr);

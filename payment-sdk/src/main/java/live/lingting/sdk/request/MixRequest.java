@@ -1,7 +1,7 @@
 package live.lingting.sdk.request;
 
 import java.util.Map;
-import live.lingting.sdk.domain.HttpProperties;
+import live.lingting.sdk.http.HttpProperties;
 import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixModel;
 import live.lingting.sdk.response.MixResponse;

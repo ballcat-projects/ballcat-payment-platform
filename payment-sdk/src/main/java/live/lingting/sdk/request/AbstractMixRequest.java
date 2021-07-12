@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import lombok.Setter;
-import live.lingting.sdk.domain.HttpProperties;
+import live.lingting.sdk.http.HttpProperties;
 import live.lingting.sdk.exception.MixRequestParamsValidException;
 import live.lingting.sdk.model.MixModel;
 import live.lingting.sdk.response.MixResponse;
