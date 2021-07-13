@@ -205,7 +205,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
 		}
 
-		if (!baseMapper.forciblyRetry(tradeNo, config.getRetryTimeout())) {
+		if (!baseMapper.forciblyRetry(pay.getTradeNo(), config.getRetryTimeout())) {
 			throw new BusinessException(ResponseCode.OPERATION_FAILED);
 		}
 	}
@@ -219,7 +219,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
 		}
 
-		if (!baseMapper.forciblyFail(tradeNo)) {
+		if (!baseMapper.forciblyFail(pay.getTradeNo())) {
 			throw new BusinessException(ResponseCode.OPERATION_FAILED);
 		}
 	}
