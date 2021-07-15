@@ -21,6 +21,9 @@ public class MixRealPayModel extends MixModel {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * 商品信息
+	 */
 	private String subject;
 
 	private ThirdPart thirdPart;
@@ -50,6 +53,9 @@ public class MixRealPayModel extends MixModel {
 		else if (Mode.QR.equals(getMode())) {
 			if (getAmount() == null || getAmount().compareTo(BigDecimal.ZERO) < 1) {
 				msg = "支付金额异常";
+			}
+			else if (!StringUtils.hasText(getSubject())) {
+				msg = "商品信息不能为空!";
 			}
 		}
 		else if (Mode.TRANSFER.equals(getMode())) {

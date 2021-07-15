@@ -16,14 +16,14 @@
     </modules>
 
     <properties>
-        <revision>0.0.1</revision>
-        <sdk-version>0.0.1</sdk-version>
+        <revision>0.0.2-SNAPSHOT</revision>
+        <sdk-version>0.0.2-SNAPSHOT</sdk-version>
 
         <spring-boot.version>2.4.3</spring-boot.version>
         <spring-javaformat-checkstyle.version>0.0.27</spring-javaformat-checkstyle.version>
         <maven-compiler-plugin.verison>3.8.0</maven-compiler-plugin.verison>
 
-        <ballcat.version>0.1.0-SNAPSHOT</ballcat.version>
+        <ballcat.version>0.1.0</ballcat.version>
 
         <java.version>1.8</java.version>
         <maven.compiler.source>8</maven.compiler.source>

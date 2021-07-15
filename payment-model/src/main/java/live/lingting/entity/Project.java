@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Getter;
@@ -46,6 +47,10 @@ public class Project implements Serializable {
 
 	@NotNull(message = "模式不能为空")
 	private ProjectMode mode;
+
+	@Size(max = 20, message = "项目标志最大为20个字符!")
+	@NotEmpty(message = "项目标志不能为空!")
+	private String mark;
 
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;

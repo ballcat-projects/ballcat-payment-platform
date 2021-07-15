@@ -37,4 +37,8 @@ ALTER TABLE pay
     ADD INDEX `idx_mode` (`mode`);
 
 ALTER TABLE project
-    ADD COLUMN `mark` varchar(20) DEFAULT `name` COMMENT '付款标志';
+    ADD COLUMN `mark` varchar(20) DEFAULT '' COMMENT '项目标志';
+
+UPDATE project
+SET project.mark=name
+WHERE mark = '';

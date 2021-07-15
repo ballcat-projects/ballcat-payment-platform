@@ -46,6 +46,9 @@ public class RealManager {
 		if (pay.getMode().equals(Mode.TRANSFER)) {
 			service.validateThirdTradeNo(pay, pay.getThirdPartTradeNo());
 		}
+		else {
+			model.setSubject(project.getMark() + " " + model.getSubject());
+		}
 
 		service.save(pay);
 		switch (model.getThirdPart()) {
