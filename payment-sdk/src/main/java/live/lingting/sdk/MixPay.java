@@ -1,16 +1,20 @@
 package live.lingting.sdk;
 
+import java.math.BigDecimal;
 import lombok.Getter;
 import live.lingting.sdk.client.DefaultMixClient;
 import live.lingting.sdk.client.MixClient;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.Currency;
+import live.lingting.sdk.enums.Mode;
 import live.lingting.sdk.enums.SdkContract;
+import live.lingting.sdk.enums.ThirdPart;
 import live.lingting.sdk.exception.MixException;
 import live.lingting.sdk.model.MixForciblyFailModel;
 import live.lingting.sdk.model.MixForciblyRetryModel;
 import live.lingting.sdk.model.MixQueryModel;
 import live.lingting.sdk.model.MixRateModel;
+import live.lingting.sdk.model.MixRealPayModel;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.sdk.model.MixVirtualRetryModel;
 import live.lingting.sdk.model.MixVirtualSubmitModel;
@@ -18,6 +22,7 @@ import live.lingting.sdk.request.MixForciblyFailRequest;
 import live.lingting.sdk.request.MixForciblyRetryRequest;
 import live.lingting.sdk.request.MixQueryRequest;
 import live.lingting.sdk.request.MixRateRequest;
+import live.lingting.sdk.request.MixRealPayRequest;
 import live.lingting.sdk.request.MixVirtualPayRequest;
 import live.lingting.sdk.request.MixVirtualRetryRequest;
 import live.lingting.sdk.request.MixVirtualSubmitRequest;
@@ -25,6 +30,7 @@ import live.lingting.sdk.response.MixForciblyFailResponse;
 import live.lingting.sdk.response.MixForciblyRetryResponse;
 import live.lingting.sdk.response.MixQueryResponse;
 import live.lingting.sdk.response.MixRateResponse;
+import live.lingting.sdk.response.MixRealPayResponse;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
@@ -57,6 +63,49 @@ public class MixPay {
 		this.apiSecurity = apiSecurity;
 		this.notifyUrl = notifyUrl;
 		this.client = client;
+	}
+
+	/**
+	 * 真实货币 - 下单 - 二维码
+	 * @author lingting 2021-07-14 17:29
+	 */
+	public MixRealPayResponse realQrPay(String projectTradeNo, BigDecimal amount, ThirdPart thirdPart,
+			Currency currency, String subject) throws MixException {
+		MixRealPayModel model = new MixRealPayModel();
+		model.setProjectTradeNo(projectTradeNo);
+		model.setAmount(amount);
+		model.setThirdPart(thirdPart);
+		model.setCurrency(currency);
+		model.setSubject(subject);
+		model.setMode(Mode.QR);
+		return realPay(model);
+	}
+
+	/**
+	 * 真实货币 - 下单 - 转账
+	 * @author lingting 2021-07-14 17:29
+	 */
+	public MixRealPayResponse realTransferPay(String projectTradeNo, String thirdPartTradeNo, ThirdPart thirdPart,
+			Currency currency, String subject) throws MixException {
+		MixRealPayModel model = new MixRealPayModel();
+		model.setProjectTradeNo(projectTradeNo);
+		model.setThirdPartTradeNo(thirdPartTradeNo);
+		model.setThirdPart(thirdPart);
+		model.setCurrency(currency);
+		model.setSubject(subject);
+		model.setMode(Mode.TRANSFER);
+		return realPay(model);
+	}
+
+	/**
+	 * 真实货币 - 下单
+	 * @author lingting 2021-07-14 17:34
+	 */
+	public MixRealPayResponse realPay(MixRealPayModel model) throws MixException {
+		model.setNotifyUrl(notifyUrl);
+		MixRealPayRequest request = new MixRealPayRequest();
+		request.setModel(model);
+		return client.execute(request);
 	}
 
 	/**

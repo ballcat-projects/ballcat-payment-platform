@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import live.lingting.virtual.VirtualConfig;
+import live.lingting.config.PayConfig;
 import live.lingting.virtual.VirtualManager;
 import live.lingting.api.properties.ApiProperties;
 import live.lingting.entity.Pay;
@@ -40,7 +40,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	private final ApiProperties properties;
 
-	private final VirtualConfig config;
+	private final PayConfig config;
 
 	private final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
 			// 限制 hash 不为空

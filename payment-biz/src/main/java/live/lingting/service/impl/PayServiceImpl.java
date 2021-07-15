@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import live.lingting.Page;
 import live.lingting.Redis;
+import live.lingting.config.PayConfig;
 import live.lingting.constant.PayConstants;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
@@ -22,12 +23,12 @@ import live.lingting.entity.VirtualAddress;
 import live.lingting.enums.ResponseCode;
 import live.lingting.mapper.PayMapper;
 import live.lingting.sdk.enums.Currency;
+import live.lingting.sdk.enums.Mode;
 import live.lingting.sdk.enums.NotifyStatus;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.sdk.model.MixVirtualPayModel;
 import live.lingting.service.PayService;
 import live.lingting.service.VirtualAddressService;
-import live.lingting.virtual.VirtualConfig;
 
 /**
  * @author lingting 2021/6/4 13:40
@@ -40,7 +41,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	private final VirtualAddressService virtualAddressService;
 
-	private final VirtualConfig config;
+	private final PayConfig config;
 
 	@Override
 	public PageResult<Pay> list(Page<Pay> page, Pay pay) {
@@ -132,8 +133,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean virtualSubmit(Pay pay, String hash) {
-		validateHash(pay, hash);
-
+		validateThirdTradeNo(pay, hash);
 		return baseMapper.virtualSubmit(pay.getTradeNo(), hash);
 	}
 
@@ -144,7 +144,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 			hash = "";
 		}
 		if (StringUtils.hasText(hash)) {
-			validateHash(pay, hash);
+			validateThirdTradeNo(pay, hash);
 		}
 		return baseMapper.virtualRetry(pay.getTradeNo(), hash);
 	}
@@ -154,20 +154,21 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		return baseMapper.notifying(pay);
 	}
 
-	private void validateHash(Pay pay, String hash) {
-		String key = PayConstants.getVirtualHashLock(pay.getChain(), hash);
+	@Override
+	public void validateThirdTradeNo(Pay pay, String thirdTradeNo) {
+		String key = PayConstants.getPayThirdTradeNoLock(pay, thirdTradeNo);
 		if (!redis.setIfAbsent(key, "", TimeUnit.DAYS.toSeconds(1))) {
-			throw new BusinessException(ResponseCode.HASH_EXIST);
+			throw new BusinessException(ResponseCode.TRADE_NO_EXIST);
 		}
 
 		final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
-				// hash
-				.eq(Pay::getThirdPartTradeNo, hash)
+				// thirdTradeNo
+				.eq(Pay::getThirdPartTradeNo, thirdTradeNo)
 				// 限制状态
 				.in(Pay::getStatus, PayStatus.WAIT, PayStatus.SUCCESS);
 
 		if (baseMapper.selectCount(wrapper) > 0) {
-			throw new BusinessException(ResponseCode.HASH_EXIST);
+			throw new BusinessException(ResponseCode.TRADE_NO_EXIST);
 		}
 	}
 
@@ -176,7 +177,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		final boolean fail = baseMapper.fail(pay, desc, retryEndTime);
 		if (fail) {
 			// 失败移除hash锁
-			final String key = PayConstants.getVirtualHashLock(pay.getChain(), pay.getThirdPartTradeNo());
+			final String key = PayConstants.getPayThirdTradeNoLock(pay, pay.getThirdPartTradeNo());
 			redis.delete(key);
 		}
 		return fail;
@@ -184,7 +185,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 
 	@Override
 	public boolean success(Pay pay) {
-		return baseMapper.success(pay.getTradeNo(), pay.getAmount());
+		return baseMapper.success(pay);
 	}
 
 	@Override
@@ -222,6 +223,30 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		if (!baseMapper.forciblyFail(pay.getTradeNo())) {
 			throw new BusinessException(ResponseCode.OPERATION_FAILED);
 		}
+	}
+
+	@Override
+	public List<Pay> listWaitTransfer() {
+		final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
+				// 限制支付模式
+				.eq(Pay::getMode, Mode.TRANSFER)
+				// 状态为等待
+				.eq(Pay::getStatus, PayStatus.WAIT);
+		return baseMapper.selectList(wrapper);
+	}
+
+	@Override
+	public List<Pay> listRealExpire(LocalDateTime maxTime) {
+		final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
+				// 限制支付模式
+				.eq(Pay::getMode, Mode.QR)
+				// 状态为等待
+				.eq(Pay::getStatus, PayStatus.WAIT)
+				// 限制货币为真实货币
+				.in(Pay::getCurrency, Currency.REAL_LIST)
+				// 时间
+				.le(Pay::getCreateTime, maxTime);
+		return baseMapper.selectList(wrapper);
 	}
 
 }

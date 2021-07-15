@@ -30,4 +30,8 @@ public class SystemConfigConstants {
 
 	public static final Long PAY_RETRY_TIMEOUT_DEFAULT = 60L;
 
+	public static final String REAL_EXPIRE_TIMEOUT = "real_expire_timeout";
+
+	public static final Long REAL_EXPIRE_TIMEOUT_DEFAULT = 1440L;
+
 }

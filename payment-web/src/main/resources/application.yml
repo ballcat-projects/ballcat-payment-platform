@@ -78,3 +78,27 @@ management:
   endpoint:
     health:
       show-details: always
+
+mix:
+  rate:
+    yy:
+      code: "yy code"
+      key: "yy key"
+      security: "yy security"
+  virtual:
+    eth-key: '注册 https://infura.io/dashboard 获取'
+    eth-security: '注册 https://infura.io/dashboard 获取'
+    trc-key: '注册 https://www.trongrid.io/shasta/#request 获取'
+  real:
+    ali:
+      app-id: 'ali pay app id'
+      private-key: 'ali pay pri key'
+      alipay-public-key: 'ali pay public key'
+      notify-url: 'https:pay.callback.com/ali'
+      return-url: 'https:pay.callback.com/#/'
+    wx:
+      app-id: 'wx pay app id'
+      mch-id: 'wx pay mch id'
+      mck-key: 'wx pay mck key'
+      notify-url: 'https:pay.callback.com/wx'
+      return-url: 'https:pay.callback.com/#/'

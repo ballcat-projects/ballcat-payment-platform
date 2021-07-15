@@ -26,3 +26,15 @@ VALUES ('projects', 'ID', 'id', 1, '{}', b'0', '', NOW())
      , ('projects', '项目名', 'name', 1, '{}', b'0', '', NOW())
      , ('projects', '创建时间', 'createTime', 1, '{}', b'0', '', NOW())
 ;
+
+INSERT INTO `sys_config`
+VALUES (NULL, '真实货币支付过期时间', 'real_expire_timeout', '1440', 'pay', '真实货币支付过期时间。单位: 分钟, 最小值为1, 小于1按120处理. 指定时间范围内未付款则本次交易失败!注: 支付模式为 TRANSFER 不受本值限制', 0, NOW(), NOW())
+;
+
+ALTER TABLE pay
+    ADD INDEX `idx_chain` (`chain`),
+    ADD INDEX `idx_third_part` (`third_part`),
+    ADD INDEX `idx_mode` (`mode`);
+
+ALTER TABLE project
+    ADD COLUMN `mark` varchar(20) DEFAULT `name` COMMENT '付款标志';

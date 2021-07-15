@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @MapperScan(basePackages = "live.lingting.**.mapper")
 @ComponentScan(basePackages = "live.lingting")
 @Configuration(proxyBeanMethods = false)
-public class BallcatConfiguration {
+public class WebConfiguration {
 
 	@Bean
 	public CustomAccessLogHandler accessLogHandler(AccessLogService service) {

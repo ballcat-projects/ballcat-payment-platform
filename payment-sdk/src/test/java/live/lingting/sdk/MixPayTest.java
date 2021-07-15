@@ -2,6 +2,7 @@ package live.lingting.sdk;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import java.math.BigDecimal;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.SdkContract;
+import live.lingting.sdk.enums.ThirdPart;
 import live.lingting.sdk.response.MixQueryResponse;
 import live.lingting.sdk.response.MixRateResponse;
+import live.lingting.sdk.response.MixRealPayResponse;
 import live.lingting.sdk.response.MixVirtualPayResponse;
 import live.lingting.sdk.response.MixVirtualRetryResponse;
 import live.lingting.sdk.response.MixVirtualSubmitResponse;
@@ -33,8 +36,16 @@ class MixPayTest {
 
 	@BeforeAll
 	public static void init() {
-		mixPay = new MixPay("http://192.168.1.237:23302", "phwzykzyqijanz2q", "c63ff87a2381449985d7afbc5c84f6fb",
+		mixPay = new MixPay("http://192.168.1.5:23302", "phwzykzyqijanz2q", "c63ff87a2381449985d7afbc5c84f6fb",
 				"http://127.0.0.1:23302/test");
+	}
+
+	@SneakyThrows
+	@Test
+	void realQrPay() {
+		final MixRealPayResponse response = mixPay.realQrPay(SNOWFLAKE.nextIdStr(), new BigDecimal("0.01"),
+				ThirdPart.ALI, Currency.CNY, "测试-支付平台");
+		log.info(response.toString());
 	}
 
 	@SneakyThrows

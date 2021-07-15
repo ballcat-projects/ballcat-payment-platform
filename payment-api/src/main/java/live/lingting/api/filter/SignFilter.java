@@ -76,6 +76,7 @@ public class SignFilter extends OncePerRequestFilter {
 		this.properties = properties;
 		allowUris.add("/actuator");
 		allowUris.add("/actuator/");
+		allowUris.add("/callback/");
 	}
 
 	@SneakyThrows

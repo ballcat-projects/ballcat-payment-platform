@@ -28,13 +28,18 @@ import live.lingting.api.util.SecurityUtils;
 import live.lingting.api.util.UriUtils;
 import live.lingting.entity.ApiAccessLog;
 import live.lingting.entity.Project;
-import live.lingting.sdk.util.JacksonUtils;
 
 /**
  * @author lingting 2021/6/25 15:23
  */
 @RequiredArgsConstructor
 public class LogFilter extends OncePerRequestFilter {
+
+	public static final String WX = "wx";
+
+	public static final String ALI = "ali";
+
+	public static final String CALLBACK = "/callback/";
 
 	private static final Set<String> IGNORE_URIS = new HashSet<>(16);
 
@@ -114,23 +119,39 @@ public class LogFilter extends OncePerRequestFilter {
 			al.setKey(project.getApiKey());
 		}
 		else {
-			al.setProjectId(0);
-			String key;
-			try {
-				final Map<String, String> map = JsonUtils.toObj(al.getReqBody(),
-						new TypeReference<Map<String, String>>() {
-						});
-				key = map.getOrDefault(FIELD_KEY, "");
+			if (al.getUri().startsWith(CALLBACK)) {
+				al.setProjectId(getProjectId(al.getUri()));
 			}
-			catch (Exception e) {
-				logger.error("[LogFilter] 获取key异常: ", e);
-				key = "";
+			else {
+				al.setProjectId(0);
+				String key;
+				try {
+					final Map<String, String> map = JsonUtils.toObj(al.getReqBody(),
+							new TypeReference<Map<String, String>>() {
+							});
+					key = map.getOrDefault(FIELD_KEY, "");
+				}
+				catch (Exception e) {
+					logger.error("[LogFilter] 获取key异常: ", e);
+					key = "";
+				}
+				al.setKey(key);
 			}
 
-			al.setKey(key);
 		}
 
 		thread.put(al);
+	}
+
+	private Integer getProjectId(String uri) {
+		if (uri.endsWith(WX)) {
+			return -2;
+
+		}
+		else if (uri.endsWith(ALI)) {
+			return -3;
+		}
+		return -1;
 	}
 
 	private String getResult(HttpServletResponse response) {

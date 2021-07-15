@@ -38,9 +38,9 @@ public enum ResponseCode implements ResultCode {
 	 */
 	HASH_SUBMIT_FAIL(233006, "Hash提交失败!"),
 	/**
-	 * Hash已被使用
+	 * 该第三方交易号已被使用
 	 */
-	HASH_EXIST(233007, "Hash已被使用!"),
+	TRADE_NO_EXIST(233007, "该第三方交易号已被使用!"),
 	/**
 	 * 禁止提交Hash
 	 */
@@ -65,6 +65,14 @@ public enum ResponseCode implements ResultCode {
 	 * 操作失败!
 	 */
 	OPERATION_FAILED(233013, "操作失败!"),
+	/**
+	 * 未知第三方!
+	 */
+	UNKNOWN_THIRD_PARTY(233014, "未知第三方!"),
+	/**
+	 * 该第三方不支持当前支付模式!
+	 */
+	THIRD_PARTY_NOT_SUPPORT(233015, "该第三方不支持当前支付模式!"),
 
 	;
 

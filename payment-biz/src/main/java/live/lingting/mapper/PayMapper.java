@@ -9,7 +9,6 @@ import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.conditions.query.LambdaQueryWrapperX;
 import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
 import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.util.StringUtils;
@@ -88,7 +87,7 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				// status
 				.eq(Pay::getStatus, PayStatus.WAIT)
 				// currency
-				.eq(Pay::getCurrency, Currency.USDT)
+				.in(Pay::getCurrency, Currency.VIRTUAL_LIST)
 				// createTime
 				.le(Pay::getCreateTime, maxTime);
 
@@ -212,6 +211,9 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				.set(Pay::getStatus, retryEndTime == null ? PayStatus.FAIL : PayStatus.RETRY)
 				// 设置描述
 				.set(StringUtils.hasText(desc), Pay::getDesc, desc)
+				// 更新第三方交易号
+				.set(StringUtils.hasText(pay.getThirdPartTradeNo()), Pay::getThirdPartTradeNo,
+						pay.getThirdPartTradeNo())
 				// 完成时间
 				.set(Pay::getCompleteTime, LocalDateTime.now());
 
@@ -227,21 +229,23 @@ public interface PayMapper extends ExtendMapper<Pay> {
 
 	/**
 	 * 已完成支付
-	 * @param tradeNo 交易号
-	 * @param amount 成功金额
+	 * @param pay 支付信息
 	 * @return boolean
 	 * @author lingting 2021-06-09 15:33
 	 */
-	default boolean success(String tradeNo, BigDecimal amount) {
+	default boolean success(Pay pay) {
 		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
 				// 限制交易信息
-				.eq(Pay::getTradeNo, tradeNo)
+				.eq(Pay::getTradeNo, pay.getTradeNo())
 				// 限制原状态
 				.eq(Pay::getStatus, PayStatus.WAIT)
 				// 设置目标状态
 				.set(Pay::getStatus, PayStatus.SUCCESS)
 				// 设置金额
-				.set(Pay::getAmount, amount)
+				.set(Pay::getAmount, pay.getAmount())
+				// 更新第三方交易号
+				.set(StringUtils.hasText(pay.getThirdPartTradeNo()), Pay::getThirdPartTradeNo,
+						pay.getThirdPartTradeNo())
 				// 设置描述
 				.set(Pay::getDesc, "支付成功")
 				// 完成时间

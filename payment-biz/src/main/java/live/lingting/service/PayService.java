@@ -107,6 +107,14 @@ public interface PayService extends ExtendService<Pay> {
 	boolean notifying(Pay pay);
 
 	/**
+	 * 校验第三方交易号是否可用
+	 * @param pay 支付信息
+	 * @param thirdTradeNo 第三方交易号
+	 * @author lingting 2021-07-14 16:48
+	 */
+	void validateThirdTradeNo(Pay pay, String thirdTradeNo);
+
+	/**
 	 * 支付失败
 	 * @param pay 支付信息
 	 * @param desc 描述
@@ -154,5 +162,20 @@ public interface PayService extends ExtendService<Pay> {
 	 * @author lingting 2021-06-24 21:13
 	 */
 	void forciblyFail(String tradeNo, String projectTradeNo);
+
+	/**
+	 * 查询所有等待的转账支付
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-07-14 15:47
+	 */
+	List<Pay> listWaitTransfer();
+
+	/**
+	 * 查询所有已过期真实货币支付信息
+	 * @param maxTime 最大创建时间
+	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @author lingting 2021-07-14 17:14
+	 */
+	List<Pay> listRealExpire(LocalDateTime maxTime);
 
 }

@@ -1,4 +1,4 @@
-package live.lingting.virtual;
+package live.lingting.config;
 
 import static live.lingting.constant.SystemConfigConstants.PAY_EMPTY_INFO_TIMEOUT;
 import static live.lingting.constant.SystemConfigConstants.PAY_EMPTY_INFO_TIMEOUT_DEFAULT;
@@ -8,6 +8,8 @@ import static live.lingting.constant.SystemConfigConstants.PAY_INFO_CREATE_TIMEO
 import static live.lingting.constant.SystemConfigConstants.PAY_INFO_CREATE_TIMEOUT_DEFAULT;
 import static live.lingting.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT;
 import static live.lingting.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT_DEFAULT;
+import static live.lingting.constant.SystemConfigConstants.REAL_EXPIRE_TIMEOUT;
+import static live.lingting.constant.SystemConfigConstants.REAL_EXPIRE_TIMEOUT_DEFAULT;
 import static live.lingting.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT;
 import static live.lingting.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
 
@@ -29,7 +31,7 @@ import live.lingting.constant.SystemConfigConstants;
 @Import(SysConfigServiceImpl.class)
 @MapperScan(basePackageClasses = SysConfigMapper.class)
 @RequiredArgsConstructor
-public class VirtualConfig {
+public class PayConfig {
 
 	private final SysConfigService service;
 
@@ -71,6 +73,16 @@ public class VirtualConfig {
 	 */
 	public Long getRetryTimeout() {
 		return getByKey(PAY_RETRY_TIMEOUT, PAY_RETRY_TIMEOUT_DEFAULT);
+	}
+
+	/**
+	 * 真实货币支付过期时间 - 指定时间内未付款记为失败
+	 *
+	 * mode={@link live.lingting.sdk.enums.Mode#TRANSFER} 时, 不受本值限制
+	 * @author lingting 2021-07-14 15:34
+	 */
+	public Long getRealExpireTimeout() {
+		return getByKey(REAL_EXPIRE_TIMEOUT, REAL_EXPIRE_TIMEOUT_DEFAULT);
 	}
 
 	private Long getByKey(String key, Long defaultVal) {

@@ -3,20 +3,19 @@ package live.lingting.api.thread;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import live.lingting.config.PayConfig;
-import live.lingting.virtual.VirtualManager;
 import live.lingting.entity.Pay;
 import live.lingting.service.PayService;
 
 /**
- * @author lingting 2021/6/9 13:58
+ * @author lingting 2021/7/14 17:11
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
-public class VirtualSubmitTimeoutThread extends AbstractThread<Pay> {
-
-	private final VirtualManager manager;
+public class RealExpireThread extends AbstractThread<Pay> {
 
 	private final PayService service;
 
@@ -24,20 +23,20 @@ public class VirtualSubmitTimeoutThread extends AbstractThread<Pay> {
 
 	@Override
 	public List<Pay> listData() {
-		return service.listVirtualTimeout(getMaxTime());
+		return service.listRealExpire(getMaxTime());
 	}
 
 	@Override
 	public void handler(Pay pay) {
-		manager.fail(pay, "超时未提交!", 0L);
+		service.fail(pay, "未在" + config.getRealExpireTimeout() + "分钟内付款!", null);
 	}
 
 	/**
-	 * 获取已超时支付信息的最大创建时间
+	 * 获取过去真实货币支付信息的最大创建时间
 	 * @author lingting 2021-06-09 14:06
 	 */
 	public LocalDateTime getMaxTime() {
-		return LocalDateTime.now().minusMinutes(config.getVirtualSubmitTimeout());
+		return LocalDateTime.now().minusMinutes(config.getRealExpireTimeout());
 	}
 
 }

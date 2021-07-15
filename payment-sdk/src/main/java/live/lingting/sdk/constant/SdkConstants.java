@@ -30,6 +30,8 @@ public class SdkConstants {
 	/**
 	 * -------------------------------PATH-----------------------------------------
 	 */
+	public static final String MIX_REAL_PAU_PATH = "pay";
+
 	public static final String MIX_VIRTUAL_PAY_PATH = "pay/virtual";
 
 	public static final String MIX_SUBMIT_PAY_PATH = "pay/virtual/submit";

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import live.lingting.Redis;
+import live.lingting.config.PayConfig;
 import live.lingting.entity.Pay;
 import live.lingting.entity.Project;
 import live.lingting.enums.ResponseCode;
@@ -35,7 +36,7 @@ public class VirtualManager {
 
 	private final VirtualAddressService virtualAddressService;
 
-	private final VirtualConfig config;
+	private final PayConfig config;
 
 	/**
 	 * 虚拟货币预下单
