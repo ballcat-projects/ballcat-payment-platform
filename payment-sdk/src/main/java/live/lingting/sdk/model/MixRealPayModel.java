@@ -19,6 +19,8 @@ import live.lingting.sdk.exception.MixRequestParamsValidException;
 @Setter
 public class MixRealPayModel extends MixModel {
 
+	public static final BigDecimal MIN = new BigDecimal("0.01");
+
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -53,6 +55,9 @@ public class MixRealPayModel extends MixModel {
 		else if (Mode.QR.equals(getMode())) {
 			if (getAmount() == null || getAmount().compareTo(BigDecimal.ZERO) < 1) {
 				msg = "支付金额异常";
+			}
+			else if (getAmount().compareTo(MIN) < 0) {
+				msg = "支付金额最小值为" + MIN.toPlainString();
 			}
 			else if (!StringUtils.hasText(getSubject())) {
 				msg = "商品信息不能为空!";

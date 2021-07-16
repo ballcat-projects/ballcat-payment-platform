@@ -73,6 +73,14 @@ public enum ResponseCode implements ResultCode {
 	 * 该第三方不支持当前支付模式!
 	 */
 	THIRD_PARTY_NOT_SUPPORT(233015, "该第三方不支持当前支付模式!"),
+	/**
+	 * 禁止使用该支付方式!
+	 */
+	PROHIBIT_PAYMENT_METHOD(233016, "禁止使用该支付方式!"),
+	/**
+	 * 生成支付信息异常!
+	 */
+	ABNORMAL_PAYMENT_GENERATED(233017, "生成支付信息异常! 详细信息: {}"),
 
 	;
 
