@@ -50,6 +50,14 @@ class MixPayTest {
 
 	@SneakyThrows
 	@Test
+	void realTransferPay() {
+		final MixRealPayResponse response = mixPay.realTransferPay(SNOWFLAKE.nextIdStr(), "13123123123123",
+				ThirdPart.ALI, Currency.CNY, "测试-支付平台");
+		log.info(response.toString());
+	}
+
+	@SneakyThrows
+	@Test
 	void virtualPay() {
 		mixVirtualPayResponse = mixPay.virtualPay(SNOWFLAKE.nextIdStr(), SdkContract.USDT, Chain.ETH);
 		log.info(mixVirtualPayResponse.toString());
