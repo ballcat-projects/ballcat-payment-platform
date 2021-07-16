@@ -6,6 +6,7 @@ import java.util.List;
 import live.lingting.Page;
 import live.lingting.entity.Project;
 import live.lingting.enums.ProjectMode;
+import live.lingting.enums.ProjectScope;
 
 /**
  * @author lingting 2021/6/4 13:36
@@ -58,5 +59,13 @@ public interface ProjectService extends ExtendService<Project> {
 	 * @author lingting 2021-06-07 16:39
 	 */
 	Project getByApiKey(String key);
+
+	/**
+	 * 更新项目权限
+	 * @param ids id
+	 * @param scopes 新权限
+	 * @author lingting 2021-07-16 16:25
+	 */
+	void scope(List<Integer> ids, List<ProjectScope> scopes);
 
 }

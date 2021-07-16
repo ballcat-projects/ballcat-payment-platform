@@ -8,9 +8,12 @@ import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
 import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import live.lingting.Page;
 import live.lingting.entity.Project;
 import live.lingting.enums.ProjectMode;
+import live.lingting.enums.ProjectScope;
 
 /**
  * @author lingting 2021/6/4 13:35
@@ -59,5 +62,14 @@ public interface ProjectMapper extends ExtendMapper<Project> {
 
 		update(null, wrapper);
 	}
+
+	/**
+	 * 更新项目权限
+	 * @param ids id
+	 * @param scopes 新权限
+	 * @author lingting 2021-07-16 16:25
+	 */
+	@Update("UPDATE project p SET p.scope=#{scopes,typeHandler=live.lingting.entity.Project$ScopeTypeHandler} WHERE p.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
+	void scope(@Param("ids") List<Integer> ids, @Param("scopes") List<ProjectScope> scopes);
 
 }

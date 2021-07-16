@@ -42,3 +42,54 @@ ALTER TABLE project
 UPDATE project
 SET project.mark=name
 WHERE mark = '';
+
+ALTER TABLE project
+    ADD COLUMN `scope` json COMMENT '项目权限';
+
+UPDATE project
+SET project.scope='[
+    "USDT"
+]'
+WHERE scope IS NULL
+   OR project.scope = '[]';
+
+INSERT INTO `sys_dict`(code, title, remarks, editable, value_type, hash_code, deleted, create_time)
+VALUES ('project_scope', '项目权限', '', 1, 2, '233', 0, NOW())
+;
+
+INSERT INTO `sys_dict_item`(dict_code, value, name, attributes, sort, remarks, deleted, create_time)
+VALUES ('project_scope', 'USDT', 'USDT', '{}', 0, '', 0, NOW())
+     , ('project_scope', 'ALI', '支付宝', '{}', 0, '', 0, NOW())
+     , ('project_scope', 'WX', '微信', '{}', 0, '', 0, NOW())
+;
+
+UPDATE sys_dict_item
+SET attributes='{
+    "tagColor": "red"
+}'
+WHERE dict_code = 'pay_status'
+  AND `value` = 'FAIL';
+UPDATE sys_dict_item
+SET attributes='{
+    "tagColor": "blue"
+}'
+WHERE dict_code = 'pay_status'
+  AND `value` = 'SUCCESS';
+UPDATE sys_dict_item
+SET attributes='{
+    "tagColor": "orange"
+}'
+WHERE dict_code = 'pay_status'
+  AND `value` = 'RETRY';
+UPDATE sys_dict_item
+SET attributes='{
+    "tagColor": "green"
+}'
+WHERE dict_code = 'pay_status'
+  AND `value` = 'WAIT';
+UPDATE sys_dict_item
+SET attributes='{
+    "tagColor": "blue"
+}'
+WHERE dict_code = 'notify_status'
+  AND `value` = 'SUCCESS';

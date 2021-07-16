@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import live.lingting.Page;
 import live.lingting.dto.ProjectModeDTO;
+import live.lingting.dto.ProjectScopeDTO;
 import live.lingting.entity.Project;
 import live.lingting.entity.ProjectHistory;
 import live.lingting.service.ProjectHistoryService;
@@ -62,6 +63,13 @@ public class ProjectController {
 	@PreAuthorize("@per.hasPermission('project:edit')")
 	public R<?> mode(@Validated @RequestBody ProjectModeDTO dto) {
 		service.mode(dto.getIds(), dto.getMode());
+		return R.ok();
+	}
+
+	@PatchMapping("set/scope")
+	@PreAuthorize("@per.hasPermission('project:edit')")
+	public R<?> scope(@Validated @RequestBody ProjectScopeDTO dto) {
+		service.scope(dto.getIds(), dto.getScopes());
 		return R.ok();
 	}
 

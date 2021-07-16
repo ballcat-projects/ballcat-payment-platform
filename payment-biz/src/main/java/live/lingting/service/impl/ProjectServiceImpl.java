@@ -10,6 +10,7 @@ import live.lingting.Page;
 import live.lingting.entity.Project;
 import live.lingting.entity.ProjectHistory;
 import live.lingting.enums.ProjectMode;
+import live.lingting.enums.ProjectScope;
 import live.lingting.enums.ResponseCode;
 import live.lingting.mapper.ProjectMapper;
 import live.lingting.service.ProjectHistoryService;
@@ -63,6 +64,11 @@ public class ProjectServiceImpl extends ExtendServiceImpl<ProjectMapper, Project
 	@Override
 	public Project getByApiKey(String key) {
 		return baseMapper.selectOne(baseMapper.getWrapper(new Project().setApiKey(key)));
+	}
+
+	@Override
+	public void scope(List<Integer> ids, List<ProjectScope> scopes) {
+		baseMapper.scope(ids, scopes);
 	}
 
 	private void update(ProjectHistory history, Project project) {

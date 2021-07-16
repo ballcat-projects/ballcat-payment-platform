@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,6 +15,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import live.lingting.enums.ProjectMode;
+import live.lingting.enums.ProjectScope;
+import live.lingting.mybatis.AbstractJsonTypeHandler;
 
 /**
  * 项目
@@ -22,7 +26,7 @@ import live.lingting.enums.ProjectMode;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("project")
+@TableName(value = "project", autoResultMap = true)
 public class Project implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -52,7 +56,22 @@ public class Project implements Serializable {
 	@NotEmpty(message = "项目标志不能为空!")
 	private String mark;
 
+	/**
+	 * 项目权限
+	 */
+	@TableField(typeHandler = ScopeTypeHandler.class)
+	private Set<ProjectScope> scope;
+
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
+
+	public static class ScopeTypeHandler extends AbstractJsonTypeHandler<Set<ProjectScope>> {
+
+		@Override
+		public Set<ProjectScope> getDefaultJavaVal() {
+			return new HashSet<>();
+		}
+
+	}
 
 }
