@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
 import live.lingting.enums.VirtualAddressMode;
-import live.lingting.mybatis.ListIntegerToJsonTypeHandler;
+import live.lingting.mybatis.AbstractJsonTypeHandler;
 import live.lingting.sdk.enums.Chain;
 
 /**
@@ -42,10 +45,20 @@ public class VirtualAddress {
 
 	private VirtualAddressMode mode;
 
-	@TableField(typeHandler = ListIntegerToJsonTypeHandler.class)
+	@TableField(typeHandler = ProjectIdsTypeHandler.class)
 	private List<Integer> projectIds;
 
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
+
+	@MappedJdbcTypes(JdbcType.VARCHAR)
+	public static class ProjectIdsTypeHandler extends AbstractJsonTypeHandler<List<Integer>> {
+
+		@Override
+		public List<Integer> getDefaultJavaVal() {
+			return new ArrayList<>();
+		}
+
+	}
 
 }

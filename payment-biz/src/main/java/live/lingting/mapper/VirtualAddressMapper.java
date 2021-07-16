@@ -161,7 +161,7 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 	 * @param projectIds 新项目id
 	 * @author lingting 2021-07-08 11:05
 	 */
-	@Update("UPDATE virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.mybatis.ListIntegerToJsonTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
+	@Update("UPDATE virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.entity.VirtualAddress$ProjectIdsTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
 	void project(@Param("ids") List<Integer> ids, @Param("pIds") List<Integer> projectIds);
 
 }
