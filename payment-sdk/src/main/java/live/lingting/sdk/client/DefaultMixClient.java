@@ -33,12 +33,14 @@ public class DefaultMixClient implements MixClient {
 
 	@Override
 	public <M extends MixModel, R extends MixResponse<?>> R execute(MixRequest<M, R> request) throws MixException {
-
 		try {
 			return request(request);
 		}
+		catch (MixException e) {
+			throw e;
+		}
 		catch (Exception e) {
-			throw new MixException("请求异常!", e);
+			throw new MixException("请求异常! " + e.getMessage(), e);
 		}
 	}
 
