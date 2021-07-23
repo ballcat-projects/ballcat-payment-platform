@@ -24,14 +24,12 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.token.store.redis.JdkSerializationStrategy;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStoreSerializationStrategy;
 import org.springframework.web.filter.OncePerRequestFilter;
 import live.lingting.Redis;
 import live.lingting.api.enums.ApiResponseCode;
-import live.lingting.api.properties.ApiProperties;
 import live.lingting.api.util.ResponseUtils;
 import live.lingting.api.util.UriUtils;
+import live.lingting.config.PayConfig;
 import live.lingting.entity.Project;
 import live.lingting.sdk.constant.SdkConstants;
 import live.lingting.sdk.util.MixUtils;
@@ -52,28 +50,19 @@ public class SignFilter extends OncePerRequestFilter {
 
 	public static final String LOCK_PREFIX = "api_request_lock";
 
-	/**
-	 * 缓存指定时间的oauth信息
-	 */
-	public static final Long OAUTH_TIME = TimeUnit.HOURS.toSeconds(1);
-
-	public static final String OAUTH_PREFIX = "api_request_oauth";
-
 	private final Set<String> allowUris = new HashSet<>(16);
 
 	private final ProjectService projectService;
 
 	private final Redis redis;
 
-	private final RedisTokenStoreSerializationStrategy tokenSerialization = new JdkSerializationStrategy();
-
-	private final ApiProperties properties;
+	private final PayConfig config;
 
 	@SneakyThrows
-	public SignFilter(ProjectService projectService, Redis redis, ApiProperties properties) {
+	public SignFilter(ProjectService projectService, Redis redis, PayConfig config) {
 		this.projectService = projectService;
 		this.redis = redis;
-		this.properties = properties;
+		this.config = config;
 		allowUris.add("/actuator");
 		allowUris.add("/actuator/");
 		allowUris.add("/callback/");
@@ -114,9 +103,9 @@ public class SignFilter extends OncePerRequestFilter {
 		}
 
 		final boolean verify;
-		if (properties.isTest()) {
+		if (config.isTest()) {
 			verify = true;
-			logger.error("当前使用测试用模式启动!");
+			logger.error("当前为测试模式!");
 		}
 		else {
 			verify = MixUtils.verifySign(project.getApiSecurity(), params);

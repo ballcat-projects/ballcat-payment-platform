@@ -96,3 +96,7 @@ WHERE dict_code = 'notify_status'
 
 ALTER TABLE virtual_address
     ADD COLUMN `usdt_amount` decimal(24, 4) DEFAULT 0 COMMENT 'USDT 余额';
+
+INSERT INTO `sys_config`
+VALUES (NULL, '测试模式', 'test', '0', '', '是否开启测试模式, 0: 关闭, 其他任意值表示开启. 线上环境无效.', 0, NOW(), NOW())
+;

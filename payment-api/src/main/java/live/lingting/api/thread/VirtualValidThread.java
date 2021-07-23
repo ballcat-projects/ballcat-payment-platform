@@ -11,13 +11,12 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import live.lingting.config.PayConfig;
-import live.lingting.virtual.VirtualManager;
-import live.lingting.api.properties.ApiProperties;
 import live.lingting.entity.Pay;
 import live.lingting.sdk.enums.Currency;
 import live.lingting.sdk.enums.PayStatus;
 import live.lingting.service.PayService;
 import live.lingting.virtual.VirtualHandler;
+import live.lingting.virtual.VirtualManager;
 import live.lingting.virtual.currency.bitcoin.contract.OmniContract;
 import live.lingting.virtual.currency.core.Contract;
 import live.lingting.virtual.currency.core.enums.TransactionStatus;
@@ -38,8 +37,6 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	private final VirtualHandler handler;
 
-	private final ApiProperties properties;
-
 	private final PayConfig config;
 
 	private final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
@@ -55,11 +52,11 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	@Override
 	public void handler(Pay pay) {
-		if (properties.isTest()) {
+		if (config.isTest()) {
 			if (RandomUtil.randomInt(10) % 2 == 0) {
 				fail(pay, "测试失败!");
 			}
-			success(pay, new TransactionInfo().setValue(BigDecimal.TEN));
+			success(pay, new TransactionInfo().setValue(new BigDecimal(RandomUtil.randomInt(0, 5000))));
 			return;
 		}
 

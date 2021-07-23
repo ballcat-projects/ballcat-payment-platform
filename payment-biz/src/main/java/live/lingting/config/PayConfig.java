@@ -10,6 +10,8 @@ import static live.lingting.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT;
 import static live.lingting.constant.SystemConfigConstants.PAY_RETRY_TIMEOUT_DEFAULT;
 import static live.lingting.constant.SystemConfigConstants.REAL_EXPIRE_TIMEOUT;
 import static live.lingting.constant.SystemConfigConstants.REAL_EXPIRE_TIMEOUT_DEFAULT;
+import static live.lingting.constant.SystemConfigConstants.TEST;
+import static live.lingting.constant.SystemConfigConstants.TEST_DEFAULT;
 import static live.lingting.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT;
 import static live.lingting.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
 
@@ -23,6 +25,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import live.lingting.constant.SystemConfigConstants;
+import live.lingting.util.SpringUtils;
 
 /**
  * @author lingting 2021/6/18 9:39
@@ -83,6 +86,26 @@ public class PayConfig {
 	 */
 	public Long getRealExpireTimeout() {
 		return getByKey(REAL_EXPIRE_TIMEOUT, REAL_EXPIRE_TIMEOUT_DEFAULT);
+	}
+
+	/**
+	 * <p>
+	 * 是否作为测试用模块启动.
+	 * </p>
+	 *
+	 * <p>
+	 * 作为测试用模块启动不会对请求进行验签.
+	 * </p>
+	 * <p>
+	 * 作为测试用模块启动所有支付信息不会去实际验证是否成功, 每笔支付有50%的几率成功或失败!
+	 * </p>
+	 */
+	public boolean isTest() {
+		if (SpringUtils.isProd()) {
+			return false;
+		}
+		final Long val = getByKey(TEST, TEST_DEFAULT);
+		return !val.equals(TEST_DEFAULT);
 	}
 
 	private Long getByKey(String key, Long defaultVal) {

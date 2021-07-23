@@ -34,4 +34,8 @@ public class SystemConfigConstants {
 
 	public static final Long REAL_EXPIRE_TIMEOUT_DEFAULT = 1440L;
 
+	public static final String TEST = "test";
+
+	public static final Long TEST_DEFAULT = 0L;
+
 }
