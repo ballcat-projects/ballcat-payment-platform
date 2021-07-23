@@ -4,6 +4,7 @@ import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.service.ExtendService;
 import java.util.List;
 import live.lingting.Page;
+import live.lingting.dto.VirtualAddressBalanceDTO;
 import live.lingting.dto.VirtualAddressCreateDTO;
 import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
@@ -72,5 +73,12 @@ public interface VirtualAddressService extends ExtendService<VirtualAddress> {
 	 * @author lingting 2021-07-08 11:05
 	 */
 	void project(List<Integer> ids, List<Integer> projectIds);
+
+	/**
+	 * 更新地址余额
+	 * @param dto 参数
+	 * @author lingting 2021-07-22 09:42
+	 */
+	void balance(VirtualAddressBalanceDTO dto);
 
 }

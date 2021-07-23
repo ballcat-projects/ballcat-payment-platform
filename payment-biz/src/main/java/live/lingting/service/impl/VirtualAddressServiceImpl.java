@@ -1,13 +1,14 @@
 package live.lingting.service.impl;
 
-import cn.hutool.core.util.StrUtil;
 import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import live.lingting.Page;
+import live.lingting.dto.VirtualAddressBalanceDTO;
 import live.lingting.dto.VirtualAddressCreateDTO;
 import live.lingting.entity.Project;
 import live.lingting.entity.VirtualAddress;
@@ -99,8 +100,33 @@ public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressM
 
 	@Override
 	public void project(List<Integer> ids, List<Integer> projectIds) {
-		System.out.println(StrUtil.join(",", projectIds.toArray()));
 		baseMapper.project(ids, projectIds);
+	}
+
+	@Override
+	public void balance(VirtualAddressBalanceDTO dto) {
+		List<VirtualAddress> list;
+		if (CollectionUtils.isEmpty(dto.getIds())) {
+			list = list();
+		}
+		else {
+			list = listByIds(dto.getIds());
+		}
+
+		for (VirtualAddress address : list) {
+			address.setUsing(null);
+			address.setDisabled(null);
+			address.setMode(null);
+			address.setProjectIds(null);
+			try {
+				address.setUsdtAmount(handler.getBalance(address));
+			}
+			catch (Exception e) {
+				log.error("更新地址余额异常! 地址: " + address.getAddress(), e);
+			}
+		}
+
+		updateBatchById(list);
 	}
 
 }

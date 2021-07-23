@@ -93,3 +93,6 @@ SET attributes='{
 }'
 WHERE dict_code = 'notify_status'
   AND `value` = 'SUCCESS';
+
+ALTER TABLE virtual_address
+    ADD COLUMN `usdt_amount` decimal(24, 4) DEFAULT 0 COMMENT 'USDT 余额';

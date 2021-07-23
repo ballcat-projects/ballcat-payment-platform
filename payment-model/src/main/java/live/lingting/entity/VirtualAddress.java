@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,11 @@ public class VirtualAddress {
 	private Boolean using;
 
 	private VirtualAddressMode mode;
+
+	/**
+	 * USDT 余额
+	 */
+	private BigDecimal usdtAmount;
 
 	@TableField(typeHandler = ProjectIdsTypeHandler.class)
 	private List<Integer> projectIds;

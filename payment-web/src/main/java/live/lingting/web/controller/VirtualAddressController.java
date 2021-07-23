@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import live.lingting.Page;
+import live.lingting.dto.VirtualAddressBalanceDTO;
 import live.lingting.dto.VirtualAddressCreateDTO;
 import live.lingting.dto.VirtualAddressDisabledDTO;
 import live.lingting.dto.VirtualAddressModeDTO;
@@ -39,6 +40,19 @@ public class VirtualAddressController {
 	@PreAuthorize("@per.hasPermission('virtual:address:add')")
 	public R<VirtualAddressCreateDTO> create(@RequestBody VirtualAddressCreateDTO dto) {
 		return R.ok(service.create(dto));
+	}
+
+	@PatchMapping("balance/all")
+	@PreAuthorize("@per.hasPermission('virtual:address:read')")
+	public R<?> balanceAll() {
+		return balance(new VirtualAddressBalanceDTO());
+	}
+
+	@PatchMapping("balance")
+	@PreAuthorize("@per.hasPermission('virtual:address:read')")
+	public R<?> balance(@RequestBody @Validated VirtualAddressBalanceDTO dto) {
+		service.balance(dto);
+		return R.ok();
 	}
 
 	@PatchMapping("disabled")

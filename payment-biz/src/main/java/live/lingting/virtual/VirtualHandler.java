@@ -1,6 +1,7 @@
 package live.lingting.virtual;
 
 import cn.hutool.core.util.StrUtil;
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
@@ -12,14 +13,18 @@ import live.lingting.entity.Pay;
 import live.lingting.entity.VirtualAddress;
 import live.lingting.sdk.enums.Chain;
 import live.lingting.virtual.currency.bitcoin.BitcoinServiceImpl;
+import live.lingting.virtual.currency.bitcoin.contract.OmniContract;
 import live.lingting.virtual.currency.bitcoin.endpoints.BitcoinEndpoints;
 import live.lingting.virtual.currency.bitcoin.properties.BitcoinProperties;
+import live.lingting.virtual.currency.core.Contract;
 import live.lingting.virtual.currency.core.PlatformService;
 import live.lingting.virtual.currency.core.model.TransactionInfo;
 import live.lingting.virtual.currency.etherscan.EtherscanServiceImpl;
+import live.lingting.virtual.currency.etherscan.contract.EtherscanContract;
 import live.lingting.virtual.currency.etherscan.endpoints.EtherscanEndpoints;
 import live.lingting.virtual.currency.etherscan.properties.EtherscanProperties;
 import live.lingting.virtual.currency.tronscan.TronscanServiceImpl;
+import live.lingting.virtual.currency.tronscan.contract.TronscanContract;
 import live.lingting.virtual.currency.tronscan.endpoints.TronscanEndpoints;
 import live.lingting.virtual.currency.tronscan.properties.TronscanProperties;
 
@@ -84,6 +89,25 @@ public class VirtualHandler {
 
 		final PlatformService<?> service = getService(va.getChain());
 		return service.validate(va.getAddress());
+	}
+
+	public BigDecimal getBalance(VirtualAddress address) throws Exception {
+		final PlatformService<?> service = getService(address.getChain());
+		Contract contract;
+
+		switch (address.getChain()) {
+		case OMNI:
+			contract = OmniContract.USDT;
+			break;
+		case ETH:
+			contract = EtherscanContract.USDT;
+			break;
+		default:
+			contract = TronscanContract.USDT;
+			break;
+		}
+
+		return service.getNumberByAddressAndContract(address.getAddress(), contract);
 	}
 
 }
