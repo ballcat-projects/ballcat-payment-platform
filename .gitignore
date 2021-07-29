@@ -68,3 +68,5 @@ admin-log/
 arthas-output
 
 application-*.yml
+.gradle
+build

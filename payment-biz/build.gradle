@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':payment-model')
+    implementation 'com.hccake:ballcat-oauth-biz'
+    implementation 'com.hccake:ballcat-system-biz'
+    implementation 'com.hccake:ballcat-log-biz'
+    implementation 'com.hccake:ballcat-extend-pay-virtual'
+    implementation 'com.hccake:ballcat-extend-pay-wx'
+    implementation 'com.hccake:ballcat-extend-pay-ali'
+    implementation project(':payment-sdk')
+    implementation 'com.hccake:ballcat-oauth-model'
+    implementation 'com.hccake:ballcat-system-model'
+    implementation 'com.hccake:ballcat-log-model'
+}
