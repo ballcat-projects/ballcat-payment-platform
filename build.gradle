@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { name "Alibaba"; url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.28")
+    }
+}
+
 plugins {
     id 'java'
     id 'idea'
@@ -15,21 +26,18 @@ repositories {
     mavenCentral()
 }
 
-
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'io.spring.dependency-management'
-    apply from: "${rootDir}/config.gradle"
-
+    apply {
+        plugin 'java'
+        plugin 'idea'
+        plugin 'io.spring.dependency-management'
+        plugin 'io.spring.javaformat'
+        from "${rootDir}/config.gradle"
+    }
 
     configurations {
         compileOnly {
             extendsFrom annotationProcessor
-        }
-
-        all {
-            transitive = true
         }
     }
 
