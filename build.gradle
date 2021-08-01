@@ -43,20 +43,6 @@ subprojects {
         from "${rootDir}/config.gradle"
     }
 
-    idea {
-        module {
-            inheritOutputDirs = false
-            outputDir = compileJava.destinationDirectory.getAsFile().getOrNull();
-            testOutputDir = compileTestJava.destinationDirectory.getAsFile().getOrNull();
-        }
-    }
-
-    configurations {
-        compileOnly {
-            extendsFrom annotationProcessor
-        }
-    }
-
     dependencies {
         implementation 'org.mapstruct:mapstruct'
         implementation 'org.springframework.boot:spring-boot-starter'
@@ -67,6 +53,37 @@ subprojects {
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    // 这样子自己写的 @ConfigurationProperties 类里面的字段就有代码提示了。
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = compileJava.destinationDirectory.getAsFile().getOrNull()
+            testOutputDir = compileTestJava.destinationDirectory.getAsFile().getOrNull()
+        }
+    }
+
+    // 打包时使用 -Pprofiles='test' 指定打包时的环境
+    processResources {
+        filesMatching("application*.yml") {
+            def map = project.properties
+            map.put("profiles", project.hasProperty('profiles') ? project.findProperty("profiles") : "dev")
+            expand(map)
+        }
+    }
+
+    // 指定打包后的jar包文件名
+    pluginManager.withPlugin('org.springframework.boot') {
+        bootJar {
+            archiveFileName.set("${project.name}.jar")
+        }
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
     }
 
     java.sourceCompatibility(JavaVersion.VERSION_1_8)
