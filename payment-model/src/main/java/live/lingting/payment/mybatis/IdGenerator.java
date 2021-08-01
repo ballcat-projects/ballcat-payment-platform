@@ -12,6 +12,7 @@ import java.util.Map;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import live.lingting.payment.entity.Pay;
 
 /**
  * 自定义主键生成
@@ -35,7 +36,7 @@ public class IdGenerator implements IdentifierGenerator {
 	private static final Map<Class<?>, String> MAP = new HashMap<>(64);
 
 	static {
-		put("live.lingting.entity.Pay", "11");
+		put(Pay.class.getName(), "11");
 	}
 
 	private static void put(Class<?> c, String prefix) {
