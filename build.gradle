@@ -1,3 +1,7 @@
+import org.springframework.boot.gradle.plugin.DependencyManagementPluginAction
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+import org.springframework.boot.gradle.util.VersionExtractor
+
 buildscript {
     repositories {
         mavenLocal()
@@ -40,7 +44,6 @@ subprojects {
         plugin 'idea'
         plugin 'io.spring.dependency-management'
         plugin 'io.spring.javaformat'
-        from "${rootDir}/config.gradle"
     }
 
     dependencies {
@@ -54,6 +57,43 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
+
+    dependencyManagement {
+        imports {
+            mavenBom SpringBootPlugin.BOM_COORDINATES
+        }
+
+        dependencies {
+            dependency('org.mapstruct:mapstruct:1.4.2.Final')
+            dependency('cn.hutool:hutool-http:5.5.8')
+            dependency('io.springfox:springfox-boot-starter:3.0.0')
+            dependency('mysql:mysql-connector-java:8.0.23')
+            dependency('com.baomidou:mybatis-plus-boot-starter:3.4.2')
+            dependency('de.codecentric:spring-boot-admin-starter-client:2.4.1')
+            dependency('org.springframework.security.oauth:spring-security-oauth2:2.3.8.RELEASE')
+            dependency('com.hccake:ballcat-common-util:0.1.0')
+            dependency('com.hccake:ballcat-common-conf:0.1.0')
+            dependency('com.hccake:ballcat-extend-mybatis-plus:0.1.0')
+            dependency('com.hccake:ballcat-extend-pay-virtual:0.1.0')
+            dependency('com.hccake:ballcat-extend-pay-wx:0.1.0')
+            dependency('com.hccake:ballcat-extend-pay-ali:0.1.0')
+            dependency('com.hccake:ballcat-spring-boot-starter-datascope:0.1.0')
+            dependency('com.hccake:ballcat-spring-boot-starter-log:0.1.0')
+            dependency('com.hccake:ballcat-oauth-model:0.1.0')
+            dependency('com.hccake:ballcat-oauth-biz:0.1.0')
+            dependency('com.hccake:ballcat-system-model:0.1.0')
+            dependency('com.hccake:ballcat-system-biz:0.1.0')
+            dependency('com.hccake:ballcat-log-biz:0.1.0')
+            dependency('com.hccake:ballcat-log-model:0.1.0')
+            dependency('com.hccake:ballcat-admin-core:0.1.0')
+            dependency('com.hccake:ballcat-admin-websocket:0.1.0')
+
+            dependency('org.springframework.boot:spring-boot-starter-web:' + VersionExtractor.forClass(DependencyManagementPluginAction.class)) {
+                exclude group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'
+            }
+        }
+    }
+
 
     // 这样子自己写的 @ConfigurationProperties 类里面的字段就有代码提示了。
     idea {
