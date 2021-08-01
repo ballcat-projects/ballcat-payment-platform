@@ -9,9 +9,9 @@ spring:
     username: mix
     password: mix
   profiles:
-    active: @profiles.active@
+    active: ${profiles}
   application:
-    name: @artifactId@
+    name: ${name}
   boot:
     admin:
       client:
