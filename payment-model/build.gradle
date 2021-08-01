@@ -2,8 +2,6 @@ dependencies {
     implementation project(':payment-sdk')
     implementation 'com.hccake:ballcat-extend-mybatis-plus'
     implementation 'org.hibernate.validator:hibernate-validator'
-    implementation 'org.springframework.boot:spring-boot-autoconfigure'
-    implementation 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'io.springfox:springfox-boot-starter'
     implementation 'com.hccake:ballcat-oauth-model'
     implementation 'com.hccake:ballcat-system-model'
