@@ -26,8 +26,8 @@ import org.springframework.context.annotation.DependsOn;
 import live.lingting.payment.api.filter.SignFilter;
 import live.lingting.payment.api.log.LogFilter;
 import live.lingting.payment.api.util.SecurityUtils;
-import live.lingting.payment.constant.TableConstants;
 import live.lingting.payment.biz.util.SpringUtils;
+import live.lingting.payment.constant.TableConstants;
 
 /**
  * @author lingting 2021/6/7 15:54

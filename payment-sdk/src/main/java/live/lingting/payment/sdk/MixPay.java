@@ -67,6 +67,7 @@ public class MixPay {
 
 	/**
 	 * 真实货币 - 下单 - 二维码
+	 *
 	 * @author lingting 2021-07-14 17:29
 	 */
 	public MixRealPayResponse realQrPay(String projectTradeNo, BigDecimal amount, ThirdPart thirdPart,
@@ -83,6 +84,7 @@ public class MixPay {
 
 	/**
 	 * 真实货币 - 下单 - 转账
+	 *
 	 * @author lingting 2021-07-14 17:29
 	 */
 	public MixRealPayResponse realTransferPay(String projectTradeNo, String thirdPartTradeNo, ThirdPart thirdPart,
@@ -99,6 +101,7 @@ public class MixPay {
 
 	/**
 	 * 真实货币 - 下单
+	 *
 	 * @author lingting 2021-07-14 17:34
 	 */
 	public MixRealPayResponse realPay(MixRealPayModel model) throws MixException {
@@ -110,6 +113,7 @@ public class MixPay {
 
 	/**
 	 * 虚拟货币 - 下单
+	 *
 	 * @author lingting 2021-06-10 09:49
 	 */
 	public MixVirtualPayResponse virtualPay(String projectTradeNo, SdkContract contract, Chain chain)
@@ -130,6 +134,7 @@ public class MixPay {
 
 	/**
 	 * 虚拟货币 - 提交hash
+	 *
 	 * @author lingting 2021-06-10 09:49
 	 */
 	public MixVirtualSubmitResponse virtualSubmit(String tradeNo, String projectTradeNo, String hash)
@@ -149,6 +154,7 @@ public class MixPay {
 
 	/**
 	 * 虚拟货币 - 重试
+	 *
 	 * @author lingting 2021-06-10 09:49
 	 */
 	public MixVirtualRetryResponse virtualRetry(String tradeNo, String projectTradeNo, String hash)
@@ -168,6 +174,7 @@ public class MixPay {
 
 	/**
 	 * 强制重试
+	 *
 	 * @author lingting 2021-06-10 13:40
 	 */
 	public MixForciblyRetryResponse forciblyRetry(String tradeNo, String projectTradeNo) throws MixException {
@@ -185,6 +192,7 @@ public class MixPay {
 
 	/**
 	 * 强制失败
+	 *
 	 * @author lingting 2021-06-10 13:40
 	 */
 	public MixForciblyFailResponse forciblyFail(String tradeNo, String projectTradeNo) throws MixException {
@@ -202,6 +210,7 @@ public class MixPay {
 
 	/**
 	 * 查询
+	 *
 	 * @author lingting 2021-06-10 13:40
 	 */
 	public MixQueryResponse query(String tradeNo, String projectTradeNo) throws MixException {
@@ -219,6 +228,7 @@ public class MixPay {
 
 	/**
 	 * 汇率
+	 *
 	 * @author lingting 2021-06-10 14:28
 	 */
 	public MixRateResponse rate(Currency currency) throws MixException {

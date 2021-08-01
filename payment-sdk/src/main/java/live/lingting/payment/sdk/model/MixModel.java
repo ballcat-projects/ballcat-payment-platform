@@ -32,13 +32,14 @@ public abstract class MixModel implements Serializable {
 	 * <p>
 	 * 仅在 getModel() 返回值不为 null 时执行
 	 * </p>
+	 * @throws MixException 校验失败抛出,参数有效性异常
 	 * @author lingting 2021-06-07 19:27
-	 * @exception MixException 校验失败抛出,参数有效性异常
 	 */
 	public abstract void valid() throws MixException;
 
 	/**
 	 * 在需要校验的时候调用!
+	 *
 	 * @author lingting 2021-06-07 19:45
 	 */
 	public void validNotifyUrl() throws MixException {
@@ -53,6 +54,7 @@ public abstract class MixModel implements Serializable {
 
 	/**
 	 * 交易 项目交易号和 交易号
+	 *
 	 * @author lingting 2021-06-09 17:05
 	 */
 	public void validNo() throws MixException {

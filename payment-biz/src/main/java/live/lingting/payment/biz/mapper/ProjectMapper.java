@@ -69,7 +69,8 @@ public interface ProjectMapper extends ExtendMapper<Project> {
 	 * @param scopes 新权限
 	 * @author lingting 2021-07-16 16:25
 	 */
-	@Update("UPDATE project p SET p.scope=#{scopes,typeHandler=live.lingting.entity.Project$ScopeTypeHandler} WHERE p.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
+	@Update("UPDATE project p SET p.scope=#{scopes,typeHandler=live.lingting.entity.Project$ScopeTypeHandler} WHERE p"
+			+ ".id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
 	void scope(@Param("ids") List<Integer> ids, @Param("scopes") List<ProjectScope> scopes);
 
 }

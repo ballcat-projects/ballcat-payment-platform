@@ -54,6 +54,7 @@ public class IdGenerator implements IdentifierGenerator {
 
 	/**
 	 * 自定义 要求使用雪花算法生成的id
+	 *
 	 * @author lingting 2021-04-07 15:44
 	 */
 	@Override

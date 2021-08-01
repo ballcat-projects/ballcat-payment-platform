@@ -34,6 +34,7 @@ public abstract class AbstractJsonTypeHandler<T> implements TypeHandler<T> {
 
 	/**
 	 * Java对象的值为空或者序列化出错时使用
+	 *
 	 * @author lingting 2021-07-16 11:05
 	 */
 	public String getDefaultSqlVal() {
@@ -42,6 +43,7 @@ public abstract class AbstractJsonTypeHandler<T> implements TypeHandler<T> {
 
 	/**
 	 * 数据的值为空或者序列化出错时使用
+	 *
 	 * @author lingting 2021-07-16 11:05
 	 */
 	public T getDefaultJavaVal() {

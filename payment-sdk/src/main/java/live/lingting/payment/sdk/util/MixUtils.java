@@ -46,6 +46,7 @@ public class MixUtils {
 
 	/**
 	 * 清理hash
+	 *
 	 * @author lingting 2021-06-09 17:14
 	 */
 	public static String clearHash(String hash) {
@@ -58,6 +59,7 @@ public class MixUtils {
 
 	/**
 	 * 校验hash有效性
+	 *
 	 * @author lingting 2021-06-09 17:14
 	 */
 	public static boolean validHash(String hash) {
@@ -71,6 +73,7 @@ public class MixUtils {
 
 	/**
 	 * 针对链对hash进行校验
+	 *
 	 * @author lingting 2021-06-09 17:25
 	 */
 	public static boolean validHash(Chain chain, String hash) {
@@ -135,6 +138,7 @@ public class MixUtils {
 
 	/**
 	 * 对参数进行验签
+	 *
 	 * @author lingting 2021-06-07 16:47
 	 */
 	public static boolean verifySign(String security, Map<String, String> params) {

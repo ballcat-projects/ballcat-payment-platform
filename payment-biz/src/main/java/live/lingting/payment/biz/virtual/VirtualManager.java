@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import live.lingting.payment.biz.Redis;
 import live.lingting.payment.biz.config.PayConfig;
+import live.lingting.payment.biz.service.PayService;
+import live.lingting.payment.biz.service.VirtualAddressService;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.enums.ResponseCode;
@@ -19,8 +21,6 @@ import live.lingting.payment.sdk.model.MixVirtualSubmitModel;
 import live.lingting.payment.sdk.response.MixVirtualPayResponse;
 import live.lingting.payment.sdk.response.MixVirtualRetryResponse;
 import live.lingting.payment.sdk.util.MixUtils;
-import live.lingting.payment.biz.service.PayService;
-import live.lingting.payment.biz.service.VirtualAddressService;
 
 /**
  * @author lingting 2021/6/7 22:48
@@ -40,6 +40,7 @@ public class VirtualManager {
 
 	/**
 	 * 虚拟货币预下单
+	 *
 	 * @author lingting 2021-06-07 22:50
 	 */
 	@Transactional(rollbackFor = Exception.class)

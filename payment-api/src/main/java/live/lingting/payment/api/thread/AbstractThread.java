@@ -37,6 +37,7 @@ public abstract class AbstractThread<E> extends Thread implements InitializingBe
 
 	/**
 	 * 休眠时长, 单位: 分钟
+	 *
 	 * @author lingting 2021-06-10 17:27
 	 */
 	public Long getSleepTime() {
@@ -52,6 +53,7 @@ public abstract class AbstractThread<E> extends Thread implements InitializingBe
 
 	/**
 	 * 处理所有数据
+	 *
 	 * @author lingting 2021-06-21 19:00
 	 */
 	protected void handlerList(List<E> data) {
@@ -78,6 +80,7 @@ public abstract class AbstractThread<E> extends Thread implements InitializingBe
 
 	/**
 	 * 是否继续运行
+	 *
 	 * @author lingting 2021-06-15 10:07
 	 */
 	public boolean isContinue() {

@@ -121,9 +121,7 @@ public interface PayMapper extends ExtendMapper<Pay> {
 				// 支付状态不为等待
 				.ne(Pay::getStatus, PayStatus.WAIT)
 				// 通知状态等待
-				.eq(Pay::getNotifyStatus, NotifyStatus.WAIT)
-
-		;
+				.eq(Pay::getNotifyStatus, NotifyStatus.WAIT);
 
 		return selectList(wrapper);
 	}

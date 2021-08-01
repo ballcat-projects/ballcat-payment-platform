@@ -24,8 +24,8 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import live.lingting.payment.constant.SystemConfigConstants;
 import live.lingting.payment.biz.util.SpringUtils;
+import live.lingting.payment.constant.SystemConfigConstants;
 
 /**
  * @author lingting 2021/6/18 9:39
@@ -40,6 +40,7 @@ public class PayConfig {
 
 	/**
 	 * 虚拟货币提交Hash超时时间, 单位: 分钟
+	 *
 	 * @author lingting 2021-06-18 09:47
 	 */
 	public Long getVirtualSubmitTimeout() {
@@ -48,6 +49,7 @@ public class PayConfig {
 
 	/**
 	 * 未获取到交易信息等待时长。单位: 分钟
+	 *
 	 * @author lingting 2021-06-18 09:54
 	 */
 	public Long getEmptyInfoTimeout() {
@@ -56,6 +58,7 @@ public class PayConfig {
 
 	/**
 	 * 失败延时。单位: 分钟
+	 *
 	 * @author lingting 2021-06-18 09:54
 	 */
 	public Long getFailTimeout() {
@@ -64,6 +67,7 @@ public class PayConfig {
 
 	/**
 	 * 交易信息创建时间最大限制。单位: 分钟
+	 *
 	 * @author lingting 2021-06-18 09:54
 	 */
 	public Long getInfoCreateTimeout() {
@@ -72,6 +76,7 @@ public class PayConfig {
 
 	/**
 	 * 支付重试时长。单位: 分钟
+	 *
 	 * @author lingting 2021-06-18 09:54
 	 */
 	public Long getRetryTimeout() {
@@ -82,6 +87,7 @@ public class PayConfig {
 	 * 真实货币支付过期时间 - 指定时间内未付款记为失败
 	 *
 	 * mode={@link live.lingting.payment.sdk.enums.Mode#TRANSFER} 时, 不受本值限制
+	 *
 	 * @author lingting 2021-07-14 15:34
 	 */
 	public Long getRealExpireTimeout() {

@@ -20,6 +20,7 @@ public abstract class MixResponse<D> {
 
 	/**
 	 * 请求是否成功
+	 *
 	 * @author lingting 2021-06-07 20:37
 	 */
 	public boolean isSuccess() {

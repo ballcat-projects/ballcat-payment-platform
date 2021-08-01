@@ -16,6 +16,7 @@ public class StreamUtils {
 
 	/**
 	 * 流转字符串
+	 *
 	 * @author lingting 2021-04-29 18:07
 	 */
 	public static String toString(InputStream stream) throws IOException {

@@ -26,6 +26,7 @@ public class ResponseUtils {
 
 	/**
 	 * 写入返回值
+	 *
 	 * @author lingting 2021-04-30 10:09
 	 */
 	public static void write(HttpServletResponse response, HttpStatus status, ResultCode code) throws IOException {
@@ -45,6 +46,7 @@ public class ResponseUtils {
 
 	/**
 	 * 返回404信息
+	 *
 	 * @author lingting 2021-04-30 10:15
 	 */
 	public static void notFound(HttpServletRequest request, HttpServletResponse response) throws IOException {

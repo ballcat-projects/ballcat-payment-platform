@@ -80,8 +80,8 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 			+ " AND va.`using` = 0 \n AND va.disabled = 0\n"
 			+ " \n AND (\n IF\n  (\n   '${p_mode}' = 'ALLOW',-- 可以获取所有可用的地址\n   (\n"
 			+ "    ( va.`mode` = 'INCLUDE' AND JSON_CONTAINS( va.project_ids, '${p_id}' ) ) \n"
-			+ "    OR ( va.`mode` = 'EXCLUDE' AND ( va.project_ids IS NULL OR NOT JSON_CONTAINS( va.project_ids, '${p_id}' ) ) ) \n"
-			+ "   ),-- 只能获取仅限该项目使用地址\n"
+			+ "    OR ( va.`mode` = 'EXCLUDE' AND ( va.project_ids IS NULL OR NOT JSON_CONTAINS( va.project_ids, "
+			+ "'${p_id}' ) ) ) \n" + "   ),-- 只能获取仅限该项目使用地址\n"
 			+ "   ( va.`mode` = 'INCLUDE' AND JSON_CONTAINS( va.project_ids, '${p_id}' ) ) \n  ) \n )")
 	@ResultMap("mybatis-plus_VirtualAddress")
 	List<VirtualAddress> load(@Param("chain") Chain chain, @Param("p_id") Integer id,
@@ -161,7 +161,9 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 	 * @param projectIds 新项目id
 	 * @author lingting 2021-07-08 11:05
 	 */
-	@Update("UPDATE virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.entity.VirtualAddress$ProjectIdsTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
+	@Update("UPDATE virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.entity"
+			+ ".VirtualAddress$ProjectIdsTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids"
+			+ ".toArray())}) ")
 	void project(@Param("ids") List<Integer> ids, @Param("pIds") List<Integer> projectIds);
 
 }

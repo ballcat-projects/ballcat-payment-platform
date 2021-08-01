@@ -136,8 +136,8 @@ public class Redis {
 	/*
 	 * pipelined 操作 ----------------------------------------------------------
 	 */
+
 	/**
-	 *
 	 * @author lingting 2021-04-26 11:36
 	 */
 	public List<Object> executePipelined(SessionCallback<?> session) {
@@ -275,6 +275,7 @@ public class Redis {
 
 	/**
 	 * 获取指定值在指定key中的索引
+	 *
 	 * @author lingting 2020-12-17 11:06
 	 */
 	public Long listIndexOf(String key, String val) {
@@ -283,6 +284,7 @@ public class Redis {
 
 	/**
 	 * 获知指定key中指定索引的值
+	 *
 	 * @author lingting 2020-12-17 11:07
 	 */
 	public String listIndex(String key, long index) {
@@ -391,6 +393,7 @@ public class Redis {
 
 	/**
 	 * 获取集合中元素数量
+	 *
 	 * @author lingting 2020-12-17 10:51
 	 */
 	public Long setSize(String key) {
@@ -399,6 +402,7 @@ public class Redis {
 
 	/**
 	 * 随机弹出一个元素
+	 *
 	 * @author lingting 2020-12-17 10:52
 	 */
 	public String setPop(String key) {
@@ -407,6 +411,7 @@ public class Redis {
 
 	/**
 	 * 移除集合中的元素
+	 *
 	 * @author lingting 2020-12-17 10:55
 	 */
 	public Long setRemove(String key, String... values) {

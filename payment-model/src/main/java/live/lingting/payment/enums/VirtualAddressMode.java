@@ -5,6 +5,7 @@ import lombok.Getter;
 
 /**
  * 地址模式
+ *
  * @author lingting 2021/7/5 18:49
  */
 @Getter

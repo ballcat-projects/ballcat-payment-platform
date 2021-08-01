@@ -14,6 +14,7 @@ public class ApiUtils {
 
 	/**
 	 * 生成api Key
+	 *
 	 * @author lingting 2021-04-29 13:56
 	 */
 	public static String generateKey() {
@@ -22,6 +23,7 @@ public class ApiUtils {
 
 	/**
 	 * 生成api security
+	 *
 	 * @author lingting 2021-04-29 13:56
 	 */
 	public static String generateSecurity() {

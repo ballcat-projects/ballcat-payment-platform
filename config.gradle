@@ -1,5 +1,5 @@
 dependencyManagement {
-    imports{
+    imports {
         mavenBom "org.springframework.boot:spring-boot-dependencies:2.4.3"
     }
 

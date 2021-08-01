@@ -25,16 +25,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-import live.lingting.payment.biz.Redis;
 import live.lingting.payment.api.enums.ApiResponseCode;
 import live.lingting.payment.api.util.ResponseUtils;
 import live.lingting.payment.api.util.UriUtils;
+import live.lingting.payment.biz.Redis;
 import live.lingting.payment.biz.config.PayConfig;
+import live.lingting.payment.biz.service.ProjectService;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.sdk.constant.SdkConstants;
 import live.lingting.payment.sdk.util.MixUtils;
 import live.lingting.payment.sdk.util.StreamUtils;
-import live.lingting.payment.biz.service.ProjectService;
 
 /**
  * 过滤url
@@ -135,6 +135,7 @@ public class SignFilter extends OncePerRequestFilter {
 
 	/**
 	 * 从http请求中获取参数信息
+	 *
 	 * @author lingting 2021-04-30 10:29
 	 */
 	private Map<String, String> getParams(HttpServletRequest request) throws IOException {

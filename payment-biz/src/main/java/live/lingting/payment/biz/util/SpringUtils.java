@@ -20,6 +20,7 @@ public class SpringUtils implements ApplicationContextAware {
 
 	private static Boolean prod;
 
+	@SuppressWarnings("ALL")
 	public static <T> T getBean(String name) {
 		return (T) context.getBean(name);
 	}

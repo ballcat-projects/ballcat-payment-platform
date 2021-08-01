@@ -11,12 +11,12 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import live.lingting.payment.biz.config.PayConfig;
-import live.lingting.payment.entity.Pay;
-import live.lingting.payment.sdk.enums.Currency;
-import live.lingting.payment.sdk.enums.PayStatus;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.biz.virtual.VirtualHandler;
 import live.lingting.payment.biz.virtual.VirtualManager;
+import live.lingting.payment.entity.Pay;
+import live.lingting.payment.sdk.enums.Currency;
+import live.lingting.payment.sdk.enums.PayStatus;
 import live.lingting.virtual.currency.bitcoin.contract.OmniContract;
 import live.lingting.virtual.currency.core.Contract;
 import live.lingting.virtual.currency.core.enums.TransactionStatus;
@@ -88,6 +88,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	/**
 	 * 支付成功处理
+	 *
 	 * @author lingting 2021-06-09 15:34
 	 */
 	private void successHandler(Pay pay, TransactionInfo info) {

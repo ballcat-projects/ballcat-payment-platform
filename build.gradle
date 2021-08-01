@@ -10,20 +10,28 @@ buildscript {
 }
 
 plugins {
-    id 'java'
-    id 'idea'
     id 'org.springframework.boot' version '2.4.3' apply false
     id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
 }
 
-group = 'live.lingting'
-version = '0.0.2-SNAPSHOT'
-sourceCompatibility = '1.8'
+allprojects {
+    group = 'live.lingting'
+    version = '0.0.2-SNAPSHOT'
 
-repositories {
-    mavenLocal()
-    maven { name "Alibaba"; url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-    mavenCentral()
+    repositories {
+        mavenLocal()
+        maven { name "Alibaba"; url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+    }
+
+    // 跳过测试
+    gradle.taskGraph.whenReady {
+        tasks.each { task ->
+            if (task.name.contains("test")) {
+                task.enabled = false
+            }
+        }
+    }
 }
 
 subprojects {
@@ -41,12 +49,6 @@ subprojects {
         }
     }
 
-    repositories {
-        mavenLocal()
-        maven { name "Alibaba"; url 'https://maven.aliyun.com/nexus/content/groups/public/' }
-        mavenCentral()
-    }
-
     dependencies {
         implementation 'org.mapstruct:mapstruct'
         implementation 'org.springframework.boot:spring-boot-starter'
@@ -54,10 +56,6 @@ subprojects {
         annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    }
-
-    test {
-        useJUnitPlatform()
     }
 
     java.sourceCompatibility(JavaVersion.VERSION_1_8)

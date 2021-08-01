@@ -17,6 +17,7 @@ import live.lingting.payment.sdk.jackson.JavaTimeModule;
 public class JacksonUtils {
 
 	static final ObjectMapper MAPPER = new ObjectMapper();
+
 	static final String JSON_READ_FEATURE_CLASS = "com.fasterxml.jackson.core.json.JsonReadFeature";
 
 	static {

@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import live.lingting.payment.api.log.LogFilter;
+import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.sdk.enums.PayStatus;
-import live.lingting.payment.biz.service.PayService;
 
 /**
  * @author lingting 2021/7/14 19:01
@@ -83,7 +83,8 @@ public class CallbackController {
 		}
 		catch (Exception e) {
 			log.error("微信回调解析异常, 回调内容: {}", callbackStr, e);
-			return "<xml>\n  <return_code><![CDATA[FAIL]]></return_code>\n  <return_msg><![CDATA[解析异常]]></return_msg>\n</xml>";
+			return "<xml>\n  <return_code><![CDATA[FAIL]]></return_code>\n  "
+					+ "<return_msg><![CDATA[解析异常]]></return_msg>\n</xml>";
 		}
 		log.info("微信回调: {}", callbackStr);
 		if (callback.checkSign(wxPay)) {

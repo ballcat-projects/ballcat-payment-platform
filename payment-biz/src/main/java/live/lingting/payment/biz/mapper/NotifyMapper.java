@@ -81,7 +81,6 @@ public interface NotifyMapper extends ExtendMapper<Notify> {
 	}
 
 	/**
-	 *
 	 * 通知完成
 	 * @param notify 通知
 	 * @param status 新状态

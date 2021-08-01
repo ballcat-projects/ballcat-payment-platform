@@ -27,9 +27,9 @@ public interface MixRequest<M extends MixModel, R extends MixResponse<?>> {
 
 	/**
 	 * 请求参数
-	 * @return java.util.Map<java.lang.String,java.lang.String>
+	 * @return java.util.Map<java.lang.String, java.lang.String>
+	 * @throws MixException 参数有效性异常
 	 * @author lingting 2021-06-07 19:51
-	 * @exception MixException 参数有效性异常
 	 */
 	Map<String, String> getParams() throws MixException;
 
