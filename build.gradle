@@ -91,4 +91,9 @@ subprojects {
     // java编译的时候缺省状态下会因为中文字符而失败
     [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
 
+    // idea 直接启动是走的 classes 方法。 或者需要在这里进行删除操作
+    classes.doLast {
+        // 删除build 生成 的 generated文件夹， 免得idea 认为里面有源码， 新增一个模块出来.
+        delete([getBuildDir().path + "/generated"])
+    }
 }
