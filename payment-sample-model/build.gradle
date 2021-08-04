@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(':payment-model')
+    implementation 'io.springfox:springfox-boot-starter'
+    implementation 'com.baomidou:mybatis-plus-boot-starter'
+    implementation 'com.hccake:ballcat-common-conf'
+}
