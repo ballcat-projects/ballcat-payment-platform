@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':payment-http')
+    implementation 'org.slf4j:slf4j-api'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+}
