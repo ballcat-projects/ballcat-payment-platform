@@ -10,12 +10,12 @@ dependencies {
     implementation project(':payment-http')
     implementation 'com.alipay.sdk:alipay-sdk-java'
     implementation project(':payment-sample-model')
-    implementation 'com.hccake:ballcat-spring-boot-starter-datascope'
-    implementation 'com.hccake:ballcat-common-conf'
-    implementation 'com.hccake:ballcat-spring-boot-starter-log'
-    implementation 'com.hccake:ballcat-oauth-biz'
-    implementation 'com.hccake:ballcat-system-biz'
-    implementation 'com.hccake:ballcat-log-biz'
+    implementation 'com.hccake:ballcat-spring-boot-starter-datascope:0.1.0'
+    implementation 'com.hccake:ballcat-common-conf:0.1.0'
+    implementation 'com.hccake:ballcat-spring-boot-starter-log:0.1.0'
+    implementation 'com.hccake:ballcat-oauth-biz:0.1.0'
+    implementation 'com.hccake:ballcat-system-biz:0.1.0'
+    implementation 'com.hccake:ballcat-log-biz:0.1.0'
     implementation 'mysql:mysql-connector-java'
     implementation 'com.baomidou:mybatis-plus-boot-starter'
     implementation 'de.codecentric:spring-boot-admin-starter-client'

@@ -134,7 +134,8 @@
     <!-- 开发环境:打印控制台-->
 
     <springProfile name="dev">
-        <logger name="live.lingting.mapper" level="debug"/>
+        <logger name="live.lingting.payment.biz.mapper" level="debug"/>
+        <logger name="live.lingting.payment.sample.mapper" level="debug"/>
         <root level="info">
             <appender-ref ref="CONSOLE"/>
         </root>

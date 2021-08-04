@@ -1,4 +1,4 @@
-package live.lingting.payment.api.constant;
+package live.lingting.payment.sample.constant;
 
 import lombok.experimental.UtilityClass;
 

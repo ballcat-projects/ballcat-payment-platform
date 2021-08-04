@@ -70,3 +70,4 @@ arthas-output
 application-*.yml
 .gradle
 build
+jrebel.xml

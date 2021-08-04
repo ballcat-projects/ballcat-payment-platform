@@ -7,9 +7,6 @@ import com.hccake.ballcat.common.datascope.handler.AbstractDataPermissionHandler
 import com.hccake.ballcat.common.datascope.handler.DataPermissionHandler;
 import com.hccake.ballcat.common.datascope.interceptor.DataPermissionInterceptor;
 import com.hccake.ballcat.common.datascope.processor.DataScopeSqlProcessor;
-import com.hccake.ballcat.system.mapper.SysConfigMapper;
-import com.hccake.ballcat.system.service.SysConfigService;
-import com.hccake.ballcat.system.service.impl.SysConfigServiceImpl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,27 +17,19 @@ import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.schema.Column;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Import;
 import live.lingting.payment.api.filter.SignFilter;
 import live.lingting.payment.api.log.LogFilter;
 import live.lingting.payment.api.util.SecurityUtils;
-import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.util.SpringUtils;
 import live.lingting.payment.constant.TableConstants;
 
 /**
  * @author lingting 2021/6/7 15:54
  */
-@Import(SysConfigServiceImpl.class)
-@MapperScan(basePackageClasses = SysConfigMapper.class)
-@MapperScan(basePackages = "live.lingting.**.mapper")
-@ComponentScan(basePackages = "live.lingting")
 @Configuration(proxyBeanMethods = false)
 public class ApiConfiguration {
 
@@ -87,12 +76,6 @@ public class ApiConfiguration {
 		// 比 traceId 后执行
 		bean.setOrder(Integer.MAX_VALUE - 1);
 		return bean;
-	}
-
-	@Bean
-
-	public PaymentConfig paymentConfig(SysConfigService service) {
-		return new ApiPaymentConfig(service);
 	}
 
 	/**

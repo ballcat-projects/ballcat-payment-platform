@@ -1,11 +1,3 @@
-ALTER TABLE project
-    ADD COLUMN `mode` varchar(20) DEFAULT 'ALLOW' COMMENT '模式';
-
-ALTER TABLE virtual_address
-    ADD COLUMN `mode`        varchar(20) DEFAULT 'EXCLUDE' COMMENT '模式',
-    ADD COLUMN `project_ids` json COMMENT '项目ids'
-;
-
 INSERT INTO `sys_dict`(code, title, remarks, editable, value_type, hash_code, deleted, create_time)
 VALUES ('project_mode', '项目模式', '', 1, 2, '233', 0, NOW())
      , ('virtual_address_mode', '地址模式', '', 1, 2, '233', 0, NOW())
@@ -30,28 +22,6 @@ VALUES ('projects', 'ID', 'id', 1, '{}', b'0', '', NOW())
 INSERT INTO `sys_config`
 VALUES (NULL, '真实货币支付过期时间', 'real_expire_timeout', '1440', 'pay', '真实货币支付过期时间。单位: 分钟, 最小值为1, 小于1按120处理. 指定时间范围内未付款则本次交易失败!注: 支付模式为 TRANSFER 不受本值限制', 0, NOW(), NOW())
 ;
-
-ALTER TABLE pay
-    ADD INDEX `idx_chain` (`chain`),
-    ADD INDEX `idx_third_part` (`third_part`),
-    ADD INDEX `idx_mode` (`mode`);
-
-ALTER TABLE project
-    ADD COLUMN `mark` varchar(20) DEFAULT '' COMMENT '项目标志';
-
-UPDATE project
-SET project.mark=name
-WHERE mark = '';
-
-ALTER TABLE project
-    ADD COLUMN `scope` json COMMENT '项目权限';
-
-UPDATE project
-SET project.scope='[
-    "USDT"
-]'
-WHERE scope IS NULL
-   OR project.scope = '[]';
 
 INSERT INTO `sys_dict`(code, title, remarks, editable, value_type, hash_code, deleted, create_time)
 VALUES ('project_scope', '项目权限', '', 1, 2, '233', 0, NOW())
@@ -93,9 +63,6 @@ SET attributes='{
 }'
 WHERE dict_code = 'notify_status'
   AND `value` = 'SUCCESS';
-
-ALTER TABLE virtual_address
-    ADD COLUMN `usdt_amount` decimal(24, 4) DEFAULT 0 COMMENT 'USDT 余额';
 
 INSERT INTO `sys_config`
 VALUES (NULL, '测试模式', 'test', '0', '', '是否开启测试模式, 0: 关闭, 其他任意值表示开启. 线上环境无效.', 0, NOW(), NOW())

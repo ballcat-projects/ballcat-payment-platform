@@ -1,6 +1,8 @@
 dependencies {
     implementation project(':payment-model')
+    implementation project(':payment-biz')
     implementation 'io.springfox:springfox-boot-starter'
     implementation 'com.baomidou:mybatis-plus-boot-starter'
-    implementation 'com.hccake:ballcat-common-conf'
+    implementation 'com.hccake:ballcat-common-conf:0.1.0'
+    implementation 'com.hccake:ballcat-system-biz:0.1.0'
 }
