@@ -1,6 +1,5 @@
 package live.lingting.payment.biz.service;
 
-import live.lingting.payment.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import live.lingting.payment.Page;
 import live.lingting.payment.entity.NotifyLog;

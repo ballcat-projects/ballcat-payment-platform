@@ -82,14 +82,14 @@ public class WxPayOrderQueryResponse {
 	@JsonProperty("return_code")
 	private ResponseCode returnCode;
 
-	public static WxPayOrderQueryResponse of(Map<String, String> res) {
-		return JacksonUtils.toObj(JacksonUtils.toJson(res), WxPayOrderQueryResponse.class).setRaw(res);
-	}
-
 	/**
 	 * 返回的原始数据
 	 */
 	private Map<String, String> raw;
+
+	public static WxPayOrderQueryResponse of(Map<String, String> res) {
+		return JacksonUtils.toObj(JacksonUtils.toJson(res), WxPayOrderQueryResponse.class).setRaw(res);
+	}
 
 	/**
 	 * 交易是否成功 . 返回false 表示交易失败

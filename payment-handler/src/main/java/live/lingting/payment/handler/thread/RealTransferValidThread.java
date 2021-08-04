@@ -1,10 +1,6 @@
 package live.lingting.payment.handler.thread;
 
 import com.alipay.api.AlipayApiException;
-import live.lingting.payment.ali.AliPay;
-import live.lingting.payment.ali.domain.AliPayQuery;
-import live.lingting.payment.ali.enums.TradeStatus;
-import live.lingting.payment.wx.WxPay;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,10 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import live.lingting.payment.ali.AliPay;
+import live.lingting.payment.ali.domain.AliPayQuery;
+import live.lingting.payment.ali.enums.TradeStatus;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.sdk.enums.ThirdPart;
+import live.lingting.payment.wx.WxPay;
 
 /**
  * @author lingting 2021/7/14 15:38

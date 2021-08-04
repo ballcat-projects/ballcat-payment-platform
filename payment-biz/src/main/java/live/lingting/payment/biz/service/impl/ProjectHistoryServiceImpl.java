@@ -1,6 +1,5 @@
 package live.lingting.payment.biz.service.impl;
 
-import live.lingting.payment.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import live.lingting.payment.Page;

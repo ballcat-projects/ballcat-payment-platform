@@ -1,6 +1,5 @@
 package live.lingting.payment.sample.service.impl;
 
-import com.hccake.ballcat.common.model.domain.PageResult;
 import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
 import org.springframework.stereotype.Service;
 import live.lingting.payment.Page;

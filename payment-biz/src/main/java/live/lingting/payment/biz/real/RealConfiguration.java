@@ -1,12 +1,12 @@
 package live.lingting.payment.biz.real;
 
-import live.lingting.payment.ali.AliPay;
-import live.lingting.payment.ali.constants.AliPayConstant;
-import live.lingting.payment.wx.WxPay;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import live.lingting.payment.ali.AliPay;
+import live.lingting.payment.ali.constants.AliPayConstant;
+import live.lingting.payment.wx.WxPay;
 
 /**
  * @author lingting 2021/7/14 14:52

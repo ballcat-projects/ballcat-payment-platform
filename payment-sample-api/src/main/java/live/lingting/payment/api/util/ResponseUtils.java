@@ -2,7 +2,6 @@ package live.lingting.payment.api.util;
 
 import com.hccake.ballcat.common.model.result.R;
 import com.hccake.ballcat.common.model.result.ResultCode;
-import live.lingting.payment.http.utils.JacksonUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
@@ -15,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import live.lingting.payment.http.utils.JacksonUtils;
 
 /**
  * @author lingting 2021/4/29 18:14

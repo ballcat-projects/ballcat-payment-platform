@@ -15,8 +15,6 @@ public enum ResponseCode {
 	 */
 	SUCCESS(200, "Success"),
 
-
-
 	/**
 	 * 重复请求!
 	 */

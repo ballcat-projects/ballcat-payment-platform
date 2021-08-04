@@ -21,11 +21,11 @@ import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
-import live.lingting.payment.ali.constants.AliPayConstant;
-import live.lingting.payment.ali.domain.AliPayQuery;
 import java.math.BigDecimal;
 import java.util.Map;
 import lombok.Data;
+import live.lingting.payment.ali.constants.AliPayConstant;
+import live.lingting.payment.ali.domain.AliPayQuery;
 
 /**
  * api文档: https://opendocs.alipay.com/apis.

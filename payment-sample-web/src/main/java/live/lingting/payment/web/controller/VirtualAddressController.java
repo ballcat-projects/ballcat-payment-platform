@@ -1,6 +1,5 @@
 package live.lingting.payment.web.controller;
 
-import live.lingting.payment.Page;
 import com.hccake.ballcat.common.model.result.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

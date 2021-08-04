@@ -2,15 +2,15 @@ package live.lingting.payment.wx.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import live.lingting.payment.http.utils.JacksonUtils;
-import live.lingting.payment.wx.WxPay;
-import live.lingting.payment.wx.enums.ResponseCode;
-import live.lingting.payment.wx.enums.TradeType;
 import java.math.BigInteger;
 import java.util.Map;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.wx.WxPay;
+import live.lingting.payment.wx.enums.ResponseCode;
+import live.lingting.payment.wx.enums.TradeType;
 
 /**
  * @author lingting 2021/2/25 15:43
@@ -53,14 +53,14 @@ public class WxPayCallback {
 
 	private ResponseCode returnCode;
 
-	public static WxPayCallback of(Map<String, String> res) {
-		return JacksonUtils.toObj(JacksonUtils.toJson(res), WxPayCallback.class).setRaw(res);
-	}
-
 	/**
 	 * 返回的原始数据
 	 */
 	private Map<String, String> raw;
+
+	public static WxPayCallback of(Map<String, String> res) {
+		return JacksonUtils.toObj(JacksonUtils.toJson(res), WxPayCallback.class).setRaw(res);
+	}
 
 	/**
 	 * 验签

@@ -1,13 +1,12 @@
 package live.lingting.payment.wx.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import live.lingting.payment.http.utils.JacksonUtils;
-import live.lingting.payment.http.utils.JacksonUtils;
-import live.lingting.payment.wx.enums.ResponseCode;
-import live.lingting.payment.wx.enums.TradeType;
 import java.util.Map;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.wx.enums.ResponseCode;
+import live.lingting.payment.wx.enums.TradeType;
 
 /**
  * @author lingting 2021/2/1 11:38
@@ -15,10 +14,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class WxPayResponse {
-
-	public static WxPayResponse of(Map<String, String> res) {
-		return JacksonUtils.toObj(JacksonUtils.toJson(res), WxPayResponse.class).setRaw(res);
-	}
 
 	/**
 	 * 返回状态码. 此字段是通信标识，非交易标识，交易是否成功需要查看result_code来判断
@@ -116,5 +111,9 @@ public class WxPayResponse {
 	 * 返回的原始数据
 	 */
 	private Map<String, String> raw;
+
+	public static WxPayResponse of(Map<String, String> res) {
+		return JacksonUtils.toObj(JacksonUtils.toJson(res), WxPayResponse.class).setRaw(res);
+	}
 
 }

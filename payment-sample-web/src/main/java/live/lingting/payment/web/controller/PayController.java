@@ -1,6 +1,5 @@
 package live.lingting.payment.web.controller;
 
-import live.lingting.payment.Page;
 import com.hccake.ballcat.common.model.result.R;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -16,7 +15,6 @@ import live.lingting.payment.biz.service.NotifyLogService;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.NotifyLog;
 import live.lingting.payment.entity.Pay;
-import live.lingting.payment.exception.PaymentException;
 
 /**
  * @author lingting 2021/6/7 10:54
@@ -45,7 +43,7 @@ public class PayController {
 	@SneakyThrows
 	@PostMapping("forcibly/retry")
 	@PreAuthorize("@per.hasPermission('pay:forcibly:retry')")
-	public R<?> forciblyRetry(@RequestBody Pay pay)  {
+	public R<?> forciblyRetry(@RequestBody Pay pay) {
 		service.forciblyRetry(pay.getTradeNo(), null);
 		return R.ok();
 	}
@@ -53,7 +51,7 @@ public class PayController {
 	@SneakyThrows
 	@PostMapping("forcibly/fail")
 	@PreAuthorize("@per.hasPermission('pay:forcibly:fail')")
-	public R<?> forciblyFail(@RequestBody Pay pay)  {
+	public R<?> forciblyFail(@RequestBody Pay pay) {
 		service.forciblyFail(pay.getTradeNo(), null);
 		return R.ok();
 	}

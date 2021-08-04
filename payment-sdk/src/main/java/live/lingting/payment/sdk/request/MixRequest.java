@@ -1,8 +1,8 @@
 package live.lingting.payment.sdk.request;
 
 import java.util.Map;
-import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.http.HttpProperties;
+import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.sdk.model.MixModel;
 import live.lingting.payment.sdk.response.MixResponse;
 

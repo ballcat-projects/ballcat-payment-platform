@@ -39,23 +39,6 @@ public class Page<T> {
 
 	private List<Sort> sorts = new ArrayList<>();
 
-	@Getter
-	@Setter
-	@ApiModel("排序元素载体")
-	public static class Sort {
-
-		/**
-		 * 排序字段
-		 */
-		private String field;
-
-		/**
-		 * 是否正序排序
-		 */
-		private boolean asc;
-
-	}
-
 	public Page() {
 	}
 
@@ -83,6 +66,23 @@ public class Page<T> {
 			page.getOrders().add(new OrderItem(sort.getField(), sort.isAsc()));
 		}
 		return page;
+	}
+
+	@Getter
+	@Setter
+	@ApiModel("排序元素载体")
+	public static class Sort {
+
+		/**
+		 * 排序字段
+		 */
+		private String field;
+
+		/**
+		 * 是否正序排序
+		 */
+		private boolean asc;
+
 	}
 
 }

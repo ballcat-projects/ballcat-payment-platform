@@ -4,13 +4,13 @@ import static live.lingting.payment.ali.constants.AliPayConstant.CODE_SUCCESS;
 
 import cn.hutool.core.util.StrUtil;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import live.lingting.payment.ali.enums.TradeStatus;
 import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import live.lingting.payment.ali.enums.TradeStatus;
 
 /**
  * 简化查询结果
@@ -22,38 +22,6 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Setter(AccessLevel.PRIVATE)
 public class AliPayQuery {
-
-	public static AliPayQuery of(AlipayTradeQueryResponse raw) {
-		AliPayQuery query = new AliPayQuery();
-		if (raw == null) {
-			return query;
-		}
-		// 状态处理
-		if (CODE_SUCCESS.equals(raw.getCode())) {
-			// 成功
-			query.setTradeStatus(TradeStatus.of(raw.getTradeStatus()));
-		}
-		// 异常
-		else {
-			query.setTradeStatus(TradeStatus.ERROR);
-		}
-
-		// 金额
-		if (StrUtil.isBlank(raw.getTotalAmount())) {
-			query.setAmount(BigDecimal.ZERO);
-		}
-		else {
-			query.setAmount(new BigDecimal(raw.getTotalAmount()));
-		}
-
-		// 信息
-		query.setCode(raw.getCode()).setMsg(raw.getMsg()).setSubCode(raw.getSubCode()).setSubMsg(raw.getSubMsg());
-
-		// 基础数据
-		return query.setTradeNo(raw.getTradeNo()).setSn(raw.getOutTradeNo()).setId(raw.getBuyerLogonId())
-				.setUserId(raw.getBuyerUserId()).setUserName(raw.getBuyerUserName())
-				.setUserType(raw.getBuyerUserType());
-	}
 
 	/**
 	 * 原始数据
@@ -101,5 +69,37 @@ public class AliPayQuery {
 	private String userName;
 
 	private String userType;
+
+	public static AliPayQuery of(AlipayTradeQueryResponse raw) {
+		AliPayQuery query = new AliPayQuery();
+		if (raw == null) {
+			return query;
+		}
+		// 状态处理
+		if (CODE_SUCCESS.equals(raw.getCode())) {
+			// 成功
+			query.setTradeStatus(TradeStatus.of(raw.getTradeStatus()));
+		}
+		// 异常
+		else {
+			query.setTradeStatus(TradeStatus.ERROR);
+		}
+
+		// 金额
+		if (StrUtil.isBlank(raw.getTotalAmount())) {
+			query.setAmount(BigDecimal.ZERO);
+		}
+		else {
+			query.setAmount(new BigDecimal(raw.getTotalAmount()));
+		}
+
+		// 信息
+		query.setCode(raw.getCode()).setMsg(raw.getMsg()).setSubCode(raw.getSubCode()).setSubMsg(raw.getSubMsg());
+
+		// 基础数据
+		return query.setTradeNo(raw.getTradeNo()).setSn(raw.getOutTradeNo()).setId(raw.getBuyerLogonId())
+				.setUserId(raw.getBuyerUserId()).setUserName(raw.getBuyerUserName())
+				.setUserType(raw.getBuyerUserType());
+	}
 
 }

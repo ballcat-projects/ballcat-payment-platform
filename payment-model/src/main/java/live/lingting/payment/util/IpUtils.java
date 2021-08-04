@@ -2,7 +2,6 @@ package live.lingting.payment.util;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.extra.servlet.ServletUtil;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -12,13 +11,13 @@ import javax.servlet.http.HttpServletRequest;
  */
 public final class IpUtils {
 
-	private IpUtils() {
-	}
-
 	/**
 	 * 如果在前端和服务端中间还有一层Node服务 在Node对前端数据进行处理并发起新请求时，需携带此头部信息 便于获取真实IP
 	 */
 	public static final String NODE_FORWARDED_IP = "Node-Forwarded-IP";
+
+	private IpUtils() {
+	}
 
 	/**
 	 * 获取客户端IP

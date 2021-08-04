@@ -25,27 +25,6 @@ import live.lingting.payment.http.utils.JacksonUtils;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class AliPayCallback {
 
-	/**
-	 * 解析回调参数
-	 * @param callbackParams 所有回调参数
-	 * @return live.lingting.payment.ali.domain.AliPayCallback
-	 * @author lingting 2021-01-26 14:39
-	 */
-	public static AliPayCallback of(Map<String, String> callbackParams) throws JsonProcessingException {
-
-		Map<String, Object> map = new HashMap<>(callbackParams);
-		String fundBillListStr = callbackParams.get("fund_bill_list").replaceAll("&quot;", "\"");
-		map.put("fund_bill_list", JacksonUtils.toObj(fundBillListStr, List.class));
-		// 覆盖原值
-		callbackParams.put("fund_bill_list", fundBillListStr);
-		return JacksonUtils.toObj(JacksonUtils.toJson(map), AliPayCallback.class).setRaw(callbackParams);
-	}
-
-	@SneakyThrows
-	public boolean checkSign(AliPay aliPay) {
-		return aliPay.checkSignV1(getRaw()) || aliPay.checkSignV2(getRaw());
-	}
-
 	@JsonIgnore
 	private Map<String, String> raw;
 
@@ -98,6 +77,27 @@ public class AliPayCallback {
 	private String buyerLogonId;
 
 	private BigDecimal pointAmount;
+
+	/**
+	 * 解析回调参数
+	 * @param callbackParams 所有回调参数
+	 * @return live.lingting.payment.ali.domain.AliPayCallback
+	 * @author lingting 2021-01-26 14:39
+	 */
+	public static AliPayCallback of(Map<String, String> callbackParams) throws JsonProcessingException {
+
+		Map<String, Object> map = new HashMap<>(callbackParams);
+		String fundBillListStr = callbackParams.get("fund_bill_list").replaceAll("&quot;", "\"");
+		map.put("fund_bill_list", JacksonUtils.toObj(fundBillListStr, List.class));
+		// 覆盖原值
+		callbackParams.put("fund_bill_list", fundBillListStr);
+		return JacksonUtils.toObj(JacksonUtils.toJson(map), AliPayCallback.class).setRaw(callbackParams);
+	}
+
+	@SneakyThrows
+	public boolean checkSign(AliPay aliPay) {
+		return aliPay.checkSignV1(getRaw()) || aliPay.checkSignV2(getRaw());
+	}
 
 	@Data
 	public static class FundBill {
