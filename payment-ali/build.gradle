@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':payment-http')
+    implementation 'com.alipay.sdk:alipay-sdk-java'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+}
