@@ -1,14 +1,12 @@
-package live.lingting.payment.sdk.util;
+package live.lingting.payment.http.utils;
 
 import com.fasterxml.jackson.core.json.JsonReadFeature;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hccake.ballcat.common.util.ClassUtils;
-import com.hccake.ballcat.common.util.json.TypeReference;
 import java.lang.reflect.Type;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import live.lingting.payment.sdk.jackson.JavaTimeModule;
 
 /**
  * @author lingting 2021/6/9 14:28

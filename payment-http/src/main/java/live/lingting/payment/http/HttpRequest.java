@@ -1,4 +1,4 @@
-package live.lingting.payment.sdk.http;
+package live.lingting.payment.http;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +30,7 @@ public abstract class HttpRequest {
 
 	/**
 	 * 发起请求
-	 * @return live.lingting.payment.sdk.http.HttpResponse
+	 * @return live.lingting.payment.http.HttpResponse
 	 * @author lingting 2021-07-12 16:28
 	 */
 	public abstract HttpResponse exec();

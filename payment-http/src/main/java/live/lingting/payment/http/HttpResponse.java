@@ -1,4 +1,4 @@
-package live.lingting.payment.sdk.http;
+package live.lingting.payment.http;
 
 import lombok.AccessLevel;
 import lombok.Getter;

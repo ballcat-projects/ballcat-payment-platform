@@ -1,0 +1,5 @@
+dependencies {
+    implementation 'org.springframework:spring-core'
+    implementation 'cn.hutool:hutool-http'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+}
