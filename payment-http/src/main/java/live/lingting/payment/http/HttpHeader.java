@@ -22,6 +22,10 @@ public enum HttpHeader {
 	 * Content_Type
 	 */
 	CONTENT_TYPE("Content-Type"),
+	/**
+	 * Authorization
+	 */
+	AUTHORIZATION("Authorization"),
 
 	;
 

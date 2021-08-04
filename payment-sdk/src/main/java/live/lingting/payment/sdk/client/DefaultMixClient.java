@@ -76,7 +76,7 @@ public class DefaultMixClient implements MixClient {
 			log.debug("[MixPay请求数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, body);
 		}
 
-		final String resStr = post.exec().body();
+		final String resStr = post.exec().getBody();
 
 		if (log.isDebugEnabled()) {
 			log.debug("[MixPay请求返回数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, resStr);

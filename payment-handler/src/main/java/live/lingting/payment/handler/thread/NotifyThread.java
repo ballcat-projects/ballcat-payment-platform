@@ -1,9 +1,6 @@
 package live.lingting.payment.handler.thread;
 
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +18,8 @@ import live.lingting.payment.entity.Notify;
 import live.lingting.payment.entity.NotifyLog;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.entity.Project;
+import live.lingting.payment.http.HttpPost;
+import live.lingting.payment.http.HttpResponse;
 import live.lingting.payment.http.utils.JacksonUtils;
 import live.lingting.payment.sdk.constant.SdkConstants;
 import live.lingting.payment.sdk.domain.MixCallback;
@@ -81,7 +80,7 @@ public class NotifyThread extends AbstractThread<Notify> {
 			final Project project = projectService.getById(notify.getProjectId());
 			final Pay pay = payService.getById(notify.getTradeNo());
 			try {
-				final HttpRequest post = HttpUtil.createPost(notify.getNotifyUrl());
+				HttpPost post = HttpPost.of(notify.getNotifyUrl());
 				NotifyLog nl = execute(post, getBody(project, pay));
 
 				logService.save(nl);
@@ -109,24 +108,24 @@ public class NotifyThread extends AbstractThread<Notify> {
 			}
 		}
 
-		private NotifyLog execute(HttpRequest post, String body) {
-			post.body(body, MediaType.APPLICATION_JSON_VALUE);
+		private NotifyLog execute(HttpPost post, String body) {
+			post.setBody(body, MediaType.APPLICATION_JSON_VALUE);
 			// 连接超时 10 秒
-			post.setConnectionTimeout(10 * 1000);
+			post.setConnectTimeout(10 * 1000);
 			// 读取超时 5 分钟
 			post.setReadTimeout(5 * 60 * 1000);
 
 			HttpResponse response = null;
 			Exception exception = null;
 			try {
-				response = post.execute();
+				response = post.exec();
 			}
 			catch (Exception e) {
 				exception = e;
 			}
-			boolean success = response != null && response.getStatus() == SdkConstants.SUCCESS_CODE;
+			boolean success = response != null && SdkConstants.SUCCESS_CODE.equals(response.getStatus());
 
-			String res = response != null ? response.body() : "";
+			String res = response != null ? response.getBody() : "";
 
 			if ("".equals(res) && exception != null) {
 				res = exception.getMessage();

@@ -1,8 +1,5 @@
 package live.lingting.payment.biz.rate;
 
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import live.lingting.payment.http.HttpGet;
+import live.lingting.payment.http.HttpResponse;
 import live.lingting.payment.http.utils.JacksonUtils;
 import live.lingting.payment.sdk.enums.Currency;
 
@@ -31,8 +30,7 @@ public class YyRate implements BaseRate {
 
 	private final String appSecret;
 
-	public YyRate(RateProperties properties) {
-		final RateProperties.Yy yy = properties.getYy();
+	public YyRate(RateProperties.Yy yy) {
 		this.appCode = yy.getCode();
 		this.appKey = yy.getKey();
 		this.appSecret = yy.getSecurity();
@@ -52,13 +50,13 @@ public class YyRate implements BaseRate {
 			break;
 		}
 
-		final HttpRequest get = HttpUtil.createGet(URL + Req.of(code, Currency.CNY.name(), "1"));
-		get.setConnectionTimeout(CONNECT_TIMEOUT.intValue());
-		get.setReadTimeout(READ_TIMEOUT.intValue());
+		HttpGet http = HttpGet.of(URL + Req.of(code, Currency.CNY.name(), "1"));
+		http.setConnectTimeout(CONNECT_TIMEOUT);
+		http.setReadTimeout(READ_TIMEOUT);
 
-		get.auth("APPCODE " + appCode);
-		final HttpResponse response = get.execute();
-		final BigDecimal rate = new BigDecimal(Res.of(response.body()).getBody().getMoney());
+		http.auth("APPCODE " + appCode);
+		final HttpResponse response = http.exec();
+		final BigDecimal rate = new BigDecimal(Res.of(response.getBody()).getBody().getMoney());
 		// 保留4位小数
 		return rate.setScale(4, RoundingMode.DOWN);
 	}

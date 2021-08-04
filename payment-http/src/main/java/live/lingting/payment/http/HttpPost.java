@@ -16,24 +16,24 @@ public class HttpPost extends HttpRequest {
 	}
 
 	public static HttpPost of(String url, HttpProperties properties) {
-		final HttpPost post = new HttpPost();
-		post.setUrl(url);
-		post.setProperties(properties);
-		return post;
+		final HttpPost http = new HttpPost();
+		http.setUrl(url);
+		http.setProperties(properties);
+		return http;
 	}
 
 	@Override
 	public HttpResponse exec() {
-		final cn.hutool.http.HttpRequest post = HttpUtil.createPost(getUrl());
+		final cn.hutool.http.HttpRequest http = HttpUtil.createPost(getUrl());
 		final HttpProperties properties = getProperties();
 
-		post.setReadTimeout(properties.getReadTimeout().intValue());
-		post.setConnectionTimeout(properties.getConnectTimeout().intValue());
+		http.setReadTimeout(properties.getReadTimeout().intValue());
+		http.setConnectionTimeout(properties.getConnectTimeout().intValue());
 
-		post.headerMap(getHeaders(), true);
-		post.body(getBody());
+		http.headerMap(getHeaders(), true);
+		http.body(getBody());
 
-		return HttpResponse.of(post.execute());
+		return HttpResponse.of(http.execute());
 	}
 
 }

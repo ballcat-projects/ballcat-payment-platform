@@ -2,6 +2,7 @@ package live.lingting.payment.http;
 
 import java.util.HashMap;
 import java.util.Map;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,13 +10,15 @@ import lombok.Setter;
  * @author lingting 2021/7/12 16:16
  */
 @Getter
-@Setter
 public abstract class HttpRequest {
 
-	private HttpProperties properties;
+	@Setter
+	private HttpProperties properties = HttpProperties.unlimited();
 
+	@Setter
 	private String url;
 
+	@Setter(AccessLevel.PROTECTED)
 	private Map<String, String> headers = new HashMap<>(16);
 
 	private String body;
@@ -28,11 +31,40 @@ public abstract class HttpRequest {
 		getHeaders().put(name, val);
 	}
 
+	public void auth(String val) {
+		header(HttpHeader.AUTHORIZATION, val);
+	}
+
 	/**
 	 * 发起请求
 	 * @return live.lingting.payment.http.HttpResponse
 	 * @author lingting 2021-07-12 16:28
 	 */
 	public abstract HttpResponse exec();
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
+	public void setBody(String body, String contentType) {
+		this.body = body;
+		header(HttpHeader.CONTENT_TYPE, contentType);
+	}
+
+	/**
+	 * 设置 连接超时
+	 * @param timeout 连接超时, 单位: 毫秒
+	 */
+	public void setConnectTimeout(long timeout) {
+		properties.setConnectTimeout(timeout);
+	}
+
+	/**
+	 * 设置 读取超时
+	 * @param timeout 读取超时, 单位: 毫秒
+	 */
+	public void setReadTimeout(long timeout) {
+		properties.setReadTimeout(timeout);
+	}
 
 }

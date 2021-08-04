@@ -36,7 +36,7 @@ public class DefaultWxDomain implements WxDomain {
 		HttpPost post = HttpPost.of(url);
 		post.header("Content-Type", "text/xml");
 		post.setBody(WxPayUtil.mapToXml(params));
-		return post.exec().body();
+		return post.exec().getBody();
 	}
 
 	/**

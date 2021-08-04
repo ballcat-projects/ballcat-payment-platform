@@ -19,8 +19,12 @@ public class HttpResponse {
 		return new HttpResponse(response);
 	}
 
-	public String body() {
+	public String getBody() {
 		return response.body();
+	}
+
+	public Integer getStatus() {
+		return response.getStatus();
 	}
 
 }
