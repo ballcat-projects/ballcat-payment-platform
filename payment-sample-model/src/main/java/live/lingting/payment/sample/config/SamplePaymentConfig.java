@@ -27,7 +27,7 @@ import live.lingting.payment.biz.util.SpringUtils;
  * @author lingting 2021/6/18 9:39
  */
 @RequiredArgsConstructor
-public class ApiPaymentConfig extends PaymentConfig {
+public class SamplePaymentConfig extends PaymentConfig {
 
 	private final SysConfigService service;
 

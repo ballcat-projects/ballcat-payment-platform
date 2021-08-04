@@ -25,7 +25,7 @@ public class SampleConfiguration {
 
 	@Bean
 	public PaymentConfig paymentConfig(SysConfigService service) {
-		return new ApiPaymentConfig(service);
+		return new SamplePaymentConfig(service);
 	}
 
 }
