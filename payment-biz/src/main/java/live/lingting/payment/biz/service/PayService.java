@@ -1,28 +1,29 @@
 package live.lingting.payment.biz.service;
 
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.service.ExtendService;
+import live.lingting.payment.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import java.time.LocalDateTime;
 import java.util.List;
 import live.lingting.payment.Page;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.entity.Project;
+import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.NotifyStatus;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
 
 /**
  * @author lingting 2021/6/4 13:40
  */
-public interface PayService extends ExtendService<Pay> {
+public interface PayService extends IService<Pay> {
 
 	/**
 	 * 查询
 	 * @param page 分页
 	 * @param pay 条件
-	 * @return com.hccake.ballcat.common.model.domain.PageResult<live.lingting.entity.Pay>
+	 * @return live.lingting.payment.Page<live.lingting.entity.Pay>
 	 * @author lingting 2021-06-07 11:05
 	 */
-	PageResult<Pay> list(Page<Pay> page, Pay pay);
+	Page<Pay> list(Page<Pay> page, Pay pay);
 
 	/**
 	 * 查询所有满足条件的支付信息
@@ -61,7 +62,7 @@ public interface PayService extends ExtendService<Pay> {
 	 * @return live.lingting.entity.Pay
 	 * @author lingting 2021-06-09 17:29
 	 */
-	Pay getByNo(String tradeNo, String projectTradeNo);
+	Pay getByNo(String tradeNo, String projectTradeNo) throws PaymentException;
 
 	/**
 	 * 查询数量
@@ -78,7 +79,7 @@ public interface PayService extends ExtendService<Pay> {
 	 * @return live.lingting.entity.Pay
 	 * @author lingting 2021-06-09 17:55
 	 */
-	Pay virtualCreate(MixVirtualPayModel model, Project project);
+	Pay virtualCreate(MixVirtualPayModel model, Project project) throws PaymentException;
 
 	/**
 	 * 虚拟货币支付 提交hash
@@ -87,7 +88,7 @@ public interface PayService extends ExtendService<Pay> {
 	 * @return boolean
 	 * @author lingting 2021-06-09 17:49
 	 */
-	boolean virtualSubmit(Pay pay, String hash);
+	boolean virtualSubmit(Pay pay, String hash) throws PaymentException;
 
 	/**
 	 * 虚拟货币支付重试
@@ -96,7 +97,7 @@ public interface PayService extends ExtendService<Pay> {
 	 * @return boolean
 	 * @author lingting 2021-06-10 10:56
 	 */
-	boolean virtualRetry(Pay pay, String hash);
+	boolean virtualRetry(Pay pay, String hash) throws PaymentException;
 
 	/**
 	 * 对指定支付进行通知上锁
@@ -112,7 +113,7 @@ public interface PayService extends ExtendService<Pay> {
 	 * @param thirdTradeNo 第三方交易号
 	 * @author lingting 2021-07-14 16:48
 	 */
-	void validateThirdTradeNo(Pay pay, String thirdTradeNo);
+	void validateThirdTradeNo(Pay pay, String thirdTradeNo) throws PaymentException;
 
 	/**
 	 * 支付失败
@@ -153,7 +154,7 @@ public interface PayService extends ExtendService<Pay> {
 	 * @param projectTradeNo 项目交易号
 	 * @author lingting 2021-06-24 21:13
 	 */
-	void forciblyRetry(String tradeNo, String projectTradeNo);
+	void forciblyRetry(String tradeNo, String projectTradeNo) throws PaymentException;
 
 	/**
 	 * 强制失败
@@ -161,7 +162,7 @@ public interface PayService extends ExtendService<Pay> {
 	 * @param projectTradeNo 项目交易号
 	 * @author lingting 2021-06-24 21:13
 	 */
-	void forciblyFail(String tradeNo, String projectTradeNo);
+	void forciblyFail(String tradeNo, String projectTradeNo) throws PaymentException;
 
 	/**
 	 * 查询所有等待的转账支付

@@ -1,6 +1,5 @@
 dependencies {
+    implementation project(':payment-http')
     implementation 'org.springframework:spring-core'
-    implementation 'cn.hutool:hutool-http'
-    implementation 'com.hccake:ballcat-common-util'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }

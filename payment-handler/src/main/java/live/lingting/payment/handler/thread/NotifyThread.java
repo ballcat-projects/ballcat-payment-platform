@@ -1,11 +1,11 @@
-package live.lingting.payment.api.thread;
+package live.lingting.payment.handler.thread;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import com.hccake.ballcat.common.util.JsonUtils;
-import com.hccake.ballcat.common.util.json.TypeReference;
+import live.lingting.payment.http.utils.JacksonUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -167,13 +167,13 @@ public class NotifyThread extends AbstractThread<Notify> {
 			callback.setKey(project.getApiKey());
 			callback.setNonce(RandomUtil.randomString(6));
 
-			Map<String, String> params = JsonUtils.toObj(JsonUtils.toJson(callback),
+			Map<String, String> params = JacksonUtils.toObj(JacksonUtils.toJson(callback),
 					new TypeReference<Map<String, String>>() {
 					});
 
 			callback.setSign(MixUtils.sign(project.getApiSecurity(), params));
 
-			return JsonUtils.toJson(callback);
+			return JacksonUtils.toJson(callback);
 		}
 
 	}

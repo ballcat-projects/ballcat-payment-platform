@@ -1,4 +1,4 @@
-package live.lingting.payment.api.thread;
+package live.lingting.payment.handler.thread;
 
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import live.lingting.payment.biz.config.PayConfig;
+import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.biz.virtual.VirtualHandler;
 import live.lingting.payment.biz.virtual.VirtualManager;
@@ -37,7 +37,7 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 
 	private final VirtualHandler handler;
 
-	private final PayConfig config;
+	private final PaymentConfig config;
 
 	private final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
 			// 限制 hash 不为空

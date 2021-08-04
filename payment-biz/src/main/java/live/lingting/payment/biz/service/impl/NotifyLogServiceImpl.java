@@ -1,7 +1,7 @@
 package live.lingting.payment.biz.service.impl;
 
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
+import live.lingting.payment.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import live.lingting.payment.Page;
 import live.lingting.payment.biz.mapper.NotifyLogMapper;
@@ -12,15 +12,15 @@ import live.lingting.payment.entity.NotifyLog;
  * @author lingting 2021/6/4 13:42
  */
 @Service
-public class NotifyLogServiceImpl extends ExtendServiceImpl<NotifyLogMapper, NotifyLog> implements NotifyLogService {
+public class NotifyLogServiceImpl extends ServiceImpl<NotifyLogMapper, NotifyLog> implements NotifyLogService {
 
 	@Override
-	public PageResult<NotifyLog> list(Page<NotifyLog> page, NotifyLog log) {
+	public Page<NotifyLog> list(Page<NotifyLog> page, NotifyLog log) {
 		return baseMapper.list(page, log);
 	}
 
 	@Override
-	public PageResult<NotifyLog> listByTradeNo(Page<NotifyLog> page, String tradeNo) {
+	public Page<NotifyLog> listByTradeNo(Page<NotifyLog> page, String tradeNo) {
 		return list(page, new NotifyLog().setTradeNo(tradeNo));
 	}
 

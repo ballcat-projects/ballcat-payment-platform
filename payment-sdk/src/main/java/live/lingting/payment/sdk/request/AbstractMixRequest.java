@@ -1,6 +1,6 @@
 package live.lingting.payment.sdk.request;
 
-import com.hccake.ballcat.common.util.json.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -8,10 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import live.lingting.payment.sdk.exception.MixRequestParamsValidException;
-import live.lingting.payment.sdk.http.HttpProperties;
+import live.lingting.payment.http.HttpProperties;
 import live.lingting.payment.sdk.model.MixModel;
 import live.lingting.payment.sdk.response.MixResponse;
-import live.lingting.payment.sdk.util.JacksonUtils;
+import live.lingting.payment.http.utils.JacksonUtils;
 
 /**
  * @author lingting 2021/6/7 17:33

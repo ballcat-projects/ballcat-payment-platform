@@ -1,14 +1,15 @@
 package live.lingting.payment.biz.virtual;
 
-import com.hccake.ballcat.common.core.exception.BusinessException;
+import live.lingting.payment.exception.PaymentException;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import live.lingting.payment.biz.Redis;
-import live.lingting.payment.biz.config.PayConfig;
+import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.biz.service.VirtualAddressService;
 import live.lingting.payment.entity.Pay;
@@ -36,13 +37,14 @@ public class VirtualManager {
 
 	private final VirtualAddressService virtualAddressService;
 
-	private final PayConfig config;
+	private final PaymentConfig config;
 
 	/**
 	 * 虚拟货币预下单
 	 *
 	 * @author lingting 2021-06-07 22:50
 	 */
+	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
 	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project) {
 		final Pay pay = payService.virtualCreate(model, project);
@@ -53,35 +55,37 @@ public class VirtualManager {
 		return data;
 	}
 
+	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
 	public void submit(MixVirtualSubmitModel model) {
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非虚拟支付 或者 非等待支付状态
 		if (!pay.getCurrency().getVirtual() || !PayStatus.WAIT.equals(pay.getStatus())) {
-			throw new BusinessException(ResponseCode.HASH_DISABLED);
+			throw new PaymentException(ResponseCode.HASH_DISABLED);
 		}
 		model.setHash(MixUtils.clearHash(model.getHash()));
 		if (!MixUtils.validHash(pay.getChain(), model.getHash())) {
-			throw new BusinessException(ResponseCode.HASH_ERROR);
+			throw new PaymentException(ResponseCode.HASH_ERROR);
 		}
 		if (!payService.virtualSubmit(pay, model.getHash())) {
-			throw new BusinessException(ResponseCode.HASH_SUBMIT_FAIL);
+			throw new PaymentException(ResponseCode.HASH_SUBMIT_FAIL);
 		}
 	}
 
+	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
 	public MixVirtualRetryResponse.Data retry(MixVirtualRetryModel model) {
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非失败支付 或 重试结束时间小于等于当前时间
 		if (!PayStatus.RETRY.equals(pay.getStatus()) || pay.getRetryEndTime().compareTo(LocalDateTime.now()) < 1) {
-			throw new BusinessException(ResponseCode.RETRY_DISABLES);
+			throw new PaymentException(ResponseCode.RETRY_DISABLES);
 		}
 		// 更新hash, 且 hash校验不通过
 		if (StringUtils.hasText(model.getHash()) && !MixUtils.validHash(pay.getChain(), model.getHash())) {
-			throw new BusinessException(ResponseCode.HASH_ERROR);
+			throw new PaymentException(ResponseCode.HASH_ERROR);
 		}
 		if (!payService.virtualRetry(pay, model.getHash())) {
-			throw new BusinessException(ResponseCode.RETRY_FAIL);
+			throw new PaymentException(ResponseCode.RETRY_FAIL);
 		}
 		final MixVirtualRetryResponse.Data data = new MixVirtualRetryResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
@@ -89,6 +93,7 @@ public class VirtualManager {
 		return data;
 	}
 
+	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
 	public void success(Pay pay) {
 		if (payService.success(pay)) {

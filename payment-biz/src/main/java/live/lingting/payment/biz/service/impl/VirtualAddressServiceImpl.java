@@ -1,13 +1,12 @@
 package live.lingting.payment.biz.service.impl;
 
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
+import live.lingting.payment.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import live.lingting.payment.Page;
 import live.lingting.payment.biz.mapper.VirtualAddressMapper;
 import live.lingting.payment.biz.service.VirtualAddressService;
 import live.lingting.payment.biz.virtual.VirtualHandler;
@@ -23,7 +22,7 @@ import live.lingting.payment.sdk.model.MixVirtualPayModel;
  */
 @Service
 @RequiredArgsConstructor
-public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressMapper, VirtualAddress>
+public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper, VirtualAddress>
 		implements VirtualAddressService {
 
 	private static final Integer SHUFFLE_MIN = 3;
@@ -53,7 +52,7 @@ public class VirtualAddressServiceImpl extends ExtendServiceImpl<VirtualAddressM
 	}
 
 	@Override
-	public PageResult<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress qo) {
+	public Page<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress qo) {
 		return baseMapper.list(page, qo);
 	}
 

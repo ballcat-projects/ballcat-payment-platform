@@ -1,7 +1,7 @@
 package live.lingting.payment.biz.service;
 
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.service.ExtendService;
+import live.lingting.payment.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 import live.lingting.payment.Page;
 import live.lingting.payment.dto.VirtualAddressBalanceDTO;
@@ -14,7 +14,7 @@ import live.lingting.payment.sdk.model.MixVirtualPayModel;
 /**
  * @author lingting 2021/6/7 15:43
  */
-public interface VirtualAddressService extends ExtendService<VirtualAddress> {
+public interface VirtualAddressService extends IService<VirtualAddress> {
 
 	/**
 	 * 根据参数, 锁定地址
@@ -37,10 +37,10 @@ public interface VirtualAddressService extends ExtendService<VirtualAddress> {
 	 * 查询
 	 * @param page 分页
 	 * @param qo 条件
-	 * @return com.hccake.ballcat.common.model.domain.PageResult<live.lingting.entity.VirtualAddress>
+	 * @return live.lingting.payment.Page<live.lingting.entity.VirtualAddress>
 	 * @author lingting 2021-06-07 11:05
 	 */
-	PageResult<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress qo);
+	Page<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress qo);
 
 	/**
 	 * 禁用指定地址

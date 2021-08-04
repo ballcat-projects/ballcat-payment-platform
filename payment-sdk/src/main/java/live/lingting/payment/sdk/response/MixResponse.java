@@ -3,7 +3,7 @@ package live.lingting.payment.sdk.response;
 import lombok.Getter;
 import lombok.Setter;
 import live.lingting.payment.sdk.constant.SdkConstants;
-import live.lingting.payment.sdk.util.JacksonUtils;
+import live.lingting.payment.http.utils.JacksonUtils;
 
 /**
  * @author lingting 2021/6/7 17:25

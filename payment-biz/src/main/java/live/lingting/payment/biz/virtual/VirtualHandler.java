@@ -1,6 +1,5 @@
 package live.lingting.payment.biz.virtual;
 
-import cn.hutool.core.util.StrUtil;
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +46,7 @@ public class VirtualHandler {
 	public VirtualHandler(Redis redis, VirtualProperties properties) {
 		bitcoin = new BitcoinServiceImpl(new BitcoinProperties().setEndpoints(BitcoinEndpoints.MAINNET)
 				// 获取锁, 8秒后自动释放
-				.setLock(() -> redis.setIfAbsent(OMNI_REQUEST_LOCK, StrUtil.EMPTY, TimeUnit.SECONDS.toSeconds(8)))
+				.setLock(() -> redis.setIfAbsent(OMNI_REQUEST_LOCK, "", TimeUnit.SECONDS.toSeconds(8)))
 				.setUnlock(() -> true));
 
 		etherscan = new EtherscanServiceImpl(new EtherscanProperties().setEndpoints(EtherscanEndpoints.MAINNET)

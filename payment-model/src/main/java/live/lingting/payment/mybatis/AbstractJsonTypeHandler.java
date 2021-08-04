@@ -1,7 +1,6 @@
 package live.lingting.payment.mybatis;
 
-import com.hccake.ballcat.common.util.JsonUtils;
-import com.hccake.ballcat.common.util.json.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.sql.CallableStatement;
@@ -11,6 +10,7 @@ import java.sql.SQLException;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 import org.springframework.util.StringUtils;
+import live.lingting.payment.http.utils.JacksonUtils;
 
 /**
  * @author lingting 2021/7/16 10:56
@@ -24,7 +24,7 @@ public abstract class AbstractJsonTypeHandler<T> implements TypeHandler<T> {
 		}
 		else {
 			try {
-				ps.setString(i, JsonUtils.toJson(parameter));
+				ps.setString(i, JacksonUtils.toJson(parameter));
 			}
 			catch (Exception e) {
 				ps.setString(i, getDefaultSqlVal());
@@ -68,7 +68,7 @@ public abstract class AbstractJsonTypeHandler<T> implements TypeHandler<T> {
 	T resolve(String s) {
 		if (StringUtils.hasText(s)) {
 			try {
-				return JsonUtils.toObj(s, getTypeReference());
+				return JacksonUtils.toObj(s, getTypeReference());
 			}
 			catch (Exception e) {
 				return getDefaultJavaVal();

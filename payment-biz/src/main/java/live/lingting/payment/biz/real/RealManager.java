@@ -2,25 +2,25 @@ package live.lingting.payment.biz.real;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
-import com.hccake.ballcat.common.core.exception.BusinessException;
-import com.hccake.extend.pay.ali.AliPay;
-import com.hccake.extend.pay.ali.constants.AliPayConstant;
-import com.hccake.extend.pay.wx.WxPay;
-import com.hccake.extend.pay.wx.response.WxPayResponse;
 import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import live.lingting.payment.ali.AliPay;
+import live.lingting.payment.ali.constants.AliPayConstant;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.enums.ResponseCode;
+import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.Mode;
 import live.lingting.payment.sdk.enums.NotifyStatus;
 import live.lingting.payment.sdk.enums.PayStatus;
 import live.lingting.payment.sdk.model.MixRealPayModel;
 import live.lingting.payment.sdk.response.MixRealPayResponse;
+import live.lingting.payment.wx.WxPay;
+import live.lingting.payment.wx.response.WxPayResponse;
 
 /**
  * @author lingting 2021/7/14 14:48
@@ -36,7 +36,8 @@ public class RealManager {
 	private final WxPay wxPay;
 
 	@Transactional(rollbackFor = Exception.class)
-	public MixRealPayResponse.Data pay(Project project, MixRealPayModel model) throws AlipayApiException {
+	public MixRealPayResponse.Data pay(Project project, MixRealPayModel model)
+			throws AlipayApiException, PaymentException {
 		Pay pay = new Pay().setProjectId(project.getId()).setProjectTradeNo(model.getProjectTradeNo())
 				.setThirdPartTradeNo(model.getMode().equals(Mode.TRANSFER) ? model.getThirdPartTradeNo() : "")
 				.setStatus(PayStatus.WAIT)
@@ -59,11 +60,11 @@ public class RealManager {
 		case WX:
 			return wxPay(pay, model);
 		default:
-			throw new BusinessException(ResponseCode.UNKNOWN_THIRD_PARTY);
+			throw new PaymentException(ResponseCode.UNKNOWN_THIRD_PARTY);
 		}
 	}
 
-	private MixRealPayResponse.Data aliPay(Pay pay, MixRealPayModel model) throws AlipayApiException {
+	private MixRealPayResponse.Data aliPay(Pay pay, MixRealPayModel model) throws AlipayApiException, PaymentException {
 		MixRealPayResponse.Data data = new MixRealPayResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
 		if (model.getMode().equals(Mode.QR)) {
@@ -78,34 +79,34 @@ public class RealManager {
 					errMsg = qrPay.getSubMsg();
 				}
 
-				throw new BusinessException(ResponseCode.ABNORMAL_PAYMENT_GENERATED, errMsg);
+				throw new PaymentException(ResponseCode.ABNORMAL_PAYMENT_GENERATED, errMsg);
 			}
 		}
 
 		return data;
 	}
 
-	private MixRealPayResponse.Data wxPay(Pay pay, MixRealPayModel model) {
+	private MixRealPayResponse.Data wxPay(Pay pay, MixRealPayModel model) throws PaymentException {
 		MixRealPayResponse.Data data = new MixRealPayResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
 		if (model.getMode().equals(Mode.QR)) {
 			final WxPayResponse nativePay = wxPay.nativePay(pay.getTradeNo(), model.getAmount(), model.getSubject());
-			if (nativePay.getReturnCode().equals(com.hccake.extend.pay.wx.enums.ResponseCode.SUCCESS)
-					&& nativePay.getResultCode().equals(com.hccake.extend.pay.wx.enums.ResponseCode.SUCCESS)) {
+			if (nativePay.getReturnCode().equals(live.lingting.payment.wx.enums.ResponseCode.SUCCESS)
+					&& nativePay.getResultCode().equals(live.lingting.payment.wx.enums.ResponseCode.SUCCESS)) {
 				data.setQr(nativePay.getCodeUrl());
 			}
 			else {
 				String errMsg = nativePay.getReturnMsg();
 				if (nativePay.getResultCode() != null
-						&& !com.hccake.extend.pay.wx.enums.ResponseCode.SUCCESS.equals(nativePay.getResultCode())) {
+						&& !live.lingting.payment.wx.enums.ResponseCode.SUCCESS.equals(nativePay.getResultCode())) {
 					errMsg = nativePay.getErrCodeDes();
 				}
 
-				throw new BusinessException(ResponseCode.ABNORMAL_PAYMENT_GENERATED, errMsg);
+				throw new PaymentException(ResponseCode.ABNORMAL_PAYMENT_GENERATED, errMsg);
 			}
 		}
 		else {
-			throw new BusinessException(ResponseCode.THIRD_PARTY_NOT_SUPPORT);
+			throw new PaymentException(ResponseCode.THIRD_PARTY_NOT_SUPPORT);
 		}
 
 		return data;

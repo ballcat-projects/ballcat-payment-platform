@@ -1,11 +1,10 @@
-package live.lingting.payment.mybatis;
+package live.lingting.payment.biz.mybatis;
 
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
-import com.hccake.ballcat.common.util.ClassUtils;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +12,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import live.lingting.payment.entity.Pay;
+import live.lingting.payment.http.utils.ClassUtils;
 
 /**
  * 自定义主键生成

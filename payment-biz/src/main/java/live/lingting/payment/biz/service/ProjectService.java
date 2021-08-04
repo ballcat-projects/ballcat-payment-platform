@@ -1,26 +1,26 @@
 package live.lingting.payment.biz.service;
 
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.service.ExtendService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 import live.lingting.payment.Page;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.enums.ProjectMode;
 import live.lingting.payment.enums.ProjectScope;
+import live.lingting.payment.exception.PaymentException;
 
 /**
  * @author lingting 2021/6/4 13:36
  */
-public interface ProjectService extends ExtendService<Project> {
+public interface ProjectService extends IService<Project> {
 
 	/**
 	 * 搜索
 	 * @param page 分页
 	 * @param project 项目
-	 * @return com.hccake.ballcat.common.model.domain.PageResult<live.lingting.entity.Project>
+	 * @return live.lingting.payment.Page<live.lingting.entity.Project>
 	 * @author lingting 2021-06-04 16:32
 	 */
-	PageResult<Project> list(Page<Project> page, Project project);
+	Page<Project> list(Page<Project> page, Project project);
 
 	/**
 	 * 新增项目
@@ -32,17 +32,19 @@ public interface ProjectService extends ExtendService<Project> {
 	/**
 	 * 重置API
 	 * @param id 项目 Id
+	 * @param userId 修改人
 	 * @author lingting 2021-06-04 17:19
 	 */
-	void resetApi(Integer id);
+	void resetApi(Integer id, Integer userId) throws PaymentException;
 
 	/**
 	 * 更新禁用信息
 	 * @param id id
 	 * @param disabled 是否禁用
+	 * @param userId 修改人
 	 * @author lingting 2021-06-04 17:26
 	 */
-	void disabled(Integer id, Boolean disabled);
+	void disabled(Integer id, Boolean disabled, Integer userId) throws PaymentException;
 
 	/**
 	 * 更新项目模式

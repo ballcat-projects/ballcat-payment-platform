@@ -1,9 +1,10 @@
 dependencies {
     implementation project(':payment-sdk')
-    implementation 'com.hccake:ballcat-extend-mybatis-plus'
+    implementation project(':payment-http')
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'io.springfox:springfox-boot-starter'
-    implementation 'com.hccake:ballcat-oauth-model'
-    implementation 'com.hccake:ballcat-system-model'
-    implementation 'com.hccake:ballcat-log-model'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.baomidou:mybatis-plus-extension'
+    implementation 'javax.servlet:javax.servlet-api'
+    implementation 'cn.hutool:hutool-extra'
 }

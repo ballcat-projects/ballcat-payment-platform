@@ -5,17 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.conditions.query.LambdaQueryWrapperX;
-import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
-import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
+import live.lingting.payment.Page;
+import live.lingting.payment.biz.mybatis.WrappersX;
+import live.lingting.payment.biz.mybatis.conditions.LambdaQueryWrapperX;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.util.CollectionUtils;
-import live.lingting.payment.Page;
 import live.lingting.payment.entity.VirtualAddress;
 import live.lingting.payment.enums.ProjectMode;
 import live.lingting.payment.enums.VirtualAddressMode;
@@ -24,7 +23,7 @@ import live.lingting.payment.sdk.enums.Chain;
 /**
  * @author lingting 2021/6/7 15:43
  */
-public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
+public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 
 	/**
 	 * 组装sql
@@ -56,16 +55,16 @@ public interface VirtualAddressMapper extends ExtendMapper<VirtualAddress> {
 	 * 查询
 	 * @param page 分页
 	 * @param va 条件
-	 * @return com.hccake.ballcat.common.model.domain.PageResult<live.lingting.entity.VirtualAddress>
+	 * @return live.lingting.payment.Page<live.lingting.entity.VirtualAddress>
 	 * @author lingting 2021-06-07 11:05
 	 */
-	default PageResult<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress va) {
+	default Page<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress va) {
 		final IPage<VirtualAddress> iPage = selectPage(page.toPage(), getWrapper(va));
 
-		final PageResult<VirtualAddress> pageResult = new PageResult<>();
-		pageResult.setRecords(iPage.getRecords());
-		pageResult.setTotal(iPage.getTotal());
-		return pageResult;
+		final Page<VirtualAddress> Page = new Page<>();
+		Page.setRecords(iPage.getRecords());
+		Page.setTotal(iPage.getTotal());
+		return Page;
 	}
 
 	/**

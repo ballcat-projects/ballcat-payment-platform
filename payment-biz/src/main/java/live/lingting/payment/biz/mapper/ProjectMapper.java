@@ -4,13 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
-import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
+import live.lingting.payment.Page;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
-import live.lingting.payment.Page;
+import live.lingting.payment.biz.mybatis.WrappersX;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.enums.ProjectMode;
 import live.lingting.payment.enums.ProjectScope;
@@ -18,7 +17,7 @@ import live.lingting.payment.enums.ProjectScope;
 /**
  * @author lingting 2021/6/4 13:35
  */
-public interface ProjectMapper extends ExtendMapper<Project> {
+public interface ProjectMapper extends BaseMapper<Project> {
 
 	/**
 	 * 组装sql
@@ -42,12 +41,12 @@ public interface ProjectMapper extends ExtendMapper<Project> {
 	 * 搜索
 	 * @param page 分页
 	 * @param project 项目
-	 * @return com.hccake.ballcat.common.model.domain.PageResult<live.lingting.entity.Project>
+	 * @return live.lingting.payment.Page<live.lingting.entity.Project>
 	 * @author lingting 2021-06-04 16:32
 	 */
-	default PageResult<Project> list(Page<Project> page, Project project) {
+	default Page<Project> list(Page<Project> page, Project project) {
 		final IPage<Project> iPage = selectPage(page.toPage(), getWrapper(project));
-		return new PageResult<>(iPage.getRecords(), iPage.getTotal());
+		return new Page<>(iPage.getRecords(), iPage.getTotal());
 	}
 
 	/**

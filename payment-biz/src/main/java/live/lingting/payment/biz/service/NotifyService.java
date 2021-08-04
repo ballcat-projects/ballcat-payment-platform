@@ -1,6 +1,6 @@
 package live.lingting.payment.biz.service;
 
-import com.hccake.extend.mybatis.plus.service.ExtendService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import java.time.LocalDateTime;
 import java.util.List;
 import live.lingting.payment.entity.Notify;
@@ -10,7 +10,7 @@ import live.lingting.payment.sdk.enums.NotifyStatus;
 /**
  * @author lingting 2021/6/10 16:33
  */
-public interface NotifyService extends ExtendService<Notify> {
+public interface NotifyService extends IService<Notify> {
 
 	/**
 	 * 添加通知

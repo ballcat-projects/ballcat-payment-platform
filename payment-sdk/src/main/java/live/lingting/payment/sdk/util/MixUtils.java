@@ -4,7 +4,7 @@ import static live.lingting.payment.sdk.constant.SdkConstants.FIELD_KEY;
 import static live.lingting.payment.sdk.constant.SdkConstants.FIELD_NONCE;
 import static live.lingting.payment.sdk.constant.SdkConstants.FIELD_SIGN;
 
-import com.hccake.ballcat.common.util.json.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.springframework.util.StringUtils;
+import live.lingting.payment.http.utils.JacksonUtils;
 import live.lingting.payment.sdk.domain.MixCallback;
 import live.lingting.payment.sdk.enums.Chain;
 

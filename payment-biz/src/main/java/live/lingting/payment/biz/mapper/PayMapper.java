@@ -5,14 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.conditions.query.LambdaQueryWrapperX;
-import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
-import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
+import live.lingting.payment.Page;
+import live.lingting.payment.biz.mybatis.WrappersX;
+import live.lingting.payment.biz.mybatis.conditions.LambdaQueryWrapperX;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.util.StringUtils;
-import live.lingting.payment.Page;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.sdk.enums.Currency;
 import live.lingting.payment.sdk.enums.NotifyStatus;
@@ -21,7 +20,7 @@ import live.lingting.payment.sdk.enums.PayStatus;
 /**
  * @author lingting 2021/6/4 13:40
  */
-public interface PayMapper extends ExtendMapper<Pay> {
+public interface PayMapper extends BaseMapper<Pay> {
 
 	/**
 	 * 组装sql
@@ -61,16 +60,16 @@ public interface PayMapper extends ExtendMapper<Pay> {
 	 * 查询
 	 * @param page 分页
 	 * @param pay 条件
-	 * @return com.hccake.ballcat.common.model.domain.PageResult<live.lingting.entity.Pay>
+	 * @return live.lingting.payment.Page<live.lingting.entity.Pay>
 	 * @author lingting 2021-06-07 11:05
 	 */
-	default PageResult<Pay> list(Page<Pay> page, Pay pay) {
+	default Page<Pay> list(Page<Pay> page, Pay pay) {
 		final IPage<Pay> iPage = selectPage(page.toPage(), getWrapper(pay));
 
-		final PageResult<Pay> pageResult = new PageResult<>();
-		pageResult.setRecords(iPage.getRecords());
-		pageResult.setTotal(iPage.getTotal());
-		return pageResult;
+		final Page<Pay> Page = new Page<>();
+		Page.setRecords(iPage.getRecords());
+		Page.setTotal(iPage.getTotal());
+		return Page;
 	}
 
 	/**

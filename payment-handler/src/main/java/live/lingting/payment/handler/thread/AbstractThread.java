@@ -1,4 +1,4 @@
-package live.lingting.payment.api.thread;
+package live.lingting.payment.handler.thread;
 
 import cn.hutool.core.thread.ThreadUtil;
 import java.util.Collections;

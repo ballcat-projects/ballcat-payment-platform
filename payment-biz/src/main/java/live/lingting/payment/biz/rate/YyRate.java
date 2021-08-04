@@ -4,7 +4,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hccake.ballcat.common.util.JsonUtils;
+import live.lingting.payment.http.utils.JacksonUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.AllArgsConstructor;
@@ -99,7 +99,7 @@ public class YyRate implements BaseRate {
 		private Body body;
 
 		public static Res of(String res) {
-			return JsonUtils.toObj(res, Res.class);
+			return JacksonUtils.toObj(res, Res.class);
 		}
 
 		@NoArgsConstructor

@@ -47,6 +47,7 @@ subprojects {
     }
 
     dependencies {
+        implementation 'cn.hutool:hutool-core'
         implementation 'org.mapstruct:mapstruct'
         implementation 'org.springframework.boot:spring-boot-starter'
         compileOnly 'org.projectlombok:lombok'
@@ -65,9 +66,12 @@ subprojects {
 
         dependencies {
             dependency('org.mapstruct:mapstruct:1.4.2.Final')
+            dependency('cn.hutool:hutool-core:5.5.8')
             dependency('cn.hutool:hutool-http:5.5.8')
+            dependency('cn.hutool:hutool-extra:5.5.8')
             dependency('io.springfox:springfox-boot-starter:3.0.0')
             dependency('mysql:mysql-connector-java:8.0.23')
+            dependency('com.baomidou:mybatis-plus-extension:3.4.2')
             dependency('com.baomidou:mybatis-plus-boot-starter:3.4.2')
             dependency('de.codecentric:spring-boot-admin-starter-client:2.4.1')
             dependency('org.springframework.security.oauth:spring-security-oauth2:2.3.8.RELEASE')
@@ -87,6 +91,8 @@ subprojects {
             dependency('com.hccake:ballcat-log-model:0.1.0')
             dependency('com.hccake:ballcat-admin-core:0.1.0')
             dependency('com.hccake:ballcat-admin-websocket:0.1.0')
+            dependency('live.lingting:virtual-currency-all:0.4.2')
+            dependency('com.alipay.sdk:alipay-sdk-java:4.11.28.ALL')
 
             dependency('org.springframework.boot:spring-boot-starter-web:' + VersionExtractor.forClass(DependencyManagementPluginAction.class)) {
                 exclude group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'

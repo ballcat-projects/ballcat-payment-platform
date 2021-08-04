@@ -3,18 +3,18 @@ package live.lingting.payment.biz.mapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.hccake.extend.mybatis.plus.conditions.query.LambdaQueryWrapperX;
-import com.hccake.extend.mybatis.plus.mapper.ExtendMapper;
-import com.hccake.extend.mybatis.plus.toolkit.WrappersX;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.time.LocalDateTime;
 import java.util.List;
+import live.lingting.payment.biz.mybatis.WrappersX;
+import live.lingting.payment.biz.mybatis.conditions.LambdaQueryWrapperX;
 import live.lingting.payment.entity.Notify;
 import live.lingting.payment.sdk.enums.NotifyStatus;
 
 /**
  * @author lingting 2021/6/10 16:33
  */
-public interface NotifyMapper extends ExtendMapper<Notify> {
+public interface NotifyMapper extends BaseMapper<Notify> {
 
 	/**
 	 * 获取sql

@@ -1,6 +1,6 @@
 package live.lingting.payment.biz.service.impl;
 
-import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +20,7 @@ import live.lingting.payment.util.NotifyUtils;
  */
 @Service
 @RequiredArgsConstructor
-public class NotifyServiceImpl extends ExtendServiceImpl<NotifyMapper, Notify> implements NotifyService {
+public class NotifyServiceImpl extends ServiceImpl<NotifyMapper, Notify> implements NotifyService {
 
 	private final PayServiceImpl payService;
 

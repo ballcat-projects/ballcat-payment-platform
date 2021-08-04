@@ -4,18 +4,17 @@ import static live.lingting.payment.enums.ResponseCode.PAY_NOT_FOUND;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.hccake.ballcat.common.core.exception.BusinessException;
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
+import live.lingting.payment.exception.PaymentException;
+import live.lingting.payment.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import live.lingting.payment.Page;
 import live.lingting.payment.biz.Redis;
-import live.lingting.payment.biz.config.PayConfig;
+import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.mapper.PayMapper;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.biz.service.VirtualAddressService;
@@ -35,16 +34,16 @@ import live.lingting.payment.sdk.model.MixVirtualPayModel;
  */
 @Service
 @RequiredArgsConstructor
-public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements PayService {
+public class PayServiceImpl extends ServiceImpl<PayMapper, Pay> implements PayService {
 
 	private final Redis redis;
 
 	private final VirtualAddressService virtualAddressService;
 
-	private final PayConfig config;
+	private final PaymentConfig config;
 
 	@Override
-	public PageResult<Pay> list(Page<Pay> page, Pay pay) {
+	public Page<Pay> list(Page<Pay> page, Pay pay) {
 		return baseMapper.list(page, pay);
 	}
 
@@ -69,7 +68,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
-	public Pay getByNo(String tradeNo, String projectTradeNo) {
+	public Pay getByNo(String tradeNo, String projectTradeNo) throws PaymentException {
 		Pay pay = new Pay();
 
 		if (StringUtils.hasText(tradeNo)) {
@@ -82,7 +81,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		pay = baseMapper.selectOne(baseMapper.getWrapper(pay));
 
 		if (pay == null) {
-			throw new BusinessException(PAY_NOT_FOUND);
+			throw new PaymentException(PAY_NOT_FOUND);
 		}
 
 		return pay;
@@ -94,11 +93,11 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
-	public Pay virtualCreate(MixVirtualPayModel model, Project project) {
+	public Pay virtualCreate(MixVirtualPayModel model, Project project) throws PaymentException {
 		VirtualAddress va = virtualAddressService.lock(model, project);
 
 		if (va == null) {
-			throw new BusinessException(ResponseCode.NO_ADDRESS_AVAILABLE);
+			throw new PaymentException(ResponseCode.NO_ADDRESS_AVAILABLE);
 		}
 		Pay pay = new Pay().setAddress(va.getAddress()).setChain(model.getChain())
 				.setCurrency(model.getContract().getCurrency()).setNotifyUrl(model.getNotifyUrl())
@@ -107,22 +106,22 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 		return pay;
 	}
 
-	private void create(Project project, Pay pay) {
+	private void create(Project project, Pay pay) throws PaymentException {
 		String key = PayConstants.getProjectTradeNoLock(project.getId(), pay.getProjectTradeNo());
 
 		if (!redis.setIfAbsent(key, "", TimeUnit.DAYS.toSeconds(1))) {
-			throw new BusinessException(ResponseCode.PROJECT_NO_REPEAT);
+			throw new PaymentException(ResponseCode.PROJECT_NO_REPEAT);
 		}
 
 		// 上锁成功, 从数据库查询
 		if (count(new Pay().setProjectTradeNo(pay.getProjectTradeNo())) > 0) {
-			throw new BusinessException(ResponseCode.PROJECT_NO_REPEAT);
+			throw new PaymentException(ResponseCode.PROJECT_NO_REPEAT);
 		}
 
 		pay.setProjectId(project.getId()).setStatus(PayStatus.WAIT);
 		try {
 			if (!save(pay)) {
-				throw new BusinessException(ResponseCode.PAY_SAVE_FAIL);
+				throw new PaymentException(ResponseCode.PAY_SAVE_FAIL);
 			}
 		}
 		catch (Exception e) {
@@ -132,13 +131,13 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
-	public boolean virtualSubmit(Pay pay, String hash) {
+	public boolean virtualSubmit(Pay pay, String hash) throws PaymentException {
 		validateThirdTradeNo(pay, hash);
 		return baseMapper.virtualSubmit(pay.getTradeNo(), hash);
 	}
 
 	@Override
-	public boolean virtualRetry(Pay pay, String hash) {
+	public boolean virtualRetry(Pay pay, String hash) throws PaymentException {
 		// 第二次请求的hash与第一次提交的一致
 		if (hash.equals(pay.getThirdPartTradeNo())) {
 			hash = "";
@@ -155,10 +154,10 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
-	public void validateThirdTradeNo(Pay pay, String thirdTradeNo) {
+	public void validateThirdTradeNo(Pay pay, String thirdTradeNo) throws PaymentException {
 		String key = PayConstants.getPayThirdTradeNoLock(pay, thirdTradeNo);
 		if (!redis.setIfAbsent(key, "", TimeUnit.DAYS.toSeconds(1))) {
-			throw new BusinessException(ResponseCode.TRADE_NO_EXIST);
+			throw new PaymentException(ResponseCode.TRADE_NO_EXIST);
 		}
 
 		final LambdaQueryWrapper<Pay> wrapper = Wrappers.<Pay>lambdaQuery()
@@ -168,7 +167,7 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 				.in(Pay::getStatus, PayStatus.WAIT, PayStatus.SUCCESS);
 
 		if (baseMapper.selectCount(wrapper) > 0) {
-			throw new BusinessException(ResponseCode.TRADE_NO_EXIST);
+			throw new PaymentException(ResponseCode.TRADE_NO_EXIST);
 		}
 	}
 
@@ -199,29 +198,29 @@ public class PayServiceImpl extends ExtendServiceImpl<PayMapper, Pay> implements
 	}
 
 	@Override
-	public void forciblyRetry(String tradeNo, String projectTradeNo) {
+	public void forciblyRetry(String tradeNo, String projectTradeNo) throws PaymentException {
 		Pay pay = getByNo(tradeNo, projectTradeNo);
 		if (pay == null || !Currency.USDT.equals(pay.getCurrency()) || !PayStatus.WAIT.equals(pay.getStatus())
 				|| !StringUtils.hasText(pay.getThirdPartTradeNo())) {
-			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
+			throw new PaymentException(ResponseCode.PROHIBIT_OPERATION);
 		}
 
 		if (!baseMapper.forciblyRetry(pay.getTradeNo(), config.getRetryTimeout())) {
-			throw new BusinessException(ResponseCode.OPERATION_FAILED);
+			throw new PaymentException(ResponseCode.OPERATION_FAILED);
 		}
 	}
 
 	@Override
-	public void forciblyFail(String tradeNo, String projectTradeNo) {
+	public void forciblyFail(String tradeNo, String projectTradeNo) throws PaymentException {
 		Pay pay = getByNo(tradeNo, projectTradeNo);
 		final boolean prohibit = pay == null
 				|| (!PayStatus.WAIT.equals(pay.getStatus()) && !PayStatus.RETRY.equals(pay.getStatus()));
 		if (prohibit) {
-			throw new BusinessException(ResponseCode.PROHIBIT_OPERATION);
+			throw new PaymentException(ResponseCode.PROHIBIT_OPERATION);
 		}
 
 		if (!baseMapper.forciblyFail(pay.getTradeNo())) {
-			throw new BusinessException(ResponseCode.OPERATION_FAILED);
+			throw new PaymentException(ResponseCode.OPERATION_FAILED);
 		}
 	}
 

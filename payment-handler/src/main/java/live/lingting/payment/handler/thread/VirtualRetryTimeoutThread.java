@@ -1,4 +1,4 @@
-package live.lingting.payment.api.thread;
+package live.lingting.payment.handler.thread;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;

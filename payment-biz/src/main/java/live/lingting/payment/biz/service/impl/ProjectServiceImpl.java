@@ -1,12 +1,11 @@
 package live.lingting.payment.biz.service.impl;
 
-import com.hccake.ballcat.common.core.exception.BusinessException;
-import com.hccake.ballcat.common.model.domain.PageResult;
-import com.hccake.extend.mybatis.plus.service.impl.ExtendServiceImpl;
+import live.lingting.payment.exception.PaymentException;
+import live.lingting.payment.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import live.lingting.payment.Page;
 import live.lingting.payment.biz.mapper.ProjectMapper;
 import live.lingting.payment.biz.service.ProjectHistoryService;
 import live.lingting.payment.biz.service.ProjectService;
@@ -22,12 +21,12 @@ import live.lingting.payment.util.ApiUtils;
  */
 @Service
 @RequiredArgsConstructor
-public class ProjectServiceImpl extends ExtendServiceImpl<ProjectMapper, Project> implements ProjectService {
+public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> implements ProjectService {
 
 	private final ProjectHistoryService historyService;
 
 	@Override
-	public PageResult<Project> list(Page<Project> page, Project project) {
+	public Page<Project> list(Page<Project> page, Project project) {
 		return baseMapper.list(page, project);
 	}
 
@@ -37,22 +36,22 @@ public class ProjectServiceImpl extends ExtendServiceImpl<ProjectMapper, Project
 	}
 
 	@Override
-	public void resetApi(Integer id) {
+	public void resetApi(Integer id,Integer userId) throws PaymentException {
 		final Project project = getById(id);
 		if (project == null) {
-			throw new BusinessException(ResponseCode.PROJECT_NOT_FOUND);
+			throw new PaymentException(ResponseCode.PROJECT_NOT_FOUND);
 		}
-		ProjectHistory history = ProjectHistory.of(project);
+		ProjectHistory history = ProjectHistory.of(project, userId);
 		update(history, ApiUtils.fillApi(project));
 	}
 
 	@Override
-	public void disabled(Integer id, Boolean disabled) {
+	public void disabled(Integer id, Boolean disabled,Integer userId) throws PaymentException {
 		final Project project = getById(id);
 		if (project == null) {
-			throw new BusinessException(ResponseCode.PROJECT_NOT_FOUND);
+			throw new PaymentException(ResponseCode.PROJECT_NOT_FOUND);
 		}
-		ProjectHistory history = ProjectHistory.of(project);
+		ProjectHistory history = ProjectHistory.of(project, userId);
 		update(history, project.setDisabled(disabled));
 	}
 
