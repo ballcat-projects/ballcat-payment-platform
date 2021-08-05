@@ -15,6 +15,7 @@ import live.lingting.payment.biz.virtual.VirtualManager;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.enums.ProjectScope;
 import live.lingting.payment.enums.ResponseCode;
+import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.sdk.model.MixRealPayModel;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
@@ -49,7 +50,7 @@ public class PayController {
 	}
 
 	@PostMapping("virtual")
-	public R<MixVirtualPayResponse.Data> virtual(@RequestBody MixVirtualPayModel model) throws MixException {
+	public R<MixVirtualPayResponse.Data> virtual(@RequestBody MixVirtualPayModel model) throws MixException, PaymentException {
 		model.valid();
 		final Project project = SecurityUtils.getProject();
 		if (project == null || !project.getScope().contains(ProjectScope.get(model))) {
@@ -60,14 +61,14 @@ public class PayController {
 	}
 
 	@PostMapping("virtual/submit")
-	public R<?> virtualSubmit(@RequestBody MixVirtualSubmitModel model) throws MixException {
+	public R<?> virtualSubmit(@RequestBody MixVirtualSubmitModel model) throws MixException, PaymentException {
 		model.valid();
 		virtualManager.submit(model);
 		return R.ok();
 	}
 
 	@PostMapping("virtual/retry")
-	public R<MixVirtualRetryResponse.Data> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException {
+	public R<MixVirtualRetryResponse.Data> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException, PaymentException {
 		model.valid();
 		return R.ok(virtualManager.retry(model));
 	}

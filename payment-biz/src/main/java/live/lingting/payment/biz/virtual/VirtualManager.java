@@ -3,7 +3,6 @@ package live.lingting.payment.biz.virtual;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -44,9 +43,8 @@ public class VirtualManager {
 	 *
 	 * @author lingting 2021-06-07 22:50
 	 */
-	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
-	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project) {
+	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project) throws PaymentException {
 		final Pay pay = payService.virtualCreate(model, project);
 		final MixVirtualPayResponse.Data data = new MixVirtualPayResponse.Data();
 		data.setAddress(pay.getAddress());
@@ -55,9 +53,8 @@ public class VirtualManager {
 		return data;
 	}
 
-	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
-	public void submit(MixVirtualSubmitModel model) {
+	public void submit(MixVirtualSubmitModel model) throws PaymentException {
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非虚拟支付 或者 非等待支付状态
 		if (!pay.getCurrency().getVirtual() || !PayStatus.WAIT.equals(pay.getStatus())) {
@@ -72,9 +69,8 @@ public class VirtualManager {
 		}
 	}
 
-	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
-	public MixVirtualRetryResponse.Data retry(MixVirtualRetryModel model) {
+	public MixVirtualRetryResponse.Data retry(MixVirtualRetryModel model) throws PaymentException {
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非失败支付 或 重试结束时间小于等于当前时间
 		if (!PayStatus.RETRY.equals(pay.getStatus()) || pay.getRetryEndTime().compareTo(LocalDateTime.now()) < 1) {
@@ -93,7 +89,6 @@ public class VirtualManager {
 		return data;
 	}
 
-	@SneakyThrows
 	@Transactional(rollbackFor = Exception.class)
 	public void success(Pay pay) {
 		if (payService.success(pay)) {
