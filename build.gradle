@@ -20,7 +20,7 @@ plugins {
 
 allprojects {
     group = 'live.lingting'
-    version = '0.0.2-SNAPSHOT'
+    version = '0.1.0-SNAPSHOT'
 
     repositories {
         mavenLocal()
@@ -44,6 +44,98 @@ subprojects {
         plugin 'idea'
         plugin 'io.spring.dependency-management'
         plugin 'io.spring.javaformat'
+    }
+
+    if (!project.name.contains("sample")) {
+        apply {
+            plugin 'maven-publish'
+            plugin 'signing'
+        }
+
+        java {
+            withJavadocJar()
+            withSourcesJar()
+        }
+
+        // 解决生成 javadoc时编译错误
+        tasks.withType(Javadoc) {
+            failOnError false
+            options.addStringOption('Xdoclint:none', '-quiet')
+            options.addStringOption('encoding', 'UTF-8')
+            options.addStringOption('charSet', 'UTF-8')
+        }
+
+        // Maven发布配置
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from components.java
+
+                    // 由于使用了spring boot的插件进行依赖管理, 所以需要设置以下配置
+                    // 防止打包时找不到依赖版本而报错
+                    versionMapping {
+                        usage('java-api') {
+                            fromResolutionOf('runtimeClasspath')
+                        }
+                        usage('java-runtime') {
+                            fromResolutionResult()
+                        }
+                    }
+
+                    pom {
+                        name = project.name
+                        url = 'https://github.com/ballcat-projects/ballcat-payment-platform'
+                        description = project.name + " 描述"
+                        licenses {
+                            license {
+                                name = 'MIT License'
+                                url = 'http://www.opensource.org/licenses/mit-license.php'
+                                distribution = 'repo'
+                            }
+                        }
+                        developers {
+                            developer {
+                                id = 'lingting'
+                                name = 'lingting'
+                                email = 'sunlisten.gzm@gmail.com'
+                                url = 'https://github.com/lingting'
+                            }
+                        }
+                        scm {
+                            connection = 'scm:git:git@github.com:ballcat-projects/ballcat-payment-platform.git'
+                            developerConnection = 'scm:git:git@github.com:ballcat-projects/ballcat-payment-platform.git'
+                            url = 'https://github.com/ballcat-projects/ballcat-payment-platform'
+                            tag = 'HEAD'
+                        }
+                    }
+                }
+            }
+
+            repositories {
+                maven {
+                    name = 'central'
+                    def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                    def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+                    credentials {
+                        // 在 GRADLE_HOME 目录下的 gradle.properties(没有则新建) 配置
+                        username project.findProperty("nexus.user") as String
+                        password project.findProperty("nexus.password") as String
+                    }
+                }
+            }
+
+            signing {
+                /**
+                 * <h1> 需要在 GRADLE_HOME 目录下的 gradle.properties(没有则新建) 配置以下属性</h1>
+                 *  <p> signing.keyId : kleopatra 查看整数密钥ID, 取后8位</p>
+                 *  <p> signing.password : 证书的密码</p>
+                 *  <p> signing.secretKeyRingFile : kleopatra 右键证书 -> Backup Secret Keys -> 保存文件 -> 修改文件后缀为 gpg -> 填写完整的文件地址(eg: C:/Users/lingting/.gradle/lingting.gpg)</p>
+                 */
+                sign publishing.publications.mavenJava
+            }
+        }
     }
 
     dependencies {
@@ -119,7 +211,9 @@ subprojects {
     java.sourceCompatibility(JavaVersion.VERSION_1_8)
     java.targetCompatibility(JavaVersion.VERSION_1_8)
     // java编译的时候缺省状态下会因为中文字符而失败
-    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
 
     // idea 直接启动是走的 classes 方法。 或者需要在这里进行删除操作
     classes.doLast {

@@ -1,3 +1,5 @@
+description 'http 以及其他基础方法'
+
 dependencies {
     implementation 'org.springframework:spring-core'
     implementation 'cn.hutool:hutool-http'

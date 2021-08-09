@@ -1,3 +1,5 @@
+description 'WEB和API的业务实现'
+
 dependencies {
     implementation project(':payment-model')
     implementation project(':payment-sdk')

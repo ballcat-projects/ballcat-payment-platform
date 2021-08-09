@@ -1,3 +1,5 @@
+description 'API 的 SDK'
+
 dependencies {
     implementation project(':payment-http')
     implementation 'org.springframework:spring-core'

@@ -1,3 +1,5 @@
+description '基础类'
+
 dependencies {
     implementation project(':payment-sdk')
     implementation project(':payment-http')

@@ -1,3 +1,5 @@
+description '处理支付信息'
+
 dependencies {
     implementation project(':payment-biz')
     implementation project(':payment-model')
