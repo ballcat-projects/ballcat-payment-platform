@@ -26,3 +26,11 @@ RENAME TABLE `pay` TO `lingting_payment_pay`;
 RENAME TABLE `project` TO `lingting_payment_project`;
 RENAME TABLE `project_history` TO `lingting_payment_project_history`;
 RENAME TABLE `virtual_address` TO `lingting_payment_virtual_address`;
+
+ALTER TABLE `lingting_payment_project`
+    DROP COLUMN `mode`;
+ALTER TABLE `lingting_payment_virtual_address`
+    DROP COLUMN `mode`;
+
+UPDATE lingting_payment_virtual_address
+SET project_ids = (SELECT CONCAT('[', GROUP_CONCAT(p.id), ']') FROM lingting_payment_project p);
