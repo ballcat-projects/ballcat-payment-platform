@@ -90,6 +90,11 @@ public class Pay {
 	private Mode mode;
 
 	/**
+	 * 支付配置标识
+	 */
+	private String configMark;
+
+	/**
 	 * 描述
 	 */
 	@TableField("`desc`")

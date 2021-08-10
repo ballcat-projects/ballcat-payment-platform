@@ -34,3 +34,7 @@ ALTER TABLE `lingting_payment_virtual_address`
 
 UPDATE lingting_payment_virtual_address
 SET project_ids = (SELECT CONCAT('[', GROUP_CONCAT(p.id), ']') FROM lingting_payment_project p);
+
+ALTER TABLE lingting_payment_pay
+    ADD COLUMN `config_mark` varchar(50) DEFAULT '' COMMENT '支付配置标志',
+    ADD INDEX `idx_config` (`config_mark`);

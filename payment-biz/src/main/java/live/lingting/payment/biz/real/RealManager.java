@@ -45,7 +45,7 @@ public class RealManager {
 				.setStatus(PayStatus.WAIT)
 				.setAmount(model.getMode().equals(Mode.TRANSFER) ? BigDecimal.ZERO : model.getAmount())
 				.setCurrency(model.getCurrency()).setThirdPart(model.getThirdPart()).setMode(model.getMode())
-				.setNotifyUrl(model.getNotifyUrl()).setNotifyStatus(NotifyStatus.WAIT);
+				.setNotifyUrl(model.getNotifyUrl()).setNotifyStatus(NotifyStatus.WAIT).setConfigMark(model.getMark());
 
 		// 转账需要校验交易号
 		if (pay.getMode().equals(Mode.TRANSFER)) {
