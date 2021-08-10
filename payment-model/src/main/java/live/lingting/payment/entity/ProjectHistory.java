@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("project_history")
+@TableName("lingting_payment_project_history")
 public class ProjectHistory {
 
 	@TableId

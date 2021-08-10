@@ -24,7 +24,7 @@ import live.lingting.payment.sdk.enums.ThirdPart;
  */
 @Getter
 @Setter
-@TableName("pay")
+@TableName("lingting_payment_pay")
 @Accessors(chain = true)
 public class Pay {
 

@@ -26,7 +26,7 @@ import live.lingting.payment.mybatis.AbstractJsonTypeHandler;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName(value = "project", autoResultMap = true)
+@TableName(value = "lingting_payment_project", autoResultMap = true)
 public class Project implements Serializable {
 
 	private static final long serialVersionUID = 1L;

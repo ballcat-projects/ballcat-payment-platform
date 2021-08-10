@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @ToString
-@TableName("api_access_log")
+@TableName("lingting_payment_api_access_log")
 @Accessors(chain = true)
 public class ApiAccessLog {
 

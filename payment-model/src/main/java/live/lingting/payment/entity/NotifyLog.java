@@ -17,7 +17,7 @@ import live.lingting.payment.sdk.enums.NotifyStatus;
  */
 @Getter
 @Setter
-@TableName("notify_log")
+@TableName("lingting_payment_notify_log")
 @Accessors(chain = true)
 public class NotifyLog {
 

@@ -19,3 +19,10 @@ CREATE TABLE `lingting_payment_config`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='第三方支付配置';
+
+RENAME TABLE `notify` TO `lingting_payment_notify`;
+RENAME TABLE `notify_log` TO `lingting_payment_notify_log`;
+RENAME TABLE `pay` TO `lingting_payment_pay`;
+RENAME TABLE `project` TO `lingting_payment_project`;
+RENAME TABLE `project_history` TO `lingting_payment_project_history`;
+RENAME TABLE `virtual_address` TO `lingting_payment_virtual_address`;

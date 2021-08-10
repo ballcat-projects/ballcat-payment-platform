@@ -23,7 +23,7 @@ import live.lingting.payment.sdk.enums.Chain;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName(value = "virtual_address", autoResultMap = true)
+@TableName(value = "lingting_payment_virtual_address", autoResultMap = true)
 public class VirtualAddress {
 
 	@TableId
