@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 import live.lingting.payment.Page;
 import live.lingting.payment.entity.Project;
-import live.lingting.payment.enums.ProjectMode;
 import live.lingting.payment.enums.ProjectScope;
 import live.lingting.payment.exception.PaymentException;
 
@@ -45,14 +44,6 @@ public interface ProjectService extends IService<Project> {
 	 * @author lingting 2021-06-04 17:26
 	 */
 	void disabled(Integer id, Boolean disabled, Integer userId) throws PaymentException;
-
-	/**
-	 * 更新项目模式
-	 * @param ids 项目
-	 * @param mode 新模式
-	 * @author lingting 2021-07-07 10:15
-	 */
-	void mode(List<Integer> ids, ProjectMode mode);
 
 	/**
 	 * 根据apiKey 获取项目信息

@@ -13,7 +13,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
-import live.lingting.payment.enums.VirtualAddressMode;
 import live.lingting.payment.mybatis.AbstractJsonTypeHandler;
 import live.lingting.payment.sdk.enums.Chain;
 
@@ -44,13 +43,14 @@ public class VirtualAddress {
 	@TableField("`using`")
 	private Boolean using;
 
-	private VirtualAddressMode mode;
-
 	/**
 	 * USDT 余额
 	 */
 	private BigDecimal usdtAmount;
 
+	/**
+	 * 地址只允许给指定的项目使用
+	 */
 	@TableField(typeHandler = ProjectIdsTypeHandler.class)
 	private List<Integer> projectIds;
 

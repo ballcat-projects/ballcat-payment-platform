@@ -15,7 +15,6 @@ import live.lingting.payment.biz.service.VirtualAddressService;
 import live.lingting.payment.dto.VirtualAddressBalanceDTO;
 import live.lingting.payment.dto.VirtualAddressCreateDTO;
 import live.lingting.payment.dto.VirtualAddressDisabledDTO;
-import live.lingting.payment.dto.VirtualAddressModeDTO;
 import live.lingting.payment.dto.VirtualAddressProjectIdsDTO;
 import live.lingting.payment.entity.VirtualAddress;
 
@@ -58,13 +57,6 @@ public class VirtualAddressController {
 	@PreAuthorize("@per.hasPermission('virtual:address:edit')")
 	public R<?> disabled(@RequestBody @Validated VirtualAddressDisabledDTO dto) {
 		service.disabled(dto.getIds(), dto.getDisabled());
-		return R.ok();
-	}
-
-	@PatchMapping("mode")
-	@PreAuthorize("@per.hasPermission('virtual:address:edit')")
-	public R<?> mode(@RequestBody @Validated VirtualAddressModeDTO dto) {
-		service.mode(dto.getIds(), dto.getMode());
 		return R.ok();
 	}
 

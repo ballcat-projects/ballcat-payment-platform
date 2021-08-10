@@ -14,7 +14,6 @@ import live.lingting.payment.dto.VirtualAddressBalanceDTO;
 import live.lingting.payment.dto.VirtualAddressCreateDTO;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.entity.VirtualAddress;
-import live.lingting.payment.enums.VirtualAddressMode;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
 
 /**
@@ -31,7 +30,7 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 
 	@Override
 	public VirtualAddress lock(MixVirtualPayModel model, Project project) {
-		final List<VirtualAddress> list = baseMapper.load(model.getChain(), project.getId(), project.getMode());
+		final List<VirtualAddress> list = baseMapper.load(model.getChain(), project.getId());
 		// 乱序
 		if (list.size() > SHUFFLE_MIN) {
 			Collections.shuffle(list);
@@ -66,7 +65,7 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 		for (VirtualAddressCreateDTO.Va address : dto.getList()) {
 			address.setSuccess(false);
 			final VirtualAddress va = new VirtualAddress().setAddress(address.getAddress()).setChain(dto.getChain())
-					.setMode(dto.getMode()).setProjectIds(dto.getIds());
+					.setProjectIds(dto.getIds());
 			if (!handler.valid(va)) {
 				address.setDesc("无效地址!");
 				continue;
@@ -93,11 +92,6 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 	}
 
 	@Override
-	public void mode(List<Integer> ids, VirtualAddressMode mode) {
-		baseMapper.mode(ids, mode);
-	}
-
-	@Override
 	public void project(List<Integer> ids, List<Integer> projectIds) {
 		baseMapper.project(ids, projectIds);
 	}
@@ -115,7 +109,6 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 		for (VirtualAddress address : list) {
 			address.setUsing(null);
 			address.setDisabled(null);
-			address.setMode(null);
 			address.setProjectIds(null);
 			try {
 				address.setUsdtAmount(handler.getBalance(address));

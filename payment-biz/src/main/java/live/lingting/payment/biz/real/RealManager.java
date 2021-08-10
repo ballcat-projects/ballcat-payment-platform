@@ -52,7 +52,9 @@ public class RealManager {
 			service.validateThirdTradeNo(pay, pay.getThirdPartTradeNo());
 		}
 		else {
-			model.setSubject(project.getMark() + " " + model.getSubject());
+			if (StringUtils.hasText(project.getMark())) {
+				model.setSubject(project.getMark() + " " + model.getSubject());
+			}
 		}
 
 		service.save(pay);

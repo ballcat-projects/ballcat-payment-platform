@@ -1,17 +1,14 @@
 package live.lingting.payment.biz.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 import live.lingting.payment.Page;
 import live.lingting.payment.biz.mybatis.WrappersX;
 import live.lingting.payment.entity.Project;
-import live.lingting.payment.enums.ProjectMode;
 import live.lingting.payment.enums.ProjectScope;
 
 /**
@@ -32,9 +29,7 @@ public interface ProjectMapper extends BaseMapper<Project> {
 				// key
 				.eqIfPresent(Project::getApiKey, project.getApiKey())
 				// 禁用
-				.eqIfPresent(Project::getDisabled, project.getDisabled())
-				// 模式
-				.eqIfPresent(Project::getMode, project.getMode());
+				.eqIfPresent(Project::getDisabled, project.getDisabled());
 	}
 
 	/**
@@ -50,25 +45,12 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	}
 
 	/**
-	 * 更新项目模式
-	 * @param ids 项目
-	 * @param mode 新模式
-	 * @author lingting 2021-07-07 10:15
-	 */
-	default void mode(List<Integer> ids, ProjectMode mode) {
-		final LambdaUpdateWrapper<Project> wrapper = Wrappers.<Project>lambdaUpdate().in(Project::getId, ids)
-				.set(Project::getMode, mode);
-
-		update(null, wrapper);
-	}
-
-	/**
 	 * 更新项目权限
 	 * @param ids id
 	 * @param scopes 新权限
 	 * @author lingting 2021-07-16 16:25
 	 */
-	@Update("UPDATE project p SET p.scope=#{scopes,typeHandler=live.lingting.entity.Project$ScopeTypeHandler} WHERE p"
+	@Update("UPDATE lingting_payment_project p SET p.scope=#{scopes,typeHandler=live.lingting.entity.Project$ScopeTypeHandler} WHERE p"
 			+ ".id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
 	void scope(@Param("ids") List<Integer> ids, @Param("scopes") List<ProjectScope> scopes);
 

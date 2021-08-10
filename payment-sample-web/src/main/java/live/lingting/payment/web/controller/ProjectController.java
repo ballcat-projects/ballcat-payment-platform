@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import live.lingting.payment.Page;
 import live.lingting.payment.biz.service.ProjectHistoryService;
 import live.lingting.payment.biz.service.ProjectService;
-import live.lingting.payment.dto.ProjectModeDTO;
 import live.lingting.payment.dto.ProjectScopeDTO;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.entity.ProjectHistory;
@@ -59,13 +58,6 @@ public class ProjectController {
 	@PreAuthorize("@per.hasPermission('project:edit')")
 	public R<?> disabled(@PathVariable Integer id, @PathVariable Boolean disabled) {
 		service.disabled(id, disabled, SecurityUtils.getSysUser().getUserId());
-		return R.ok();
-	}
-
-	@PatchMapping("set/mode")
-	@PreAuthorize("@per.hasPermission('project:edit')")
-	public R<?> mode(@Validated @RequestBody ProjectModeDTO dto) {
-		service.mode(dto.getIds(), dto.getMode());
 		return R.ok();
 	}
 

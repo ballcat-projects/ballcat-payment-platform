@@ -10,7 +10,6 @@ import live.lingting.payment.biz.service.ProjectHistoryService;
 import live.lingting.payment.biz.service.ProjectService;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.entity.ProjectHistory;
-import live.lingting.payment.enums.ProjectMode;
 import live.lingting.payment.enums.ProjectScope;
 import live.lingting.payment.enums.ResponseCode;
 import live.lingting.payment.exception.PaymentException;
@@ -53,11 +52,6 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 		}
 		ProjectHistory history = ProjectHistory.of(project, userId);
 		update(history, project.setDisabled(disabled));
-	}
-
-	@Override
-	public void mode(List<Integer> ids, ProjectMode mode) {
-		baseMapper.mode(ids, mode);
 	}
 
 	@Override
