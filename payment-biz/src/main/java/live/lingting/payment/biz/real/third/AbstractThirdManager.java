@@ -51,7 +51,6 @@ public abstract class AbstractThirdManager<T> {
 
 	/**
 	 * 获取第三方
-	 *
 	 * @return live.lingting.payment.sdk.enums.ThirdPart
 	 * @author lingting 2021-08-10 11:05
 	 */
@@ -59,7 +58,6 @@ public abstract class AbstractThirdManager<T> {
 
 	/**
 	 * 从支付配置中转换
-	 *
 	 * @param config 支付配置
 	 * @return T
 	 * @author lingting 2021-08-10 11:09

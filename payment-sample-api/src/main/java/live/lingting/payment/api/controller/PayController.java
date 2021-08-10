@@ -50,7 +50,8 @@ public class PayController {
 	}
 
 	@PostMapping("virtual")
-	public R<MixVirtualPayResponse.Data> virtual(@RequestBody MixVirtualPayModel model) throws MixException, PaymentException {
+	public R<MixVirtualPayResponse.Data> virtual(@RequestBody MixVirtualPayModel model)
+			throws MixException, PaymentException {
 		model.valid();
 		final Project project = SecurityUtils.getProject();
 		if (project == null || !project.getScope().contains(ProjectScope.get(model))) {
@@ -68,7 +69,8 @@ public class PayController {
 	}
 
 	@PostMapping("virtual/retry")
-	public R<MixVirtualRetryResponse.Data> virtualRetry(@RequestBody MixVirtualRetryModel model) throws MixException, PaymentException {
+	public R<MixVirtualRetryResponse.Data> virtualRetry(@RequestBody MixVirtualRetryModel model)
+			throws MixException, PaymentException {
 		model.valid();
 		return R.ok(virtualManager.retry(model));
 	}

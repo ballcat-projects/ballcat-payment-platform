@@ -12,7 +12,6 @@ public interface PayConfigService extends IService<PayConfig> {
 
 	/**
 	 * 获取所有指定第三方的支付配置
-	 *
 	 * @param third 第三方
 	 * @return java.util.List<live.lingting.payment.entity.PayConfig>
 	 * @author lingting 2021-08-10 11:15

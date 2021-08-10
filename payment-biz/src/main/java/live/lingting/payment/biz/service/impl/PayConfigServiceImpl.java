@@ -18,8 +18,7 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 
 	@Override
 	public List<PayConfig> listByThird(ThirdPart third) {
-		LambdaQueryWrapperX<PayConfig> wrapper = WrappersX.<PayConfig>lambdaQueryX().eq(PayConfig::getThirdPart,
-				third);
+		LambdaQueryWrapperX<PayConfig> wrapper = WrappersX.<PayConfig>lambdaQueryX().eq(PayConfig::getThirdPart, third);
 		return list(wrapper);
 	}
 

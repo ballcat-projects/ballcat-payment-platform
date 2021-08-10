@@ -1,5 +1,11 @@
 package live.lingting.payment.sample.config;
 
+import static live.lingting.payment.constant.PaymentConfigConstants.PAY_EMPTY_INFO_TIMEOUT_DEFAULT;
+import static live.lingting.payment.constant.PaymentConfigConstants.PAY_FAIL_TIMEOUT_DEFAULT;
+import static live.lingting.payment.constant.PaymentConfigConstants.PAY_INFO_CREATE_TIMEOUT_DEFAULT;
+import static live.lingting.payment.constant.PaymentConfigConstants.PAY_RETRY_TIMEOUT_DEFAULT;
+import static live.lingting.payment.constant.PaymentConfigConstants.REAL_EXPIRE_TIMEOUT_DEFAULT;
+import static live.lingting.payment.constant.PaymentConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
 import static live.lingting.payment.sample.constant.SystemConfigConstants.PAY_EMPTY_INFO_TIMEOUT;
 import static live.lingting.payment.sample.constant.SystemConfigConstants.PAY_FAIL_TIMEOUT;
 import static live.lingting.payment.sample.constant.SystemConfigConstants.PAY_INFO_CREATE_TIMEOUT;
@@ -8,20 +14,14 @@ import static live.lingting.payment.sample.constant.SystemConfigConstants.REAL_E
 import static live.lingting.payment.sample.constant.SystemConfigConstants.TEST;
 import static live.lingting.payment.sample.constant.SystemConfigConstants.TEST_DEFAULT;
 import static live.lingting.payment.sample.constant.SystemConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT;
-import static live.lingting.payment.constant.PaymentConfigConstants.PAY_EMPTY_INFO_TIMEOUT_DEFAULT;
-import static live.lingting.payment.constant.PaymentConfigConstants.PAY_FAIL_TIMEOUT_DEFAULT;
-import static live.lingting.payment.constant.PaymentConfigConstants.PAY_INFO_CREATE_TIMEOUT_DEFAULT;
-import static live.lingting.payment.constant.PaymentConfigConstants.PAY_RETRY_TIMEOUT_DEFAULT;
-import static live.lingting.payment.constant.PaymentConfigConstants.REAL_EXPIRE_TIMEOUT_DEFAULT;
-import static live.lingting.payment.constant.PaymentConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
 
 import cn.hutool.core.convert.Convert;
 import com.hccake.ballcat.system.service.SysConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
-import live.lingting.payment.sample.constant.SystemConfigConstants;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.util.SpringUtils;
+import live.lingting.payment.sample.constant.SystemConfigConstants;
 
 /**
  * @author lingting 2021/6/18 9:39
