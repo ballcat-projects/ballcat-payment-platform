@@ -1,11 +1,13 @@
 package live.lingting.payment.biz.config;
 
+import static live.lingting.payment.constant.PaymentConfigConstants.ALI_NOTIFY_URL;
 import static live.lingting.payment.constant.PaymentConfigConstants.PAY_EMPTY_INFO_TIMEOUT_DEFAULT;
 import static live.lingting.payment.constant.PaymentConfigConstants.PAY_FAIL_TIMEOUT_DEFAULT;
 import static live.lingting.payment.constant.PaymentConfigConstants.PAY_INFO_CREATE_TIMEOUT_DEFAULT;
 import static live.lingting.payment.constant.PaymentConfigConstants.PAY_RETRY_TIMEOUT_DEFAULT;
 import static live.lingting.payment.constant.PaymentConfigConstants.REAL_EXPIRE_TIMEOUT_DEFAULT;
 import static live.lingting.payment.constant.PaymentConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
+import static live.lingting.payment.constant.PaymentConfigConstants.WX_NOTIFY_URL;
 
 /**
  * @author lingting 2021/6/18 9:39
@@ -82,6 +84,24 @@ public class PaymentConfig {
 	 */
 	public boolean isTest() {
 		return false;
+	}
+
+	/**
+	 * 获取微信通知地址
+	 *
+	 * @author lingting 2021-08-10 10:04
+	 */
+	public String getWxNotifyUrl() {
+		return WX_NOTIFY_URL;
+	}
+
+	/**
+	 * 获取支付宝通知地址
+	 *
+	 * @author lingting 2021-08-10 10:04
+	 */
+	public String getAliNotifyUrl() {
+		return ALI_NOTIFY_URL;
 	}
 
 }

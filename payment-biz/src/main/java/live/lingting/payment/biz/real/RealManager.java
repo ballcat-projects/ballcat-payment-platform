@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import live.lingting.payment.ali.AliPay;
 import live.lingting.payment.ali.constants.AliPayConstant;
+import live.lingting.payment.biz.real.third.AliManager;
+import live.lingting.payment.biz.real.third.WxManager;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.entity.Project;
@@ -31,9 +33,9 @@ public class RealManager {
 
 	private final PayService service;
 
-	private final AliPay aliPay;
+	private final AliManager aliManager;
 
-	private final WxPay wxPay;
+	private final WxManager wxManager;
 
 	@Transactional(rollbackFor = Exception.class)
 	public MixRealPayResponse.Data pay(Project project, MixRealPayModel model)
@@ -68,7 +70,7 @@ public class RealManager {
 		MixRealPayResponse.Data data = new MixRealPayResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
 		if (model.getMode().equals(Mode.QR)) {
-			final AlipayTradePrecreateResponse qrPay = aliPay.qrPay(pay.getTradeNo(), pay.getAmount(),
+			final AlipayTradePrecreateResponse qrPay = getAliPay(model).qrPay(pay.getTradeNo(), pay.getAmount(),
 					model.getSubject());
 			if (qrPay.getCode().equals(AliPayConstant.CODE_SUCCESS)) {
 				data.setQr(qrPay.getQrCode());
@@ -90,7 +92,8 @@ public class RealManager {
 		MixRealPayResponse.Data data = new MixRealPayResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
 		if (model.getMode().equals(Mode.QR)) {
-			final WxPayResponse nativePay = wxPay.nativePay(pay.getTradeNo(), model.getAmount(), model.getSubject());
+			final WxPayResponse nativePay = getWxPay(model).nativePay(pay.getTradeNo(), model.getAmount(),
+					model.getSubject());
 			if (nativePay.getReturnCode().equals(live.lingting.payment.wx.enums.ResponseCode.SUCCESS)
 					&& nativePay.getResultCode().equals(live.lingting.payment.wx.enums.ResponseCode.SUCCESS)) {
 				data.setQr(nativePay.getCodeUrl());
@@ -110,6 +113,14 @@ public class RealManager {
 		}
 
 		return data;
+	}
+
+	private AliPay getAliPay(MixRealPayModel model) throws PaymentException {
+		return aliManager.get(model.getMark());
+	}
+
+	private WxPay getWxPay(MixRealPayModel model) throws PaymentException {
+		return wxManager.get(model.getMark());
 	}
 
 }

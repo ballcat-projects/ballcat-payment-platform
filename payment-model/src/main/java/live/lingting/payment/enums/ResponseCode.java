@@ -98,6 +98,10 @@ public enum ResponseCode {
 	 * 生成支付信息异常!
 	 */
 	ABNORMAL_PAYMENT_GENERATED(233017, "生成支付信息异常! 详细信息: {}"),
+	/**
+	 * 未找到指定支付配置!
+	 */
+	PAYMENT_CONFIG_NOT_FOUND(233018, "未找到指定支付配置!"),
 
 	;
 

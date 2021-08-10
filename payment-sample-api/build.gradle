@@ -15,7 +15,6 @@ dependencies {
     implementation 'com.hccake:ballcat-spring-boot-starter-log:0.1.0'
     implementation 'com.hccake:ballcat-oauth-biz:0.1.0'
     implementation 'com.hccake:ballcat-system-biz:0.1.0'
-    implementation 'com.hccake:ballcat-log-biz:0.1.0'
     implementation 'mysql:mysql-connector-java'
     implementation 'com.baomidou:mybatis-plus-boot-starter'
     implementation 'de.codecentric:spring-boot-admin-starter-client'

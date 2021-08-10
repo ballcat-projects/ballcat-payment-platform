@@ -20,4 +20,8 @@ public class PaymentConfigConstants {
 
 	public static final Long REAL_EXPIRE_TIMEOUT_DEFAULT = 1440L;
 
+	public static final String WX_NOTIFY_URL = "http://sample.com/callback/wx";
+
+	public static final String ALI_NOTIFY_URL = "http://sample.com/callback/ali";
+
 }

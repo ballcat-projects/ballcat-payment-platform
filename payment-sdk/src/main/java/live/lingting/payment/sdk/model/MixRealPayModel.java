@@ -30,6 +30,11 @@ public class MixRealPayModel extends MixModel {
 
 	private ThirdPart thirdPart;
 
+	/**
+	 * 支付配置标识
+	 */
+	private String mark;
+
 	private Mode mode;
 
 	private Currency currency;
@@ -51,6 +56,10 @@ public class MixRealPayModel extends MixModel {
 		}
 		else if (!StringUtils.hasText(getProjectTradeNo())) {
 			msg = "项目交易号不能为空";
+		}
+		else if (!StringUtils.hasText(getMark()))
+		{
+			msg="支付配置标识不能为空";
 		}
 		else if (Mode.QR.equals(getMode())) {
 			if (getAmount() == null || getAmount().compareTo(BigDecimal.ZERO) < 1) {
