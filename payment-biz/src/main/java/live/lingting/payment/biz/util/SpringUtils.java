@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * @author lingting 2021/4/9 14:27
  */
-@Component
+@Component("live.lingting.payment.biz.util.SpringUtils")
 public class SpringUtils implements ApplicationContextAware {
 
 	@Setter

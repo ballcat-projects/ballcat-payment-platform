@@ -34,7 +34,7 @@ import live.lingting.payment.constant.TableConstants;
 public class ApiConfiguration {
 
 	@Bean
-	@DependsOn("springUtils")
+	@DependsOn("live.lingting.payment.biz.util.SpringUtils")
 	public FilterRegistrationBean<SignFilter> signFilterRegistrationBean()
 			throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 		final Class<SignFilter> sc = SignFilter.class;
@@ -56,7 +56,7 @@ public class ApiConfiguration {
 	}
 
 	@Bean
-	@DependsOn("springUtils")
+	@DependsOn("live.lingting.payment.biz.util.SpringUtils")
 	public FilterRegistrationBean<LogFilter> logFilterFilterRegistrationBean()
 			throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 		final Class<LogFilter> sc = LogFilter.class;
