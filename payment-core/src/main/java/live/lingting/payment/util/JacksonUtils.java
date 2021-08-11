@@ -22,6 +22,8 @@ public class JacksonUtils {
 	static {
 		// 序列化时忽略未知属性
 		MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		// 单值元素可以被设置成 array, 防止处理 ["a"] 为 List<String> 时报错
+		MAPPER.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 		// 时间解析器
 		MAPPER.registerModule(new JavaTimeModule());
 		if (ClassUtils.isPresent(JSON_READ_FEATURE_CLASS, JacksonUtils.class.getClassLoader())) {
