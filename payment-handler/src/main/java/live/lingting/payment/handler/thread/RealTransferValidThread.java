@@ -9,14 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import live.lingting.payment.ali.AliPay;
 import live.lingting.payment.ali.domain.AliPayQuery;
 import live.lingting.payment.ali.enums.TradeStatus;
 import live.lingting.payment.biz.config.PaymentConfig;
+import live.lingting.payment.biz.real.third.AliManager;
+import live.lingting.payment.biz.real.third.WxManager;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.sdk.enums.ThirdPart;
-import live.lingting.payment.wx.WxPay;
 
 /**
  * @author lingting 2021/7/14 15:38
@@ -28,9 +28,9 @@ public class RealTransferValidThread extends AbstractThread<Pay> {
 
 	private final PayService service;
 
-	private final AliPay aliPay;
+	private final AliManager aliManager;
 
-	private final WxPay wxPay;
+	private final WxManager wxManager;
 
 	private final PaymentConfig config;
 
@@ -46,7 +46,7 @@ public class RealTransferValidThread extends AbstractThread<Pay> {
 		if (isAli) {
 			AliPayQuery query;
 			try {
-				query = aliPay.query(null, pay.getThirdPartTradeNo());
+				query = aliManager.get(pay.getConfigMark()).query(null, pay.getThirdPartTradeNo());
 			}
 			catch (AlipayApiException e) {
 				log.error("查询交易时发生异常! tradeNo: {}", pay.getTradeNo(), e);
