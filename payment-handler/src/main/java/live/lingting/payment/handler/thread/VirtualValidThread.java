@@ -43,7 +43,15 @@ public class VirtualValidThread extends AbstractThread<Pay> {
 			// 限制 hash 不为空
 			.ne(Pay::getThirdPartTradeNo, "")
 			// 状态为等待
-			.eq(Pay::getStatus, PayStatus.WAIT);
+			.eq(Pay::getStatus, PayStatus.WAIT)
+			// 链不为空
+			.ne(Pay::getChain, "")
+			// 收款地址不为空
+			.ne(Pay::getAddress, "")
+			// 第三方为空
+			.eq(Pay::getThirdPart, "")
+			// 支付模式为空
+			.eq(Pay::getMode, "");
 
 	@Override
 	public List<Pay> listData() {
