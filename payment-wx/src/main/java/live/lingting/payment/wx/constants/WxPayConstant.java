@@ -1,10 +1,12 @@
 package live.lingting.payment.wx.constants;
 
 import java.math.BigDecimal;
+import lombok.experimental.UtilityClass;
 
 /**
  * @author lingting 2021/1/26 16:15
  */
+@UtilityClass
 public class WxPayConstant {
 
 	/**
@@ -25,13 +27,16 @@ public class WxPayConstant {
 	/**
 	 * 回调成功返回值
 	 */
-	public static String CALLBACK_SUCCESS = "<xml>\n" + "  <return_code><![CDATA[SUCCESS]]></return_code>\n"
-			+ "  <return_msg><![CDATA[OK]]></return_msg>\n" + "</xml>";
+	public static final String CALLBACK_SUCCESS = callback("OK");
 
 	/**
 	 * 回调验签失败返回值
 	 */
-	public static String CALLBACK_SIGN_ERROR = "<xml>\n" + "  <return_code><![CDATA[FAIL]]></return_code>\n"
-			+ "  <return_msg><![CDATA[签名异常]]></return_msg>\n" + "</xml>";
+	public static final String CALLBACK_SIGN_ERROR = callback("签名异常");
+
+	public static String callback(String msg) {
+		return "<xml>\n" + "  <return_code><![CDATA[FAIL]]></return_code>\n" + "  <return_msg><![CDATA[" + msg
+				+ "]]></return_msg>\n" + "</xml>";
+	}
 
 }
