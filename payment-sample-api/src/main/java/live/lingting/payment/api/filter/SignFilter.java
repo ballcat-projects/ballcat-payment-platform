@@ -31,7 +31,7 @@ import live.lingting.payment.biz.Redis;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.ProjectService;
 import live.lingting.payment.entity.Project;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sdk.constant.SdkConstants;
 import live.lingting.payment.sdk.util.MixUtils;
 import live.lingting.payment.sdk.util.StreamUtils;

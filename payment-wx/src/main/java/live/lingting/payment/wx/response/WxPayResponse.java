@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.wx.enums.ResponseCode;
 import live.lingting.payment.wx.enums.TradeType;
 

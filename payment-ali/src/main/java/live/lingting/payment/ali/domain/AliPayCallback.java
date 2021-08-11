@@ -14,7 +14,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.Accessors;
 import live.lingting.payment.ali.AliPay;
 import live.lingting.payment.ali.enums.TradeStatus;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 
 /**
  * @author lingting 2021/1/26 13:31

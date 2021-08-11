@@ -19,11 +19,8 @@ public class AliManager extends AbstractThirdManager<AliPay> {
 
 	@Override
 	public AliPay convertFrom(PayConfig config) {
-		AliPay pay = new AliPay(AliPayConstant.SERVER_URL_PROD, config.getAliAppId(), config.getAliPrivateKey(),
+		return new AliPay(AliPayConstant.SERVER_URL_PROD, config.getAliAppId(), config.getAliPrivateKey(),
 				config.getAliFormat(), config.getAliCharset(), config.getAliPayPublicKey(), config.getAliSignType());
-
-		pay.setNotifyUrl(paymentConfig.getAliNotifyUrl());
-		return pay;
 	}
 
 }

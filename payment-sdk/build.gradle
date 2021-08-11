@@ -1,7 +1,7 @@
 description 'API 的 SDK'
 
 dependencies {
-    implementation project(':payment-http')
+    implementation project(':payment-core')
     implementation 'org.springframework:spring-core'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
 }

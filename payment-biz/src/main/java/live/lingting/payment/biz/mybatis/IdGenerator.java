@@ -12,7 +12,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import live.lingting.payment.entity.Pay;
-import live.lingting.payment.http.utils.ClassUtils;
+import live.lingting.payment.util.ClassUtils;
 
 /**
  * 自定义主键生成

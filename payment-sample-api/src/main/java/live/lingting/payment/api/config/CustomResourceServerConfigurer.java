@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 
 /**
  * @author Hccake

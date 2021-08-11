@@ -7,7 +7,7 @@ dependencies {
     implementation project(':payment-handler')
     implementation project(':payment-wx')
     implementation project(':payment-ali')
-    implementation project(':payment-http')
+    implementation project(':payment-core')
     implementation 'com.alipay.sdk:alipay-sdk-java'
     implementation project(':payment-sample-model')
     implementation 'com.hccake:ballcat-spring-boot-starter-datascope:0.1.0'

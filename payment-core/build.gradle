@@ -1,4 +1,4 @@
-description 'http 以及其他基础方法'
+description '核心'
 
 dependencies {
     implementation 'org.springframework:spring-core'

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import live.lingting.payment.http.HttpHeader;
 import live.lingting.payment.http.HttpPost;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sdk.constant.SdkConstants;
 import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.sdk.model.MixModel;

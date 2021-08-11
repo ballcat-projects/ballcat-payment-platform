@@ -11,12 +11,13 @@ import live.lingting.payment.biz.service.PayConfigService;
 import live.lingting.payment.entity.PayConfig;
 import live.lingting.payment.enums.ResponseCode;
 import live.lingting.payment.exception.PaymentException;
+import live.lingting.payment.pay.ThirdPay;
 import live.lingting.payment.sdk.enums.ThirdPart;
 
 /**
  * @author lingting 2021/8/10 10:11
  */
-public abstract class AbstractThirdManager<T> {
+public abstract class AbstractThirdManager<T extends ThirdPay> {
 
 	@Autowired
 	protected PayConfigService service;
@@ -46,6 +47,7 @@ public abstract class AbstractThirdManager<T> {
 		if (t == null) {
 			throw new PaymentException(ResponseCode.PAYMENT_CONFIG_NOT_FOUND);
 		}
+		t.setNotifyUrl(paymentConfig.getNotifyUrl(getThird()));
 		return t;
 	}
 

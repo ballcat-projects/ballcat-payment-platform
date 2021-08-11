@@ -14,7 +14,7 @@ import live.lingting.payment.ali.enums.TradeStatus;
 import live.lingting.payment.api.log.LogFilter;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.Pay;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sdk.enums.PayStatus;
 import live.lingting.payment.wx.WxPay;
 import live.lingting.payment.wx.constants.WxPayConstant;

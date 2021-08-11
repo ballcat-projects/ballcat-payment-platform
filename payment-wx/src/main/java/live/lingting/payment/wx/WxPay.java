@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
 import lombok.SneakyThrows;
+import live.lingting.payment.pay.ThirdPay;
 import live.lingting.payment.wx.constants.WxPayConstant;
 import live.lingting.payment.wx.domain.DefaultWxDomain;
 import live.lingting.payment.wx.domain.WxDomain;
@@ -25,7 +26,7 @@ import live.lingting.payment.wx.utils.WxPayUtil;
  * @author lingting 2021/1/26 15:54
  */
 @Data
-public class WxPay {
+public class WxPay implements ThirdPay {
 
 	private final String appId;
 

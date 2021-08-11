@@ -18,9 +18,7 @@ public class WxManager extends AbstractThirdManager<WxPay> {
 
 	@Override
 	public WxPay convertFrom(PayConfig config) {
-		WxPay pay = new WxPay(config.getWxAppId(), config.getWxMchId(), config.getWxMchKey(), false);
-		pay.setNotifyUrl(paymentConfig.getWxNotifyUrl());
-		return pay;
+		return new WxPay(config.getWxAppId(), config.getWxMchId(), config.getWxMchKey(), false);
 	}
 
 }

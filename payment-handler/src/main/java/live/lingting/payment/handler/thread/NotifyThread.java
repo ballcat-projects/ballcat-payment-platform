@@ -20,7 +20,7 @@ import live.lingting.payment.entity.Pay;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.http.HttpPost;
 import live.lingting.payment.http.HttpResponse;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sdk.constant.SdkConstants;
 import live.lingting.payment.sdk.domain.MixCallback;
 import live.lingting.payment.sdk.enums.NotifyStatus;

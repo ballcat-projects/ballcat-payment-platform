@@ -7,7 +7,7 @@ import java.util.Map;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.wx.WxPay;
 import live.lingting.payment.wx.enums.ResponseCode;
 import live.lingting.payment.wx.enums.TradeType;

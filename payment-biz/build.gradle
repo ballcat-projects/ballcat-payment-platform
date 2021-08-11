@@ -5,7 +5,7 @@ dependencies {
     implementation project(':payment-sdk')
     implementation project(':payment-wx')
     implementation project(':payment-ali')
-    implementation project(':payment-http')
+    implementation project(':payment-core')
     implementation 'com.baomidou:mybatis-plus-extension'
     implementation 'com.alipay.sdk:alipay-sdk-java'
     implementation 'live.lingting:virtual-currency-all'

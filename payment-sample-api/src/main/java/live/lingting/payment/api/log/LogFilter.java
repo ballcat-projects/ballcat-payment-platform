@@ -26,7 +26,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import live.lingting.payment.api.util.SecurityUtils;
 import live.lingting.payment.api.util.UriUtils;
 import live.lingting.payment.entity.Project;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sample.entity.ApiAccessLog;
 
 /**

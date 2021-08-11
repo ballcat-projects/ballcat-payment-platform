@@ -1,7 +1,7 @@
 description '微信支付处理'
 
 dependencies {
-    implementation project(':payment-http')
+    implementation project(':payment-core')
     implementation 'org.slf4j:slf4j-api'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }

@@ -1,4 +1,4 @@
-package live.lingting.payment.http.utils;
+package live.lingting.payment.util;
 
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Type;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import live.lingting.payment.jackson.JavaTimeModule;
 
 /**
  * @author lingting 2021/6/9 14:28
@@ -46,7 +47,7 @@ public class JacksonUtils {
 
 	@SneakyThrows
 	public static <T> T toObj(String json, TypeReference<T> t) {
-		return MAPPER.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<T>() {
+		return MAPPER.readValue(json, new TypeReference<T>() {
 			@Override
 			public Type getType() {
 				return t.getType();

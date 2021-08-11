@@ -26,6 +26,7 @@ import java.util.Map;
 import lombok.Data;
 import live.lingting.payment.ali.constants.AliPayConstant;
 import live.lingting.payment.ali.domain.AliPayQuery;
+import live.lingting.payment.pay.ThirdPay;
 
 /**
  * api文档: https://opendocs.alipay.com/apis.
@@ -35,7 +36,7 @@ import live.lingting.payment.ali.domain.AliPayQuery;
  * @author lingting 2021/1/25 9:42
  */
 @Data
-public class AliPay {
+public class AliPay implements ThirdPay {
 
 	private final String serverUrl;
 

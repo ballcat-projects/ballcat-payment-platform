@@ -8,6 +8,10 @@ import static live.lingting.payment.constant.PaymentConfigConstants.PAY_RETRY_TI
 import static live.lingting.payment.constant.PaymentConfigConstants.REAL_EXPIRE_TIMEOUT_DEFAULT;
 import static live.lingting.payment.constant.PaymentConfigConstants.VIRTUAL_SUBMIT_HASH_TIMEOUT_DEFAULT;
 import static live.lingting.payment.constant.PaymentConfigConstants.WX_NOTIFY_URL;
+import static live.lingting.payment.enums.ResponseCode.UNKNOWN_THIRD_PARTY;
+
+import live.lingting.payment.exception.PaymentException;
+import live.lingting.payment.sdk.enums.ThirdPart;
 
 /**
  * @author lingting 2021/6/18 9:39
@@ -87,21 +91,18 @@ public class PaymentConfig {
 	}
 
 	/**
-	 * 获取微信通知地址
-	 *
-	 * @author lingting 2021-08-10 10:04
+	 * 获取通知地址
+	 * @author lingting 2021-08-11 14:00
 	 */
-	public String getWxNotifyUrl() {
-		return WX_NOTIFY_URL;
-	}
-
-	/**
-	 * 获取支付宝通知地址
-	 *
-	 * @author lingting 2021-08-10 10:04
-	 */
-	public String getAliNotifyUrl() {
-		return ALI_NOTIFY_URL;
+	public String getNotifyUrl(ThirdPart tp) throws PaymentException {
+		switch (tp) {
+		case WX:
+			return WX_NOTIFY_URL;
+		case ALI:
+			return ALI_NOTIFY_URL;
+		default:
+			throw new PaymentException(UNKNOWN_THIRD_PARTY);
+		}
 	}
 
 }

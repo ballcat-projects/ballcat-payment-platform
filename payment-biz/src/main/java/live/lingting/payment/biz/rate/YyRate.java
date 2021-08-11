@@ -11,7 +11,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import live.lingting.payment.http.HttpGet;
 import live.lingting.payment.http.HttpResponse;
-import live.lingting.payment.http.utils.JacksonUtils;
+import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sdk.enums.Currency;
 
 /**
