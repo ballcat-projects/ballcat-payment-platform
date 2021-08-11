@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.PayConfigService;
 import live.lingting.payment.entity.PayConfig;
@@ -29,17 +28,17 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 
 	@PostConstruct
 	public void init() {
+		reload();
+	}
+
+	public void reload() {
 		List<PayConfig> list = service.listByThird(getThird());
-
-		if (CollectionUtils.isEmpty(list)) {
-			return;
-		}
-		cache = new ConcurrentHashMap<>(list.size());
-
+		Map<String, T> newCache = new ConcurrentHashMap<>(list.size());
 		for (PayConfig config : list) {
 			T t = convertFrom(config);
-			cache.put(config.getMark(), t);
+			newCache.put(config.getMark(), t);
 		}
+		cache = newCache;
 	}
 
 	public T get(String mark) throws PaymentException {
