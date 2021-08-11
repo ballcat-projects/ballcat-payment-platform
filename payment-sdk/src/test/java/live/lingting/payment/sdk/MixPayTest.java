@@ -33,21 +33,21 @@ class MixPayTest {
 
 	@BeforeAll
 	public static void init() {
-		mixPay = new MixPay("http://192.168.1.5:23302", "phwzykzyqijanz2q", "c63ff87a2381449985d7afbc5c84f6fb",
+		mixPay = new MixPay("http://192.168.1.237:18002", "phwzykzyqijanz2q", "c63ff87a2381449985d7afbc5c84f6fb",
 				"http://127.0.0.1:23302/test");
 	}
 
 	@Test
 	void realQrPay() throws Exception {
 		final MixRealPayResponse response = mixPay.realQrPay(SNOWFLAKE.nextIdStr(), new BigDecimal("0.01"),
-				ThirdPart.ALI, Currency.CNY, "测试-支付平台");
+				ThirdPart.WX, Currency.CNY, "test", "测试-支付平台");
 		System.out.println(response.toString());
 	}
 
 	@Test
 	void realTransferPay() throws Exception {
 		final MixRealPayResponse response = mixPay.realTransferPay(SNOWFLAKE.nextIdStr(), "13123123123123",
-				ThirdPart.ALI, Currency.CNY, "测试-支付平台");
+				ThirdPart.ALI, Currency.CNY, "test", "测试-支付平台");
 		System.out.println(response.toString());
 	}
 

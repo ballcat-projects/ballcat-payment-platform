@@ -71,7 +71,7 @@ public class MixPay {
 	 * @author lingting 2021-07-14 17:29
 	 */
 	public MixRealPayResponse realQrPay(String projectTradeNo, BigDecimal amount, ThirdPart thirdPart,
-			Currency currency, String subject) throws MixException {
+			Currency currency, String mark, String subject) throws MixException {
 		MixRealPayModel model = new MixRealPayModel();
 		model.setProjectTradeNo(projectTradeNo);
 		model.setAmount(amount);
@@ -79,6 +79,7 @@ public class MixPay {
 		model.setCurrency(currency);
 		model.setSubject(subject);
 		model.setMode(Mode.QR);
+		model.setMark(mark);
 		return realPay(model);
 	}
 
@@ -88,7 +89,7 @@ public class MixPay {
 	 * @author lingting 2021-07-14 17:29
 	 */
 	public MixRealPayResponse realTransferPay(String projectTradeNo, String thirdPartTradeNo, ThirdPart thirdPart,
-			Currency currency, String subject) throws MixException {
+			Currency currency,String mark, String subject) throws MixException {
 		MixRealPayModel model = new MixRealPayModel();
 		model.setProjectTradeNo(projectTradeNo);
 		model.setThirdPartTradeNo(thirdPartTradeNo);
@@ -96,6 +97,7 @@ public class MixPay {
 		model.setCurrency(currency);
 		model.setSubject(subject);
 		model.setMode(Mode.TRANSFER);
+		model.setMark(mark);
 		return realPay(model);
 	}
 
