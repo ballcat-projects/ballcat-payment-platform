@@ -13,7 +13,7 @@ public class WxManager extends AbstractThirdManager<WxPay> {
 
 	@Override
 	public ThirdPart getThird() {
-		return ThirdPart.ALI;
+		return ThirdPart.WX;
 	}
 
 	@Override
