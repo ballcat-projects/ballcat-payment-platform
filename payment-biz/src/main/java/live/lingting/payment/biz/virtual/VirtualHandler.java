@@ -72,7 +72,7 @@ public class VirtualHandler {
 			return getService(pay.getChain()).getTransactionByHash(pay.getThirdPartTradeNo());
 		}
 		catch (Exception e) {
-			log.error("获取交易信息时异常! tradeNo: {}", pay.getTradeNo());
+			log.error("获取交易信息时异常! tradeNo: {}", pay.getTradeNo(), e);
 			return Optional.empty();
 		}
 	}
