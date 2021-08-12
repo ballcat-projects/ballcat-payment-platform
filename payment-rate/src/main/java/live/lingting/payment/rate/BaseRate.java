@@ -2,7 +2,6 @@ package live.lingting.payment.rate;
 
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
-import live.lingting.payment.sdk.enums.Currency;
 
 /**
  * @author lingting 2021/6/21 17:07
@@ -20,11 +19,11 @@ public interface BaseRate {
 	Long READ_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
 
 	/**
-	 * 获取指定货币汇率
-	 * @param currency 货币
+	 * 获取指定货币代码兑人民币汇率
+	 * @param code 货币代码
 	 * @return java.math.BigDecimal
 	 * @author lingting 2021-06-11 15:54
 	 */
-	BigDecimal get(Currency currency);
+	BigDecimal get(String code);
 
 }

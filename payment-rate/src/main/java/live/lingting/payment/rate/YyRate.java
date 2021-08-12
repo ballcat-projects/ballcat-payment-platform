@@ -37,17 +37,9 @@ public class YyRate implements BaseRate {
 	}
 
 	@Override
-	public BigDecimal get(Currency type) {
-		String code;
-		switch (type) {
-		case CNY:
+	public BigDecimal get(String code) {
+		if (Rate.CNY_CODE.equals(code)) {
 			return Rate.CNY_RATE;
-		case USDT:
-			code = "USD";
-			break;
-		default:
-			code = type.name();
-			break;
 		}
 
 		HttpGet http = HttpGet.of(URL + Req.of(code, Currency.CNY.name(), "1"));
