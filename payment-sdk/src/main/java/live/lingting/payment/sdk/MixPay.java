@@ -89,13 +89,12 @@ public class MixPay {
 	 * @author lingting 2021-07-14 17:29
 	 */
 	public MixRealPayResponse realTransferPay(String projectTradeNo, String thirdPartTradeNo, ThirdPart thirdPart,
-			Currency currency,String mark, String subject) throws MixException {
+			Currency currency, String mark) throws MixException {
 		MixRealPayModel model = new MixRealPayModel();
 		model.setProjectTradeNo(projectTradeNo);
 		model.setThirdPartTradeNo(thirdPartTradeNo);
 		model.setThirdPart(thirdPart);
 		model.setCurrency(currency);
-		model.setSubject(subject);
 		model.setMode(Mode.TRANSFER);
 		model.setMark(mark);
 		return realPay(model);

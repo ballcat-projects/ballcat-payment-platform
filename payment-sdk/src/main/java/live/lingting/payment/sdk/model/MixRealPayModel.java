@@ -48,10 +48,7 @@ public class MixRealPayModel extends MixModel {
 		validNotifyUrl();
 
 		String msg = "";
-		if (!StringUtils.hasText(getSubject())) {
-			msg = "商品信息不能为空!";
-		}
-		else if (!Currency.REAL_LIST.contains(getCurrency())) {
+		if (!Currency.REAL_LIST.contains(getCurrency())) {
 			msg = "暂不支持该货币: " + (getCurrency() == null ? "" : getCurrency().name());
 		}
 		else if (!StringUtils.hasText(getProjectTradeNo())) {

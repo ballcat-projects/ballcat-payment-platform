@@ -47,7 +47,7 @@ class MixPayTest {
 	@Test
 	void realTransferPay() throws Exception {
 		final MixRealPayResponse response = mixPay.realTransferPay(SNOWFLAKE.nextIdStr(), "13123123123123",
-				ThirdPart.ALI, Currency.CNY, "test", "测试-支付平台");
+				ThirdPart.ALI, Currency.CNY, "test");
 		System.out.println(response.toString());
 	}
 
