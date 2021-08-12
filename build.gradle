@@ -167,6 +167,7 @@ allprojects {
             dependency('org.springframework.security.oauth:spring-security-oauth2:2.3.8.RELEASE')
             dependency('live.lingting:virtual-currency-all:0.4.2')
             dependency('com.alipay.sdk:alipay-sdk-java:4.11.28.ALL')
+            dependency('com.google.code.findbugs:jsr305:3.0.2')
 
             dependency('org.springframework.boot:spring-boot-starter-web:' + VersionExtractor.forClass(DependencyManagementPluginAction.class)) {
                 exclude group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat'
