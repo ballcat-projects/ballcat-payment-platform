@@ -1,12 +1,12 @@
 description '处理支付信息'
 
 dependencies {
-    implementation project(':payment-biz')
-    implementation project(':payment-model')
+    implementation project(':payment-core')
     implementation project(':payment-sdk')
     implementation project(':payment-wx')
     implementation project(':payment-ali')
-    implementation project(':payment-core')
+    implementation project(':payment-model')
+    implementation project(':payment-biz')
     implementation 'com.alipay.sdk:alipay-sdk-java'
     implementation 'mysql:mysql-connector-java'
     implementation 'com.baomidou:mybatis-plus-boot-starter'

@@ -1,4 +1,4 @@
-package live.lingting.payment.biz.rate;
+package live.lingting.payment.rate;
 
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;

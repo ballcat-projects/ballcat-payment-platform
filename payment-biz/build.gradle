@@ -1,11 +1,12 @@
 description 'WEB和API的业务实现'
 
 dependencies {
-    implementation project(':payment-model')
+    implementation project(':payment-core')
     implementation project(':payment-sdk')
     implementation project(':payment-wx')
     implementation project(':payment-ali')
-    implementation project(':payment-core')
+    implementation project(':payment-rate')
+    implementation project(':payment-model')
     implementation 'com.baomidou:mybatis-plus-extension'
     implementation 'com.alipay.sdk:alipay-sdk-java'
     implementation 'live.lingting:virtual-currency-all'

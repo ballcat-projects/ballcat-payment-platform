@@ -1,0 +1,8 @@
+description '汇率实现'
+
+dependencies {
+    implementation project(':payment-core')
+    implementation project(':payment-sdk')
+    implementation project(':payment-model')
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+}

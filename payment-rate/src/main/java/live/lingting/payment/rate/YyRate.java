@@ -1,4 +1,4 @@
-package live.lingting.payment.biz.rate;
+package live.lingting.payment.rate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
@@ -11,8 +11,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import live.lingting.payment.http.HttpGet;
 import live.lingting.payment.http.HttpResponse;
-import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sdk.enums.Currency;
+import live.lingting.payment.util.JacksonUtils;
 
 /**
  * 阿里云购买的 易源数据 汇率查询api

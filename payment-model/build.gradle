@@ -1,8 +1,8 @@
 description '基础类'
 
 dependencies {
-    implementation project(':payment-sdk')
     implementation project(':payment-core')
+    implementation project(':payment-sdk')
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'io.springfox:springfox-boot-starter'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'

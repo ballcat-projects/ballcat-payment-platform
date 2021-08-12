@@ -1,13 +1,14 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    implementation project(':payment-biz')
-    implementation project(':payment-model')
+    implementation project(':payment-core')
     implementation project(':payment-sdk')
-    implementation project(':payment-handler')
     implementation project(':payment-wx')
     implementation project(':payment-ali')
-    implementation project(':payment-core')
+    implementation project(':payment-rate')
+    implementation project(':payment-model')
+    implementation project(':payment-handler')
+    implementation project(':payment-biz')
     implementation 'com.alipay.sdk:alipay-sdk-java'
     implementation project(':payment-sample-model')
     implementation 'com.hccake:ballcat-spring-boot-starter-datascope:0.1.0'
