@@ -32,7 +32,7 @@ public class WxPay implements ThirdPay {
 
 	private final String mchId;
 
-	private final String mckKey;
+	private final String mchKey;
 
 	private String notifyUrl;
 
@@ -48,11 +48,11 @@ public class WxPay implements ThirdPay {
 	 */
 	private WxDomain domain;
 
-	public WxPay(String appId, String mchId, String mckKey, boolean sandbox) {
-		this(appId, mchId, mckKey, sandbox, DefaultWxDomain.of(sandbox));
+	public WxPay(String appId, String mchId, String mchKey, boolean sandbox) {
+		this(appId, mchId, mchKey, sandbox, DefaultWxDomain.of(sandbox));
 	}
 
-	public WxPay(String appId, String mchId, String mckKey, boolean sandbox, WxDomain domain) {
+	public WxPay(String appId, String mchId, String mchKey, boolean sandbox, WxDomain domain) {
 		this.sandbox = sandbox;
 		this.domain = domain;
 		this.mchId = mchId;
@@ -60,10 +60,10 @@ public class WxPay implements ThirdPay {
 
 		// 沙箱环境初始化
 		if (sandbox) {
-			this.mckKey = domain.sandbox(this).getSandboxSignKey();
+			this.mchKey = domain.sandbox(this).getSandboxSignKey();
 		}
 		else {
-			this.mckKey = mckKey;
+			this.mchKey = mchKey;
 		}
 
 	}
@@ -183,7 +183,7 @@ public class WxPay implements ThirdPay {
 		// 设置签名类型; 沙箱使用 md5, 正式使用 hmac sha256
 		map.put(WxPayConstant.FIELD_SIGN_TYPE, sandbox ? SignType.MD5.getStr() : SignType.HMAC_SHA256.getStr());
 		// 签名
-		map.put(WxPayConstant.FIELD_SIGN, WxPayUtil.sign(map, mckKey));
+		map.put(WxPayConstant.FIELD_SIGN, WxPayUtil.sign(map, mchKey));
 
 		return domain.request(map, rs);
 	}
@@ -214,15 +214,15 @@ public class WxPay implements ThirdPay {
 
 		// 存在签名类型, 直接验签
 		if (params.containsKey(WxPayConstant.FIELD_SIGN_TYPE)) {
-			return WxPayUtil.sign(params, mckKey).equals(callback.getSign());
+			return WxPayUtil.sign(params, mchKey).equals(callback.getSign());
 		}
 
 		// 两种签名类型都试一次
-		if (WxPayUtil.sign(params, SignType.HMAC_SHA256, mckKey).equals(callback.getSign())) {
+		if (WxPayUtil.sign(params, SignType.HMAC_SHA256, mchKey).equals(callback.getSign())) {
 			return true;
 		}
 
-		return WxPayUtil.sign(params, SignType.MD5, mckKey).equals(callback.getSign());
+		return WxPayUtil.sign(params, SignType.MD5, mchKey).equals(callback.getSign());
 	}
 
 }

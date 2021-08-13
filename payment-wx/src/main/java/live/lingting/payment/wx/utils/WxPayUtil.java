@@ -134,19 +134,19 @@ public final class WxPayUtil {
 	/**
 	 * 签名
 	 * @param params 参数
-	 * @param mckKey 密钥
+	 * @param mchKey 密钥
 	 * @return java.lang.String 签名结果
 	 * @author lingting 2021-01-29 18:13
 	 */
 	@SneakyThrows
-	public static String sign(Map<String, String> params, String mckKey) {
+	public static String sign(Map<String, String> params, String mchKey) {
 		SignType st = SignType.of(params.get(WxPayConstant.FIELD_SIGN_TYPE));
 		Assert.isFalse(st == null, "签名类型不能为空!");
-		return sign(params, st, mckKey);
+		return sign(params, st, mchKey);
 	}
 
 	@SneakyThrows
-	public static String sign(Map<String, String> params, SignType type, String mckKey) {
+	public static String sign(Map<String, String> params, SignType type, String mchKey) {
 		String[] keyArray = params.keySet().toArray(new String[0]);
 		// 参数key排序
 		Arrays.sort(keyArray);
@@ -164,7 +164,7 @@ public final class WxPayUtil {
 				paramsStr.append(k).append("=").append(val.trim()).append("&");
 			}
 		}
-		paramsStr.append("key=").append(mckKey);
+		paramsStr.append("key=").append(mchKey);
 
 		// 签名后的字节
 		byte[] bytes;
@@ -174,7 +174,7 @@ public final class WxPayUtil {
 		}
 		else {
 			final Mac mac = Mac.getInstance("HmacSHA256");
-			SecretKeySpec sk = new SecretKeySpec(mckKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+			SecretKeySpec sk = new SecretKeySpec(mchKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
 			mac.init(sk);
 			bytes = mac.doFinal(paramsStr.toString().getBytes(StandardCharsets.UTF_8));
 		}

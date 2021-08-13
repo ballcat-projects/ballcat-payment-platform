@@ -74,7 +74,7 @@ public interface WxDomain {
 		// 设置签名类型
 		map.put(WxPayConstant.FIELD_SIGN_TYPE, SignType.MD5.getStr());
 		// 签名
-		map.put(WxPayConstant.FIELD_SIGN, WxPayUtil.sign(map, wxPay.getMckKey()));
+		map.put(WxPayConstant.FIELD_SIGN, WxPayUtil.sign(map, wxPay.getMchKey()));
 
 		return WxPayResponse.of(request(map, RequestSuffix.GETSIGNKEY));
 	}
