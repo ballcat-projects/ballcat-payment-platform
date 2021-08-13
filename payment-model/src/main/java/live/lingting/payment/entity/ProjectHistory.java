@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import lombok.experimental.Accessors;
  */
 @Getter
 @Setter
+@ApiModel("项目修改记录")
 @Accessors(chain = true)
 @TableName("lingting_payment_project_history")
 public class ProjectHistory {
@@ -27,20 +29,25 @@ public class ProjectHistory {
 	@ApiModelProperty("操作人")
 	private Integer userId;
 
+	@ApiModelProperty("项目id")
 	private Integer projectId;
 
 	/**
 	 * 项目名
 	 */
+	@ApiModelProperty("项目名")
 	private String name;
 
 	/**
 	 * 是否禁用
 	 */
+	@ApiModelProperty("是否禁用")
 	private Boolean disabled;
 
+	@ApiModelProperty("api key")
 	private String apiKey;
 
+	@ApiModelProperty("api security")
 	private String apiSecurity;
 
 	@TableField(fill = FieldFill.INSERT)

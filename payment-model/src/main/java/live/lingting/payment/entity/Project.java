@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ import live.lingting.payment.mybatis.AbstractJsonTypeHandler;
  */
 @Getter
 @Setter
+@ApiModel("项目")
 @Accessors(chain = true)
 @TableName(value = "lingting_payment_project", autoResultMap = true)
 public class Project implements Serializable {
@@ -30,30 +33,37 @@ public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
+	@ApiModelProperty("项目id")
 	private Integer id;
 
 	/**
 	 * 项目名
 	 */
+	@ApiModelProperty("项目名")
 	@Size(max = 50, message = "项目名最多使用50个字符!")
 	private String name;
 
 	/**
 	 * 是否禁用
 	 */
+	@ApiModelProperty("是否禁用")
 	private Boolean disabled;
 
+	@ApiModelProperty("api key")
 	private String apiKey;
 
+	@ApiModelProperty("api security")
 	private String apiSecurity;
 
-	@Size(max = 20, message = "项目标志最大为20个字符!")
+	@ApiModelProperty("项目标志")
 	@NotEmpty(message = "项目标志不能为空!")
+	@Size(max = 20, message = "项目标志最大为20个字符!")
 	private String mark;
 
 	/**
 	 * 项目权限
 	 */
+	@ApiModelProperty("项目权限")
 	@TableField(typeHandler = ScopeTypeHandler.class)
 	private Set<ProjectScope> scope;
 
