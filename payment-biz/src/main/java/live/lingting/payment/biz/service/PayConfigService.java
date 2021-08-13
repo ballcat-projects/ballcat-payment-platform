@@ -2,7 +2,9 @@ package live.lingting.payment.biz.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
+import live.lingting.payment.Page;
 import live.lingting.payment.entity.PayConfig;
+import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.ThirdPart;
 
 /**
@@ -17,5 +19,28 @@ public interface PayConfigService extends IService<PayConfig> {
 	 * @author lingting 2021-08-10 11:15
 	 */
 	List<PayConfig> listByThird(ThirdPart third);
+
+	/**
+	 * 分页查询
+	 * @param page 分页
+	 * @param qo 参数
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.PayConfig>
+	 * @author lingting 2021-08-13 15:16
+	 */
+	Page<PayConfig> list(Page<PayConfig> page, PayConfig qo);
+
+	/**
+	 * 新增支付配置
+	 * @param config 配置详情
+	 * @author lingting 2021-08-13 15:18
+	 */
+	void create(PayConfig config) throws PaymentException;
+
+	/**
+	 * 删除支付配置
+	 * @param id 支付配置id
+	 * @author lingting 2021-08-13 15:23
+	 */
+	void delete(Integer id);
 
 }

@@ -102,6 +102,10 @@ public enum ResponseCode {
 	 * 未找到指定支付配置!
 	 */
 	PAYMENT_CONFIG_NOT_FOUND(233018, "未找到指定支付配置!"),
+	/**
+	 * 支付关键配置缺失, 请检查!
+	 */
+	PAYMENT_CONFIG_ERROR(233019, "支付关键配置缺失, 请检查!"),
 
 	;
 

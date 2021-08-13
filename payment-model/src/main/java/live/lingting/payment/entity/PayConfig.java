@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -28,8 +30,10 @@ public class PayConfig {
 	 * 标识
 	 */
 	@ApiModelProperty("标识")
+	@NotEmpty(message = "支付配置标识不能为空!")
 	private String mark;
 
+	@NotNull(message = "请选择所属第三方!")
 	@ApiModelProperty("第三方")
 	private ThirdPart thirdPart;
 
