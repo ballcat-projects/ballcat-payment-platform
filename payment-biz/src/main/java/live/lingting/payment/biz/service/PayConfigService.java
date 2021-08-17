@@ -33,8 +33,17 @@ public interface PayConfigService extends IService<PayConfig> {
 	 * 新增支付配置
 	 * @param config 配置详情
 	 * @author lingting 2021-08-13 15:18
+	 * @throws PaymentException 异常
 	 */
 	void create(PayConfig config) throws PaymentException;
+
+	/**
+	 * 编辑支付配置
+	 * @param config 支付配置
+	 * @author lingting 2021-08-17 10:26
+	 * @throws PaymentException 异常
+	 */
+	void edit(PayConfig config) throws PaymentException;
 
 	/**
 	 * 删除支付配置

@@ -33,6 +33,27 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 
 	@Override
 	public void create(PayConfig config) throws PaymentException {
+		valid(config);
+		save(config);
+	}
+
+	@Override
+	public void edit(PayConfig config) throws PaymentException {
+		PayConfig oldConfig = getById(config.getId());
+		// 支付方式不允许修改
+		config.setThirdPart(oldConfig.getThirdPart());
+
+		valid(config);
+
+		updateById(config);
+	}
+
+	@Override
+	public void delete(Integer id) {
+		removeById(id);
+	}
+
+	private void valid(PayConfig config) throws PaymentException {
 		switch (config.getThirdPart()) {
 		case WX:
 			validWx(config);
@@ -40,11 +61,6 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 		default:
 			validAli(config);
 		}
-	}
-
-	@Override
-	public void delete(Integer id) {
-		removeById(id);
 	}
 
 	private void validWx(PayConfig config) throws PaymentException {

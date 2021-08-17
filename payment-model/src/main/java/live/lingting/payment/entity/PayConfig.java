@@ -1,10 +1,13 @@
 package live.lingting.payment.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -37,6 +40,10 @@ public class PayConfig {
 	@ApiModelProperty("第三方")
 	private ThirdPart thirdPart;
 
+	@NotNull(message = "请选择是否禁用")
+	@ApiModelProperty("是否禁用")
+	private Boolean disabled;
+
 	@ApiModelProperty("支付宝-appId")
 	private String aliAppId;
 
@@ -67,5 +74,8 @@ public class PayConfig {
 	@TableLogic
 	@ApiModelProperty("是否删除")
 	private Long deleted;
+
+	@TableField(fill = FieldFill.INSERT)
+	private LocalDateTime createTime;
 
 }

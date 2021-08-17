@@ -3,6 +3,7 @@ CREATE TABLE `lingting_payment_config`
     `id`                 int(11) PRIMARY KEY AUTO_INCREMENT COMMENT 'id',
     `mark`               varchar(50) NOT NULL COMMENT '标识',
     `third_part`         VARCHAR(10) NOT NULL COMMENT '第三方',
+    `disabled`           tinyint(1)    DEFAULT 0 COMMENT '是否禁用',
     `ali_app_id`         varchar(32)   DEFAULT '' COMMENT 'ali_app_id',
     `ali_private_key`    varchar(3248) DEFAULT '' COMMENT 'ali_private_key',
     `ali_pay_public_key` VARCHAR(786)  DEFAULT '' COMMENT 'ali_pay_public_key',
@@ -13,9 +14,11 @@ CREATE TABLE `lingting_payment_config`
     `wx_mch_id`          VARCHAR(20)   DEFAULT '' COMMENT 'wx_mch_id',
     `wx_mch_key`         VARCHAR(64)   DEFAULT '' COMMENT 'wx_mch_key',
     `deleted`            bigint(20)    DEFAULT 0 COMMENT '逻辑删除标识，未删除为 0，已删除为删除时间',
+    `create_time`        datetime(4) NOT NULL COMMENT '创建时间',
     KEY `idx_third` (`third_part`) USING BTREE,
+    KEY `idx_mark` (`mark`) USING BTREE,
     -- 同一标识下, 同一第三方仅允许一个支付配置
-    UNIQUE KEY `uk_mark_third` (`mark`, `third_part`) USING BTREE
+    UNIQUE KEY `uk_mark_third` (`mark`, `third_part`, `deleted`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE utf8mb4_general_ci COMMENT ='第三方支付配置';
