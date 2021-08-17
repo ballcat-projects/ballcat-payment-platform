@@ -19,7 +19,7 @@ public interface PayService extends IService<Pay> {
 	 * 查询
 	 * @param page 分页
 	 * @param pay 条件
-	 * @return live.lingting.payment.Page<live.lingting.entity.Pay>
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-07 11:05
 	 */
 	Page<Pay> list(Page<Pay> page, Pay pay);
@@ -27,7 +27,7 @@ public interface PayService extends IService<Pay> {
 	/**
 	 * 查询所有满足条件的支付信息
 	 * @param pay 条件
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-09 14:03
 	 */
 	List<Pay> list(Pay pay);
@@ -35,21 +35,21 @@ public interface PayService extends IService<Pay> {
 	/**
 	 * 查询虚拟货币未提交hash的超时支付
 	 * @param maxTime 支付信息最大创建时间
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-10 10:06
 	 */
 	List<Pay> listVirtualTimeout(LocalDateTime maxTime);
 
 	/**
 	 * 查询重试超时的支付信息
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-10 11:27
 	 */
 	List<Pay> listVirtualRetryTimeout();
 
 	/**
 	 * 获取所有需要通知的支付信息
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-10 17:10
 	 */
 	List<Pay> listNotify();
@@ -58,7 +58,7 @@ public interface PayService extends IService<Pay> {
 	 * 根据交易号或者项目交易获取信息
 	 * @param tradeNo 交易号
 	 * @param projectTradeNo 项目交易号
-	 * @return live.lingting.entity.Pay
+	 * @return live.lingting.payment.entity.Pay
 	 * @author lingting 2021-06-09 17:29
 	 */
 	Pay getByNo(String tradeNo, String projectTradeNo) throws PaymentException;
@@ -75,7 +75,7 @@ public interface PayService extends IService<Pay> {
 	 * 虚拟货币支付 创建支付
 	 * @param model 基础参数
 	 * @param project 所属
-	 * @return live.lingting.entity.Pay
+	 * @return live.lingting.payment.entity.Pay
 	 * @author lingting 2021-06-09 17:55
 	 */
 	Pay virtualCreate(MixVirtualPayModel model, Project project) throws PaymentException;
@@ -165,7 +165,7 @@ public interface PayService extends IService<Pay> {
 
 	/**
 	 * 查询所有等待的转账支付
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-07-14 15:47
 	 */
 	List<Pay> listWaitTransfer();
@@ -173,7 +173,7 @@ public interface PayService extends IService<Pay> {
 	/**
 	 * 查询所有已过期真实货币支付信息
 	 * @param maxTime 最大创建时间
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-07-14 17:14
 	 */
 	List<Pay> listRealExpire(LocalDateTime maxTime);

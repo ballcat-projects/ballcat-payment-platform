@@ -18,7 +18,7 @@ public interface VirtualAddressService extends IService<VirtualAddress> {
 	 * 根据参数, 锁定地址
 	 * @param model 参数
 	 * @param project 项目
-	 * @return live.lingting.entity.VirtualAddress
+	 * @return live.lingting.payment.entity.VirtualAddress
 	 * @author lingting 2021-06-07 22:51
 	 */
 	VirtualAddress lock(MixVirtualPayModel model, Project project);
@@ -35,7 +35,7 @@ public interface VirtualAddressService extends IService<VirtualAddress> {
 	 * 查询
 	 * @param page 分页
 	 * @param qo 条件
-	 * @return live.lingting.payment.Page<live.lingting.entity.VirtualAddress>
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.VirtualAddress>
 	 * @author lingting 2021-06-07 11:05
 	 */
 	Page<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress qo);

@@ -19,7 +19,7 @@ public interface NotifyMapper extends BaseMapper<Notify> {
 	/**
 	 * 获取sql
 	 * @param notify 条件
-	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.Notify>
+	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.payment.entity.Notify>
 	 * @author lingting 2021-06-15 09:59
 	 */
 	default LambdaQueryWrapperX<Notify> getWrapper(Notify notify) {
@@ -33,7 +33,7 @@ public interface NotifyMapper extends BaseMapper<Notify> {
 	/**
 	 * 获取通知中数据
 	 * @param size 数据量
-	 * @return java.util.List<live.lingting.entity.Notify>
+	 * @return java.util.List<live.lingting.payment.entity.Notify>
 	 * @author lingting 2021-06-15 09:58
 	 */
 	default List<Notify> listNotifying(Integer size) {

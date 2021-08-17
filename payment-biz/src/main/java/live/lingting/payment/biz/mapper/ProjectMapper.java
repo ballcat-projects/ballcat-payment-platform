@@ -19,7 +19,7 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	/**
 	 * 组装sql
 	 * @param project 条件
-	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.Project>
+	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.payment.entity.Project>
 	 * @author lingting 2021-06-07 14:08
 	 */
 	default Wrapper<Project> getWrapper(Project project) {
@@ -36,7 +36,7 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	 * 搜索
 	 * @param page 分页
 	 * @param project 项目
-	 * @return live.lingting.payment.Page<live.lingting.entity.Project>
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.Project>
 	 * @author lingting 2021-06-04 16:32
 	 */
 	default Page<Project> list(Page<Project> page, Project project) {
@@ -50,7 +50,7 @@ public interface ProjectMapper extends BaseMapper<Project> {
 	 * @param scopes 新权限
 	 * @author lingting 2021-07-16 16:25
 	 */
-	@Update("UPDATE lingting_payment_project p SET p.scope=#{scopes,typeHandler=live.lingting.entity.Project$ScopeTypeHandler} WHERE p"
+	@Update("UPDATE lingting_payment_project p SET p.scope=#{scopes,typeHandler=live.lingting.payment.entity.Project$ScopeTypeHandler} WHERE p"
 			+ ".id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids.toArray())}) ")
 	void scope(@Param("ids") List<Integer> ids, @Param("scopes") List<ProjectScope> scopes);
 

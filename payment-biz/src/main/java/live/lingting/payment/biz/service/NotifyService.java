@@ -23,7 +23,7 @@ public interface NotifyService extends IService<Notify> {
 	/**
 	 * 获取通知中数据
 	 * @param size 数据量
-	 * @return java.util.List<live.lingting.entity.Notify>
+	 * @return java.util.List<live.lingting.payment.entity.Notify>
 	 * @author lingting 2021-06-15 09:58
 	 */
 	List<Notify> listNotifying(Integer size);

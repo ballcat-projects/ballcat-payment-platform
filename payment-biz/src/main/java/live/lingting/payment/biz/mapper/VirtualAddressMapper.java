@@ -26,7 +26,7 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 	/**
 	 * 组装sql
 	 * @param va 条件
-	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.Pay>
+	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-07 14:08
 	 */
 	default Wrapper<VirtualAddress> getWrapper(VirtualAddress va) {
@@ -51,7 +51,7 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 	 * 查询
 	 * @param page 分页
 	 * @param va 条件
-	 * @return live.lingting.payment.Page<live.lingting.entity.VirtualAddress>
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.VirtualAddress>
 	 * @author lingting 2021-06-07 11:05
 	 */
 	default Page<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress va) {
@@ -67,7 +67,7 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 	 * 加载允许指定项目使用的地址
 	 * @param chain 链
 	 * @param id 项目id
-	 * @return java.util.List<live.lingting.entity.VirtualAddress>
+	 * @return java.util.List<live.lingting.payment.entity.VirtualAddress>
 	 * @author lingting 2021-07-05 21:04
 	 */
 	@Select("SELECT * FROM `lingting_payment_virtual_address` va WHERE va.`chain` = '${chain}' "
@@ -133,8 +133,7 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 	 * @param projectIds 新项目id
 	 * @author lingting 2021-07-08 11:05
 	 */
-	@Update("UPDATE lingting_payment_virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.entity"
-			+ ".VirtualAddress$ProjectIdsTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids"
+	@Update("UPDATE lingting_payment_virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.payment.entity.VirtualAddress$ProjectIdsTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids"
 			+ ".toArray())}) ")
 	void project(@Param("ids") List<Integer> ids, @Param("pIds") List<Integer> projectIds);
 

@@ -16,7 +16,7 @@ public interface ProjectService extends IService<Project> {
 	 * 搜索
 	 * @param page 分页
 	 * @param project 项目
-	 * @return live.lingting.payment.Page<live.lingting.entity.Project>
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.Project>
 	 * @author lingting 2021-06-04 16:32
 	 */
 	Page<Project> list(Page<Project> page, Project project);
@@ -48,7 +48,7 @@ public interface ProjectService extends IService<Project> {
 	/**
 	 * 根据apiKey 获取项目信息
 	 * @param key key
-	 * @return live.lingting.entity.Project
+	 * @return live.lingting.payment.entity.Project
 	 * @author lingting 2021-06-07 16:39
 	 */
 	Project getByApiKey(String key);

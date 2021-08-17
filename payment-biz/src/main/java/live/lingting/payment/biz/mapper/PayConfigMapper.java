@@ -15,7 +15,7 @@ public interface PayConfigMapper extends BaseMapper<PayConfig> {
 	/**
 	 * 组装sql
 	 * @param project 条件
-	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.Project>
+	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.payment.entity.Project>
 	 * @author lingting 2021-06-07 14:08
 	 */
 	default Wrapper<PayConfig> getWrapper(PayConfig project) {

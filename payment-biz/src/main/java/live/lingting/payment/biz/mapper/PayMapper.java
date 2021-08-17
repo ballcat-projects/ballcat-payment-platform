@@ -25,7 +25,7 @@ public interface PayMapper extends BaseMapper<Pay> {
 	/**
 	 * 组装sql
 	 * @param pay 条件
-	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.Pay>
+	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-07 14:08
 	 */
 	default Wrapper<Pay> getWrapper(Pay pay) {
@@ -60,7 +60,7 @@ public interface PayMapper extends BaseMapper<Pay> {
 	 * 查询
 	 * @param page 分页
 	 * @param pay 条件
-	 * @return live.lingting.payment.Page<live.lingting.entity.Pay>
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-07 11:05
 	 */
 	default Page<Pay> list(Page<Pay> page, Pay pay) {
@@ -75,7 +75,7 @@ public interface PayMapper extends BaseMapper<Pay> {
 	/**
 	 * 查询虚拟货币未提交hash的超时支付
 	 * @param maxTime 支付信息最大创建时间
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-10 10:06
 	 */
 	default List<Pay> listVirtualTimeout(LocalDateTime maxTime) {
@@ -95,7 +95,7 @@ public interface PayMapper extends BaseMapper<Pay> {
 
 	/**
 	 * 查询重试超时的支付信息
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-10 11:27
 	 */
 	default List<Pay> listVirtualRetryTimeout() {
@@ -112,7 +112,7 @@ public interface PayMapper extends BaseMapper<Pay> {
 
 	/**
 	 * 获取所有需要通知的支付信息
-	 * @return java.util.List<live.lingting.entity.Pay>
+	 * @return java.util.List<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-10 17:10
 	 */
 	default List<Pay> listNotify() {

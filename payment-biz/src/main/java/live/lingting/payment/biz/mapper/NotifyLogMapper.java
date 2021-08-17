@@ -15,7 +15,7 @@ public interface NotifyLogMapper extends BaseMapper<NotifyLog> {
 	/**
 	 * 组装 sql
 	 * @param log 条件
-	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.entity.NotifyLog>
+	 * @return com.baomidou.mybatisplus.core.conditions.Wrapper<live.lingting.payment.entity.NotifyLog>
 	 * @author lingting 2021-06-07 14:08
 	 */
 	default Wrapper<NotifyLog> getWrapper(NotifyLog log) {
@@ -34,7 +34,7 @@ public interface NotifyLogMapper extends BaseMapper<NotifyLog> {
 	 * 查询
 	 * @param page 分页
 	 * @param log 条件
-	 * @return live.lingting.payment.Page<live.lingting.entity.NotifyLog>
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.NotifyLog>
 	 * @author lingting 2021-06-07 14:07
 	 */
 	default Page<NotifyLog> list(Page<NotifyLog> page, NotifyLog log) {
