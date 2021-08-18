@@ -1,13 +1,18 @@
 package live.lingting.payment.biz.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import live.lingting.payment.Page;
 import live.lingting.payment.biz.mapper.VirtualAddressMapper;
+import live.lingting.payment.biz.mybatis.WrappersX;
+import live.lingting.payment.biz.service.ItVirtualAddressProjectService;
 import live.lingting.payment.biz.service.VirtualAddressService;
 import live.lingting.payment.biz.virtual.VirtualHandler;
 import live.lingting.payment.dto.VirtualAddressBalanceDTO;
@@ -15,6 +20,7 @@ import live.lingting.payment.dto.VirtualAddressCreateDTO;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.entity.VirtualAddress;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
+import live.lingting.payment.vo.VirtualAddressVO;
 
 /**
  * @author lingting 2021/6/7 15:43
@@ -27,6 +33,8 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 	private static final Integer SHUFFLE_MIN = 3;
 
 	private final VirtualHandler handler;
+
+	private final ItVirtualAddressProjectService service;
 
 	@Override
 	public VirtualAddress lock(MixVirtualPayModel model, Project project) {
@@ -56,6 +64,22 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 	}
 
 	@Override
+	public Page<VirtualAddressVO> listVo(Page<VirtualAddress> page, VirtualAddress qo) {
+		Wrapper<VirtualAddress> wrapper = WrappersX.<VirtualAddress>lambdaQueryX()
+				// address
+				.eqIfPresent(VirtualAddress::getAddress, qo.getAddress())
+				// chain
+				.eqIfPresent(VirtualAddress::getChain, qo.getChain())
+				// disabled
+				.eqIfPresent(VirtualAddress::getDisabled, qo.getDisabled())
+				// using
+				.eqIfPresent(VirtualAddress::getUsing, qo.getUsing());
+
+		IPage<VirtualAddressVO> iPage = baseMapper.listVo(page.toPage(), wrapper);
+		return new Page<>(iPage.getRecords(), iPage.getTotal());
+	}
+
+	@Override
 	public void disabled(List<Integer> ids, Boolean disabled) {
 		baseMapper.disabled(ids, disabled);
 	}
@@ -64,8 +88,7 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 	public VirtualAddressCreateDTO create(VirtualAddressCreateDTO dto) {
 		for (VirtualAddressCreateDTO.Va address : dto.getList()) {
 			address.setSuccess(false);
-			final VirtualAddress va = new VirtualAddress().setAddress(address.getAddress()).setChain(dto.getChain())
-					.setProjectIds(dto.getIds());
+			final VirtualAddress va = new VirtualAddress().setAddress(address.getAddress()).setChain(dto.getChain());
 			if (!handler.valid(va)) {
 				address.setDesc("无效地址!");
 				continue;
@@ -81,6 +104,8 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 				if (!address.getSuccess()) {
 					address.setDesc("保存失败!");
 				}
+				// 添加关联
+				service.insert(va.getId(), dto.getIds());
 			}
 			catch (Exception e) {
 				address.setSuccess(false);
@@ -92,8 +117,12 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void project(List<Integer> ids, List<Integer> projectIds) {
-		baseMapper.project(ids, projectIds);
+		for (Integer id : ids) {
+			service.removeByVa(id);
+			service.insert(id, projectIds);
+		}
 	}
 
 	@Override
@@ -109,7 +138,6 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 		for (VirtualAddress address : list) {
 			address.setUsing(null);
 			address.setDisabled(null);
-			address.setProjectIds(null);
 			try {
 				address.setUsdtAmount(handler.getBalance(address));
 			}

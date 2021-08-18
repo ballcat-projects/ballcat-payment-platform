@@ -2,12 +2,14 @@ package live.lingting.payment.biz.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
+import org.apache.ibatis.annotations.Select;
 import live.lingting.payment.Page;
 import live.lingting.payment.dto.VirtualAddressBalanceDTO;
 import live.lingting.payment.dto.VirtualAddressCreateDTO;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.entity.VirtualAddress;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
+import live.lingting.payment.vo.VirtualAddressVO;
 
 /**
  * @author lingting 2021/6/7 15:43
@@ -39,6 +41,15 @@ public interface VirtualAddressService extends IService<VirtualAddress> {
 	 * @author lingting 2021-06-07 11:05
 	 */
 	Page<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress qo);
+
+	/**
+	 * 查询VO
+	 * @param page 分页
+	 * @param qo 条件
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.VirtualAddress>
+	 * @author lingting 2021-06-07 11:05
+	 */
+	Page<VirtualAddressVO> listVo(Page<VirtualAddress> page, VirtualAddress qo);
 
 	/**
 	 * 禁用指定地址

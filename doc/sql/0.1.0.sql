@@ -41,3 +41,93 @@ SET project_ids = (SELECT CONCAT('[', GROUP_CONCAT(p.id), ']') FROM lingting_pay
 ALTER TABLE lingting_payment_pay
     ADD COLUMN `config_mark` varchar(50) DEFAULT '' COMMENT '支付配置标识',
     ADD INDEX `idx_config` (`config_mark`);
+
+ALTER TABLE lingting_payment_virtual_address
+    DROP COLUMN `project_ids`;
+
+CREATE TABLE `lingting_payment_virtual_address_project`
+(
+    `id`         int(11) AUTO_INCREMENT PRIMARY KEY,
+    `va_id`      int(11) NOT NULL,
+    `project_id` int(11) NOT NULL,
+    UNIQUE KEY `uk_va_project` (`va_id`, `project_id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE utf8mb4_general_ci COMMENT ='中间表:虚拟货币地址-项目';
+
+# 如果存在存储过程则删除
+DROP PROCEDURE IF EXISTS scan_va;
+# 定义新的结束符
+DELIMITER $$
+# 创建存储过程
+CREATE PROCEDURE scan_va()
+# 开始
+BEGIN
+    ##定义判断变量
+    DECLARE _flag varchar(50);
+
+    ## 定义查询变量
+    DECLARE _cur CURSOR FOR
+        SELECT va.id FROM lingting_payment_virtual_address va;
+
+    ### 循环赋初始值
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET _flag = NULL;
+    ### 打开
+    OPEN _cur;
+    ## 赋值
+    FETCH _cur INTO _flag;
+    ###循环判断
+    WHILE (_flag IS NOT NULL)
+        DO
+            CALL scan_p(_flag);
+            ## 赋值下一个游标
+            FETCH _cur INTO _flag;
+        END WHILE;
+    ## 关闭
+    CLOSE _cur;
+# 结束, 需指定结束符
+END$$
+
+# 如果存在存储过程则删除
+DROP PROCEDURE IF EXISTS scan_p;
+# 创建存储过程
+CREATE PROCEDURE scan_p(IN va_id varchar(50))
+# 开始
+BEGIN
+    # 定义sql 流
+    DECLARE _sql varchar(500);
+    ##定义判断变量
+    DECLARE _p_flag varchar(50);
+
+    DECLARE _p_cur CURSOR FOR SELECT p.id FROM lingting_payment_project p;
+
+    ### 循环赋初始值
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET _p_flag = NULL;
+    ### 打开
+    OPEN _p_cur;
+    ## 赋值
+    FETCH _p_cur INTO _p_flag;
+    ###循环判断
+    WHILE (_p_flag IS NOT NULL)
+        DO
+            SET @sql = CONCAT('insert into lingting_payment_virtual_address_project(va_id,project_id) value(', va_id, ',', _p_flag, ');');
+            # 转为流?
+            PREPARE _sql FROM @sql;
+            # 执行sql
+            EXECUTE _sql;
+            # 解除分配
+            DEALLOCATE PREPARE _sql;
+            ## 赋值下一个游标
+            FETCH _p_cur INTO _p_flag;
+        END WHILE;
+    ## 关闭
+    CLOSE _p_cur;
+# 结束, 需指定结束符
+END$$
+
+# 恢复结束符
+DELIMITER ;
+# 调用存储过程, 可以传入参数
+CALL scan_va();
+DROP PROCEDURE scan_va;
+DROP PROCEDURE scan_p;

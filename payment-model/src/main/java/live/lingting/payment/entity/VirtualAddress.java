@@ -8,14 +8,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.apache.ibatis.type.JdbcType;
-import org.apache.ibatis.type.MappedJdbcTypes;
-import live.lingting.payment.mybatis.AbstractJsonTypeHandler;
 import live.lingting.payment.sdk.enums.Chain;
 
 /**
@@ -57,24 +52,7 @@ public class VirtualAddress {
 	@ApiModelProperty("USDT 余额")
 	private BigDecimal usdtAmount;
 
-	/**
-	 * 地址只允许给指定的项目使用
-	 */
-	@ApiModelProperty("地址只允许给指定的项目使用")
-	@TableField(typeHandler = ProjectIdsTypeHandler.class)
-	private List<Integer> projectIds;
-
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
-
-	@MappedJdbcTypes(JdbcType.VARCHAR)
-	public static class ProjectIdsTypeHandler extends AbstractJsonTypeHandler<List<Integer>> {
-
-		@Override
-		public List<Integer> getDefaultJavaVal() {
-			return new ArrayList<>();
-		}
-
-	}
 
 }

@@ -4,19 +4,19 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.springframework.util.CollectionUtils;
 import live.lingting.payment.Page;
 import live.lingting.payment.biz.mybatis.WrappersX;
-import live.lingting.payment.biz.mybatis.conditions.LambdaQueryWrapperX;
 import live.lingting.payment.entity.VirtualAddress;
 import live.lingting.payment.sdk.enums.Chain;
+import live.lingting.payment.vo.VirtualAddressVO;
 
 /**
  * @author lingting 2021/6/7 15:43
@@ -30,8 +30,7 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 	 * @author lingting 2021-06-07 14:08
 	 */
 	default Wrapper<VirtualAddress> getWrapper(VirtualAddress va) {
-
-		final LambdaQueryWrapperX<VirtualAddress> wrapperX = WrappersX.<VirtualAddress>lambdaQueryX()
+		return WrappersX.<VirtualAddress>lambdaQueryX()
 				// address
 				.eqIfPresent(VirtualAddress::getAddress, va.getAddress())
 				// chain
@@ -40,11 +39,6 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 				.eqIfPresent(VirtualAddress::getDisabled, va.getDisabled())
 				// using
 				.eqIfPresent(VirtualAddress::getUsing, va.getUsing());
-		if (!CollectionUtils.isEmpty(va.getProjectIds())) {
-			wrapperX.apply(String.format(" JSON_CONTAINS(project_ids, '%s') ", va.getProjectIds().get(0)));
-		}
-
-		return wrapperX;
 	}
 
 	/**
@@ -57,11 +51,30 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 	default Page<VirtualAddress> list(Page<VirtualAddress> page, VirtualAddress va) {
 		final IPage<VirtualAddress> iPage = selectPage(page.toPage(), getWrapper(va));
 
-		final Page<VirtualAddress> Page = new Page<>();
-		Page.setRecords(iPage.getRecords());
-		Page.setTotal(iPage.getTotal());
-		return Page;
+		final Page<VirtualAddress> rPage = new Page<>();
+		rPage.setRecords(iPage.getRecords());
+		rPage.setTotal(iPage.getTotal());
+		return rPage;
 	}
+
+	/**
+	 * 查询VO
+	 * @param page 分页
+	 * @param wrapper 条件
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.VirtualAddress>
+	 * @author lingting 2021-06-07 11:05
+	 */
+	@Select("SELECT va.*,\n"
+			+ "CONCAT( '[',( SELECT GROUP_CONCAT( project_id ) FROM lingting_payment_virtual_address_project WHERE "
+			+ "va_id = va.id ), ']' ) AS project_ids,\n"
+			+ "CONCAT('[\"',(SELECT GROUP_CONCAT( `name` SEPARATOR '\", \"' ) FROM `lingting_payment_project` p WHERE "
+			+ "p.id IN ( SELECT project_id FROM lingting_payment_virtual_address_project WHERE va_id = va.id )),'\"]')"
+			+ " AS project_names \n" + "FROM `lingting_payment_virtual_address` va ")
+	@Result(column = "project_ids", property = "projectIds", typeHandler = VirtualAddressVO.ProjectIdsTypeHandler.class)
+	@Result(column = "project_names", property = "projectNames",
+			typeHandler = VirtualAddressVO.ProjectNamesTypeHandler.class)
+	IPage<VirtualAddressVO> listVo(IPage<VirtualAddress> page,
+			@Param(Constants.WRAPPER) Wrapper<VirtualAddress> wrapper);
 
 	/**
 	 * 加载允许指定项目使用的地址
@@ -71,7 +84,7 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 	 * @author lingting 2021-07-05 21:04
 	 */
 	@Select("SELECT * FROM `lingting_payment_virtual_address` va WHERE va.`chain` = '${chain}' "
-			+ " AND va.`using` = 0  AND va.disabled = 0  AND ( JSON_CONTAINS( va.project_ids, " + "'${p_id}' ))")
+			+ " AND va.`using` = 0  AND va.disabled = 0 AND ( SELECT id FROM `lingting_payment_virtual_address_project` WHERE va_id=va.id AND project_id=${p_id} ) IS NOT NULL ")
 	@ResultMap("mybatis-plus_VirtualAddress")
 	List<VirtualAddress> load(@Param("chain") Chain chain, @Param("p_id") Integer id);
 
@@ -126,15 +139,5 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 
 		update(null, wrapper);
 	}
-
-	/**
-	 * 更新项目id
-	 * @param ids 地址id
-	 * @param projectIds 新项目id
-	 * @author lingting 2021-07-08 11:05
-	 */
-	@Update("UPDATE lingting_payment_virtual_address va SET va.project_ids=#{pIds,typeHandler=live.lingting.payment.entity.VirtualAddress$ProjectIdsTypeHandler} WHERE va.id IN (${@cn.hutool.core.util.StrUtil@join(\",\", ids"
-			+ ".toArray())}) ")
-	void project(@Param("ids") List<Integer> ids, @Param("pIds") List<Integer> projectIds);
 
 }
