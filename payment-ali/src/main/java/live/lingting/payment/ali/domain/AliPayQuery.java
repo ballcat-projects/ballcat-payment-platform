@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.springframework.util.StringUtils;
 import live.lingting.payment.ali.enums.TradeStatus;
 
 /**
@@ -86,7 +87,7 @@ public class AliPayQuery {
 		}
 
 		// 金额
-		if (StrUtil.isBlank(raw.getTotalAmount())) {
+		if (!StringUtils.hasText(raw.getTotalAmount())) {
 			query.setAmount(BigDecimal.ZERO);
 		}
 		else {

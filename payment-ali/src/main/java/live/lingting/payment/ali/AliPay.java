@@ -3,12 +3,14 @@ package live.lingting.payment.ali;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeCloseModel;
 import com.alipay.api.domain.AlipayTradePayModel;
 import com.alipay.api.domain.AlipayTradePrecreateModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.domain.AlipayTradeRefundModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeCloseRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradePayRequest;
 import com.alipay.api.request.AlipayTradePrecreateRequest;
@@ -16,6 +18,7 @@ import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeCloseResponse;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
@@ -407,6 +410,19 @@ public class AliPay implements ThirdPay {
 		AlipayTradeRefundRequest request = new AlipayTradeRefundRequest();
 		request.setBizModel(model);
 		return client.execute(request);
+	}
+
+	public AlipayTradeCloseResponse close(String sn, String tradeNo) throws AlipayApiException {
+		AlipayTradeCloseModel model = new AlipayTradeCloseModel();
+		model.setOutTradeNo(sn);
+		model.setTradeNo(tradeNo);
+		return close(model);
+	}
+
+	private AlipayTradeCloseResponse close(AlipayTradeCloseModel model) throws AlipayApiException {
+		AlipayTradeCloseRequest request = new AlipayTradeCloseRequest();
+		request.setBizModel(model);
+		return getClient().execute(request);
 	}
 
 	/**
