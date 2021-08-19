@@ -106,10 +106,10 @@ public class MixPay {
 	 * @author lingting 2021-07-14 17:34
 	 */
 	public MixRealPayResponse realPay(MixRealPayModel model) throws MixException {
-		model.setNotifyUrl(notifyUrl);
+		model.setNotifyUrl(getNotifyUrl());
 		MixRealPayRequest request = new MixRealPayRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 	/**
@@ -123,14 +123,14 @@ public class MixPay {
 		model.setChain(chain);
 		model.setContract(contract);
 		model.setProjectTradeNo(projectTradeNo);
-		model.setNotifyUrl(notifyUrl);
+		model.setNotifyUrl(getNotifyUrl());
 		return virtualPay(model);
 	}
 
 	public MixVirtualPayResponse virtualPay(MixVirtualPayModel model) throws MixException {
 		MixVirtualPayRequest request = new MixVirtualPayRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class MixPay {
 	public MixVirtualSubmitResponse virtualSubmit(MixVirtualSubmitModel model) throws MixException {
 		MixVirtualSubmitRequest request = new MixVirtualSubmitRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class MixPay {
 	public MixVirtualRetryResponse virtualRetry(MixVirtualRetryModel model) throws MixException {
 		MixVirtualRetryRequest request = new MixVirtualRetryRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class MixPay {
 	public MixForciblyRetryResponse forciblyRetry(MixForciblyRetryModel model) throws MixException {
 		MixForciblyRetryRequest request = new MixForciblyRetryRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class MixPay {
 	public MixForciblyFailResponse forciblyFail(MixForciblyFailModel model) throws MixException {
 		MixForciblyFailRequest request = new MixForciblyFailRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class MixPay {
 	public MixQueryResponse query(MixQueryModel model) throws MixException {
 		MixQueryRequest request = new MixQueryRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class MixPay {
 	public MixRateResponse rate(MixRateModel model) throws MixException {
 		MixRateRequest request = new MixRateRequest();
 		request.setModel(model);
-		return client.execute(request);
+		return getClient().execute(request);
 	}
 
 }

@@ -54,9 +54,9 @@ public class DefaultMixClient implements MixClient {
 
 		final Map<String, String> params = request.getParams();
 		// 填充参数, 但是不覆盖原有数据
-		params.computeIfAbsent(SdkConstants.FIELD_KEY, k -> apiKey);
+		params.computeIfAbsent(SdkConstants.FIELD_KEY, k -> getApiKey());
 		params.computeIfAbsent(SdkConstants.FIELD_NONCE, k -> RandomUtil.randomString(6));
-		params.computeIfAbsent(SdkConstants.FIELD_SIGN, k -> MixUtils.sign(apiSecurity, params));
+		params.computeIfAbsent(SdkConstants.FIELD_SIGN, k -> MixUtils.sign(getApiSecurity(), params));
 
 		return getResponse(request, params);
 	}
@@ -85,7 +85,7 @@ public class DefaultMixClient implements MixClient {
 	}
 
 	private <M extends MixModel, R extends MixResponse<?>> String getUrlStr(MixRequest<M, R> request) {
-		String url = serverUrl;
+		String url = getServerUrl();
 
 		if (!url.endsWith(FORWARD_SLASH)) {
 			url = url + FORWARD_SLASH;
