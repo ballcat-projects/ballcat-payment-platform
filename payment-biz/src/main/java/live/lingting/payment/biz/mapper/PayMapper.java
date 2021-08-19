@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.util.StringUtils;
 import live.lingting.payment.Page;
 import live.lingting.payment.biz.mybatis.WrappersX;
@@ -16,6 +19,7 @@ import live.lingting.payment.entity.Pay;
 import live.lingting.payment.sdk.enums.Currency;
 import live.lingting.payment.sdk.enums.NotifyStatus;
 import live.lingting.payment.sdk.enums.PayStatus;
+import live.lingting.payment.vo.PayVO;
 
 /**
  * @author lingting 2021/6/4 13:40
@@ -66,11 +70,21 @@ public interface PayMapper extends BaseMapper<Pay> {
 	default Page<Pay> list(Page<Pay> page, Pay pay) {
 		final IPage<Pay> iPage = selectPage(page.toPage(), getWrapper(pay));
 
-		final Page<Pay> Page = new Page<>();
-		Page.setRecords(iPage.getRecords());
-		Page.setTotal(iPage.getTotal());
-		return Page;
+		final Page<Pay> rPage = new Page<>();
+		rPage.setRecords(iPage.getRecords());
+		rPage.setTotal(iPage.getTotal());
+		return rPage;
 	}
+
+	/**
+	 * 查询
+	 * @param page 分页
+	 * @param wrapper 条件
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.Pay>
+	 * @author lingting 2021-06-07 11:05
+	 */
+	@Select("select *, (select p.name from lingting_payment_project p where  p.id=lpp.project_id) as project_name from `lingting_payment_pay` lpp ")
+	IPage<PayVO> listVo(IPage<Pay> page, @Param(Constants.WRAPPER) Wrapper<Pay> wrapper);
 
 	/**
 	 * 查询虚拟货币未提交hash的超时支付

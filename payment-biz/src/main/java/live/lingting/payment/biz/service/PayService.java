@@ -9,6 +9,7 @@ import live.lingting.payment.entity.Project;
 import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.NotifyStatus;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
+import live.lingting.payment.vo.PayVO;
 
 /**
  * @author lingting 2021/6/4 13:40
@@ -23,6 +24,15 @@ public interface PayService extends IService<Pay> {
 	 * @author lingting 2021-06-07 11:05
 	 */
 	Page<Pay> list(Page<Pay> page, Pay pay);
+
+	/**
+	 * 查询
+	 * @param page 分页
+	 * @param qo 条件
+	 * @return live.lingting.payment.Page<live.lingting.payment.entity.Pay>
+	 * @author lingting 2021-06-07 11:05
+	 */
+	Page<PayVO> listVo(Page<Pay> page, Pay qo);
 
 	/**
 	 * 查询所有满足条件的支付信息

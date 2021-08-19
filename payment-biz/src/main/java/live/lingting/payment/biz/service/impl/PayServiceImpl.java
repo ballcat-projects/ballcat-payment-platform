@@ -3,6 +3,7 @@ package live.lingting.payment.biz.service.impl;
 import static live.lingting.payment.enums.ResponseCode.PAY_NOT_FOUND;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ import live.lingting.payment.sdk.enums.Mode;
 import live.lingting.payment.sdk.enums.NotifyStatus;
 import live.lingting.payment.sdk.enums.PayStatus;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
+import live.lingting.payment.vo.PayVO;
 
 /**
  * @author lingting 2021/6/4 13:40
@@ -45,6 +47,12 @@ public class PayServiceImpl extends ServiceImpl<PayMapper, Pay> implements PaySe
 	@Override
 	public Page<Pay> list(Page<Pay> page, Pay pay) {
 		return baseMapper.list(page, pay);
+	}
+
+	@Override
+	public Page<PayVO> listVo(Page<Pay> page, Pay qo) {
+		IPage<PayVO> iPage = baseMapper.listVo(page.toPage(), baseMapper.getWrapper(qo));
+		return new Page<>(iPage.getRecords(), iPage.getTotal());
 	}
 
 	@Override
