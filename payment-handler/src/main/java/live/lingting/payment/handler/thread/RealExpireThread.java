@@ -33,6 +33,10 @@ public class RealExpireThread extends AbstractThread<Pay> {
 
 	private static final PaymentQuery EMPTY_QUERY = new PaymentQuery().setAmount(BigDecimal.ZERO).setSuccess(false);
 
+	public static final int CLOSE_RETRY_MAX = 3;
+
+	public static final String CLOSE_RETRY_KEY = "live:lingting:payment:close:retry:";
+
 	private final PayService service;
 
 	private final PaymentConfig config;
@@ -58,11 +62,21 @@ public class RealExpireThread extends AbstractThread<Pay> {
 		}
 		else {
 			// 发起交易关闭 - 如果关闭失败(已支付, 等待下一次重新处理即可进入正常流程)
-			if (fail(pay)) {
+			// 关闭失败, 但是不允许重试了, 也直接关闭
+			if (close(pay) || !allowRetry(pay)) {
 				// 成功关闭, 进入支付失败流程
 				service.fail(pay, "未在" + config.getRealExpireTimeout() + "分钟内付款!", null);
 			}
 		}
+	}
+
+	public boolean allowRetry(Pay pay) {
+		String key = CLOSE_RETRY_KEY + pay.getTradeNo();
+		if (redis.increment(key) < CLOSE_RETRY_MAX) {
+			redis.delete(key);
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -98,7 +112,7 @@ public class RealExpireThread extends AbstractThread<Pay> {
 	 * @author lingting 2021-08-19 11:35
 	 */
 	@SneakyThrows
-	public boolean fail(Pay pay) {
+	public boolean close(Pay pay) {
 		if (pay.getThirdPart().equals(ThirdPart.WX)) {
 			WxPay wxPay = wxManager.get(pay.getConfigMark());
 			WxPayOrderCloseResponse response = wxPay.close(pay.getTradeNo());
