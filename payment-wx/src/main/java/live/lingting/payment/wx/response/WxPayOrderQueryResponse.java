@@ -56,7 +56,7 @@ public class WxPayOrderQueryResponse {
 	private String cashFeeType;
 
 	@JsonProperty("appid")
-	private String appid;
+	private String appId;
 
 	@JsonProperty("total_fee")
 	private BigInteger totalFee;

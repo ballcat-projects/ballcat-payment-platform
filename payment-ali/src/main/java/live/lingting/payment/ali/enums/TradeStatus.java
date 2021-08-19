@@ -1,10 +1,10 @@
 package live.lingting.payment.ali.enums;
 
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.var;
+import org.springframework.util.StringUtils;
 
 /**
  * 交易状态
@@ -40,7 +40,7 @@ public enum TradeStatus {
 
 	@JsonCreator
 	public static TradeStatus of(String status) {
-		if (StrUtil.isBlank(status)) {
+		if (!StringUtils.hasText(status)) {
 			return ERROR;
 		}
 

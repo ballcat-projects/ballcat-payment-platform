@@ -3,13 +3,13 @@ package live.lingting.payment.wx;
 import static live.lingting.payment.wx.constants.WxPayConstant.HUNDRED;
 
 import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.StrUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
 import lombok.SneakyThrows;
+import org.springframework.util.StringUtils;
 import live.lingting.payment.pay.ThirdPay;
 import live.lingting.payment.wx.constants.WxPayConstant;
 import live.lingting.payment.wx.domain.DefaultWxDomain;
@@ -18,6 +18,7 @@ import live.lingting.payment.wx.enums.RequestSuffix;
 import live.lingting.payment.wx.enums.SignType;
 import live.lingting.payment.wx.enums.TradeType;
 import live.lingting.payment.wx.response.WxPayCallback;
+import live.lingting.payment.wx.response.WxPayOrderCloseResponse;
 import live.lingting.payment.wx.response.WxPayOrderQueryResponse;
 import live.lingting.payment.wx.response.WxPayResponse;
 import live.lingting.payment.wx.utils.WxPayUtil;
@@ -158,11 +159,24 @@ public class WxPay implements ThirdPay {
 	 * @author lingting 2021-02-25 15:20
 	 */
 	public WxPayOrderQueryResponse query(String sn, String wxSn) {
-		Assert.isFalse(StrUtil.isBlank(sn) && StrUtil.isBlank(wxSn), "参数 sn 和 wxSn 不能同时为空!");
+		Assert.isFalse(!StringUtils.hasText(sn) && !StringUtils.hasText(wxSn), "参数 sn 和 wxSn 不能同时为空!");
 		Map<String, String> params = new HashMap<>(6);
 		params.put("out_trade_no", sn);
 		params.put("transaction_id", wxSn);
 		return WxPayOrderQueryResponse.of(request(params, RequestSuffix.ORDERQUERY));
+	}
+
+	/**
+	 * 关闭订单
+	 * @param sn 平台订单号
+	 * @return live.lingting.payment.wx.response.WxPayOrderQueryResponse
+	 * @author lingting 2021-02-25 15:20
+	 */
+	public WxPayOrderCloseResponse close(String sn) {
+		Assert.isTrue(StringUtils.hasText(sn), "参数 sn 不能为空!");
+		Map<String, String> params = new HashMap<>(6);
+		params.put("out_trade_no", sn);
+		return WxPayOrderCloseResponse.of(request(params, RequestSuffix.ORDERQUERY));
 	}
 
 	/**
@@ -206,7 +220,7 @@ public class WxPay implements ThirdPay {
 	 */
 	public boolean checkSign(WxPayCallback callback) {
 		// 原签名不存在时, 直接失败
-		if (StrUtil.isBlank(callback.getSign())) {
+		if (!StringUtils.hasText(callback.getSign())) {
 			return false;
 		}
 
