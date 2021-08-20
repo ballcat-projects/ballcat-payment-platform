@@ -28,9 +28,9 @@ import org.springframework.stereotype.Component;
 /**
  * @author lingting 2020/4/17 11:49
  */
-@Component
 @Slf4j
 @RequiredArgsConstructor
+@Component("live.lingting.payment.biz.Redis")
 public class Redis {
 
 	private final StringRedisTemplate template;
