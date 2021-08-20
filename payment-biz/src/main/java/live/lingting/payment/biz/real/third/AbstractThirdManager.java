@@ -1,9 +1,10 @@
 package live.lingting.payment.biz.real.third;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.PayConfigService;
@@ -24,24 +25,42 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 	@Autowired
 	protected PaymentConfig paymentConfig;
 
-	private Map<String, T> cache;
+	private boolean init = false;
 
-	@PostConstruct
-	public void init() {
-		reload();
-	}
+	private final Map<String, T> cache = new ConcurrentHashMap<>(16);
 
 	public void reload() {
-		List<PayConfig> list = service.listByThird(getThird());
-		Map<String, T> newCache = new ConcurrentHashMap<>(list.size());
-		for (PayConfig config : list) {
-			T t = convertFrom(config);
-			newCache.put(config.getMark(), t);
+		synchronized (cache) {
+			List<PayConfig> list = service.listByThird(getThird());
+			for (PayConfig config : list) {
+				T t = convertFrom(config);
+				cache.put(config.getMark(), t);
+			}
+			init = true;
 		}
-		cache = newCache;
+	}
+
+	/**
+	 * 重新加载指定标识的配置
+	 * @author lingting 2021-08-20 16:48
+	 */
+	public void reload(String... marks) {
+		for (String mark : marks) {
+			PayConfig config = service.getByMarkAndThird(mark, getThird());
+			if (config == null) {
+				getLogger(getClass()).error("支付配置加载异常! 标识: {}, 第三方: {}", mark, getThird());
+				continue;
+			}
+			T t = convertFrom(config);
+			cache.put(config.getMark(), t);
+		}
 	}
 
 	public T get(String mark) throws PaymentException {
+		// map 为空, 且未进行初始化
+		if (cache.isEmpty() && !init) {
+			reload();
+		}
 		T t = cache.get(mark);
 		if (t == null) {
 			throw new PaymentException(ResponseCode.PAYMENT_CONFIG_NOT_FOUND);

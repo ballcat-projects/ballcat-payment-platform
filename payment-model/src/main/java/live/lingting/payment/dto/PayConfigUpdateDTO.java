@@ -3,7 +3,6 @@ package live.lingting.payment.dto;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import live.lingting.payment.entity.PayConfig;
@@ -19,10 +18,6 @@ public class PayConfigUpdateDTO {
 	@NotNull(message = "请指定要更新的配置ID!")
 	@ApiModelProperty("配置id")
 	private Integer id;
-
-	@ApiModelProperty("标识")
-	@NotEmpty(message = "支付配置标识不能为空!")
-	private String mark;
 
 	@NotNull(message = "请选择是否禁用")
 	@ApiModelProperty("是否禁用")
@@ -56,7 +51,7 @@ public class PayConfigUpdateDTO {
 	private String wxMchKey;
 
 	public PayConfig toEntity() {
-		return new PayConfig().setId(getId()).setMark(getMark()).setDisabled(getDisabled()).setAliAppId(getAliAppId())
+		return new PayConfig().setId(getId()).setDisabled(getDisabled()).setAliAppId(getAliAppId())
 				.setAliPrivateKey(getAliPrivateKey()).setAliPayPublicKey(getAliPayPublicKey())
 				.setAliFormat(getAliFormat()).setAliCharset(getAliCharset()).setAliSignType(getAliSignType())
 				.setWxAppId(getWxAppId()).setWxMchId(getWxMchId()).setWxMchKey(getWxMchKey());
