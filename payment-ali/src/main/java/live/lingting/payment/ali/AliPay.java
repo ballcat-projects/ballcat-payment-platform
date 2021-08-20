@@ -8,6 +8,7 @@ import com.alipay.api.domain.AlipayTradePayModel;
 import com.alipay.api.domain.AlipayTradePrecreateModel;
 import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.domain.AlipayTradeRefundModel;
+import com.alipay.api.internal.util.AlipayLogger;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.request.AlipayTradeCloseRequest;
@@ -447,6 +448,14 @@ public class AliPay implements ThirdPay {
 		// 验签需要先移除 fund_bill_list 参数值中的 &quot; 否则会导致正确的签名验签失败
 		map.put("fund_bill_list", map.get("fund_bill_list").replaceAll("&quot;", "\""));
 		return AlipaySignature.rsaCheckV2(map, alipayPublicKey, charset, signType);
+	}
+
+	/**
+	 * 是否需要日志
+	 * @author lingting 2021-08-20 16:53
+	 */
+	public static void needLogger(boolean need) {
+		AlipayLogger.setNeedEnableLogger(need);
 	}
 
 }

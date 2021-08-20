@@ -32,12 +32,21 @@ public interface PayConfigService extends IService<PayConfig> {
 	Page<PayConfig> list(Page<PayConfig> page, PayConfig qo);
 
 	/**
+	 * 获取指定标识, 指定第三方的支付配置
+	 * @param mark 标识
+	 * @param third 第三方
+	 * @return live.lingting.payment.entity.PayConfig
+	 * @author lingting 2021-08-20 16:50
+	 */
+	PayConfig getByMarkAndThird(String mark, ThirdPart third);
+
+	/**
 	 * 新增支付配置
 	 * @param config 配置详情
 	 * @author lingting 2021-08-13 15:18
 	 * @throws PaymentException 异常
 	 */
-	void create(PayConfigCreateDTO  config) throws PaymentException;
+	void create(PayConfigCreateDTO config) throws PaymentException;
 
 	/**
 	 * 编辑支付配置
