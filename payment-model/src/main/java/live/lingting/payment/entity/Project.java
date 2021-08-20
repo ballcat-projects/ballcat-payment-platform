@@ -10,9 +10,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -41,14 +38,11 @@ public class Project implements Serializable {
 	 * 项目名
 	 */
 	@ApiModelProperty("项目名")
-	@NotEmpty(message = "项目不能为空!")
-	@Size(max = 50, message = "项目名最多使用50个字符!")
 	private String name;
 
 	/**
 	 * 是否禁用
 	 */
-	@NotNull(message = "请指定是否禁用!")
 	@ApiModelProperty("是否禁用")
 	private Boolean disabled;
 
@@ -59,8 +53,6 @@ public class Project implements Serializable {
 	private String apiSecurity;
 
 	@ApiModelProperty("项目标志")
-	@NotEmpty(message = "项目标志不能为空!")
-	@Size(max = 20, message = "项目标志最大为20个字符!")
 	private String mark;
 
 	/**

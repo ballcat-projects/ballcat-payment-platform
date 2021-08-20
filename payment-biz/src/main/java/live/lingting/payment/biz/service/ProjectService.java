@@ -3,6 +3,7 @@ package live.lingting.payment.biz.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 import live.lingting.payment.Page;
+import live.lingting.payment.dto.ProjectCreateDTO;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.enums.ProjectScope;
 import live.lingting.payment.exception.PaymentException;
@@ -26,13 +27,14 @@ public interface ProjectService extends IService<Project> {
 	 * @param project 项目
 	 * @author lingting 2021-06-04 17:15
 	 */
-	void create(Project project);
+	void create(ProjectCreateDTO  project);
 
 	/**
 	 * 重置API
 	 * @param id 项目 Id
 	 * @param userId 修改人
 	 * @author lingting 2021-06-04 17:19
+	 * @throws PaymentException 异常
 	 */
 	void resetApi(Integer id, Integer userId) throws PaymentException;
 
@@ -42,6 +44,7 @@ public interface ProjectService extends IService<Project> {
 	 * @param disabled 是否禁用
 	 * @param userId 修改人
 	 * @author lingting 2021-06-04 17:26
+	 * @throws PaymentException 异常
 	 */
 	void disabled(Integer id, Boolean disabled, Integer userId) throws PaymentException;
 

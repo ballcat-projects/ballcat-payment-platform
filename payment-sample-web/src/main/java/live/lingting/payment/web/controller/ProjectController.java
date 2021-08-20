@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import live.lingting.payment.Page;
 import live.lingting.payment.biz.service.ProjectHistoryService;
 import live.lingting.payment.biz.service.ProjectService;
+import live.lingting.payment.dto.ProjectCreateDTO;
 import live.lingting.payment.dto.ProjectScopeDTO;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.entity.ProjectHistory;
@@ -40,7 +41,7 @@ public class ProjectController {
 
 	@PostMapping
 	@PreAuthorize("@per.hasPermission('project:add')")
-	public R<?> create(@Validated @RequestBody Project project) {
+	public R<?> create(@Validated @RequestBody ProjectCreateDTO  project) {
 		service.create(project);
 		return R.ok();
 	}

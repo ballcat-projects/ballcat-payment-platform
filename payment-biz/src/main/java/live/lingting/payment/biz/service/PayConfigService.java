@@ -3,6 +3,8 @@ package live.lingting.payment.biz.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 import live.lingting.payment.Page;
+import live.lingting.payment.dto.PayConfigCreateDTO;
+import live.lingting.payment.dto.PayConfigUpdateDTO;
 import live.lingting.payment.entity.PayConfig;
 import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.ThirdPart;
@@ -35,7 +37,7 @@ public interface PayConfigService extends IService<PayConfig> {
 	 * @author lingting 2021-08-13 15:18
 	 * @throws PaymentException 异常
 	 */
-	void create(PayConfig config) throws PaymentException;
+	void create(PayConfigCreateDTO  config) throws PaymentException;
 
 	/**
 	 * 编辑支付配置
@@ -43,7 +45,7 @@ public interface PayConfigService extends IService<PayConfig> {
 	 * @author lingting 2021-08-17 10:26
 	 * @throws PaymentException 异常
 	 */
-	void edit(PayConfig config) throws PaymentException;
+	void edit(PayConfigUpdateDTO config) throws PaymentException;
 
 	/**
 	 * 删除支付配置

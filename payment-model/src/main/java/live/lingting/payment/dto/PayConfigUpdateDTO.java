@@ -1,41 +1,30 @@
-package live.lingting.payment.entity;
+package live.lingting.payment.dto;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-import live.lingting.payment.sdk.enums.ThirdPart;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import lombok.Data;
+import live.lingting.payment.entity.PayConfig;
 
 /**
- * @author lingting 2021/8/10 10:13
+ * @author lingting 2021/8/20 16:12
  */
-@Getter
-@Setter
-@ApiModel("支付配置")
-@Accessors(chain = true)
-@TableName(value = "lingting_payment_config")
-public class PayConfig {
+@Data
+@ApiModel("支付配置更新参数")
+public class PayConfigUpdateDTO {
 
 	@TableId
+	@NotNull(message = "请指定要更新的配置ID!")
 	@ApiModelProperty("配置id")
 	private Integer id;
 
-	/**
-	 * 标识
-	 */
 	@ApiModelProperty("标识")
+	@NotEmpty(message = "支付配置标识不能为空!")
 	private String mark;
 
-	@ApiModelProperty("第三方")
-	private ThirdPart thirdPart;
-
+	@NotNull(message = "请选择是否禁用")
 	@ApiModelProperty("是否禁用")
 	private Boolean disabled;
 
@@ -66,11 +55,11 @@ public class PayConfig {
 	@ApiModelProperty("微信-商户key")
 	private String wxMchKey;
 
-	@TableLogic
-	@ApiModelProperty("是否删除")
-	private Long deleted;
-
-	@TableField(fill = FieldFill.INSERT)
-	private LocalDateTime createTime;
+	public PayConfig toEntity() {
+		return new PayConfig().setId(getId()).setMark(getMark()).setDisabled(getDisabled()).setAliAppId(getAliAppId())
+				.setAliPrivateKey(getAliPrivateKey()).setAliPayPublicKey(getAliPayPublicKey())
+				.setAliFormat(getAliFormat()).setAliCharset(getAliCharset()).setAliSignType(getAliSignType())
+				.setWxAppId(getWxAppId()).setWxMchId(getWxMchId()).setWxMchKey(getWxMchKey());
+	}
 
 }

@@ -8,6 +8,7 @@ import live.lingting.payment.Page;
 import live.lingting.payment.biz.mapper.ProjectMapper;
 import live.lingting.payment.biz.service.ProjectHistoryService;
 import live.lingting.payment.biz.service.ProjectService;
+import live.lingting.payment.dto.ProjectCreateDTO;
 import live.lingting.payment.entity.Project;
 import live.lingting.payment.entity.ProjectHistory;
 import live.lingting.payment.enums.ProjectScope;
@@ -30,8 +31,8 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 	}
 
 	@Override
-	public void create(Project project) {
-		save(ApiUtils.fillApi(project));
+	public void create(ProjectCreateDTO project) {
+		save(ApiUtils.fillApi(project.toEntity()));
 	}
 
 	@Override

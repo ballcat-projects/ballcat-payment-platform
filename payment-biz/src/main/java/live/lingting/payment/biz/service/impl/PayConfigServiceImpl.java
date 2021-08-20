@@ -9,6 +9,8 @@ import live.lingting.payment.biz.mapper.PayConfigMapper;
 import live.lingting.payment.biz.mybatis.WrappersX;
 import live.lingting.payment.biz.mybatis.conditions.LambdaQueryWrapperX;
 import live.lingting.payment.biz.service.PayConfigService;
+import live.lingting.payment.dto.PayConfigCreateDTO;
+import live.lingting.payment.dto.PayConfigUpdateDTO;
 import live.lingting.payment.entity.PayConfig;
 import live.lingting.payment.enums.ResponseCode;
 import live.lingting.payment.exception.PaymentException;
@@ -32,14 +34,16 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 	}
 
 	@Override
-	public void create(PayConfig config) throws PaymentException {
+	public void create(PayConfigCreateDTO dto) throws PaymentException {
+		PayConfig config = dto.toEntity();
 		valid(config);
 		save(config);
 	}
 
 	@Override
-	public void edit(PayConfig config) throws PaymentException {
-		PayConfig oldConfig = getById(config.getId());
+	public void edit(PayConfigUpdateDTO dto) throws PaymentException {
+		PayConfig oldConfig = getById(dto.getId());
+		PayConfig config = dto.toEntity();
 		// 支付方式不允许修改
 		config.setThirdPart(oldConfig.getThirdPart());
 
