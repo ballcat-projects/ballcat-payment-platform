@@ -36,6 +36,18 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 	}
 
 	@Override
+	public List<PayConfig> listDeletedByIgnore(List<String> marks) {
+		LambdaQueryWrapperX<PayConfig> wrapper = WrappersX.<PayConfig>lambdaQueryX()
+				// 不在指定标识内
+				.notInIfPresent(PayConfig::getMark, marks)
+				// 被删除
+				.gt(PayConfig::getDeleted, 0)
+
+		;
+		return list(wrapper);
+	}
+
+	@Override
 	public Page<PayConfig> list(Page<PayConfig> page, PayConfig qo) {
 		return baseMapper.list(page, qo);
 	}

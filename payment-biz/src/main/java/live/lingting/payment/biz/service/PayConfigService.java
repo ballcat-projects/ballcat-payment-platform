@@ -23,6 +23,14 @@ public interface PayConfigService extends IService<PayConfig> {
 	List<PayConfig> listByThird(ThirdPart third);
 
 	/**
+	 * 获取指定标识外的, 被逻辑删除的支付配置
+	 * @param marks 指定标识
+	 * @return java.util.List<live.lingting.payment.entity.PayConfig>
+	 * @author lingting 2021-08-20 17:24
+	 */
+	List<PayConfig> listDeletedByIgnore(List<String> marks);
+
+	/**
 	 * 分页查询
 	 * @param page 分页
 	 * @param qo 参数

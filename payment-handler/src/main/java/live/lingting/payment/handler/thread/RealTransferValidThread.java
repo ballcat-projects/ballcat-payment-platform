@@ -9,13 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import live.lingting.payment.ali.domain.AliPayQuery;
-import live.lingting.payment.ali.enums.TradeStatus;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.real.third.AliManager;
 import live.lingting.payment.biz.real.third.WxManager;
 import live.lingting.payment.biz.service.PayService;
 import live.lingting.payment.entity.Pay;
+import live.lingting.payment.handler.domain.PaymentQuery;
 import live.lingting.payment.sdk.enums.ThirdPart;
 
 /**
@@ -43,29 +42,34 @@ public class RealTransferValidThread extends AbstractThread<Pay> {
 	@Override
 	public void handler(Pay pay) {
 		final boolean isAli = ThirdPart.ALI.equals(pay.getThirdPart());
-		if (isAli) {
-			AliPayQuery query;
-			try {
-				query = aliManager.get(pay.getConfigMark()).query(null, pay.getThirdPartTradeNo());
-			}
-			catch (AlipayApiException e) {
-				log.error("查询交易时发生异常! tradeNo: {}", pay.getTradeNo(), e);
-				query = null;
-			}
+		PaymentQuery query;
 
-			if (query != null && !query.getTradeStatus().equals(TradeStatus.WAIT)) {
-				if (query.getTradeStatus().equals(TradeStatus.SUCCESS)
-						|| query.getTradeStatus().equals(TradeStatus.FINISHED)) {
-					success(pay, query.getAmount());
-					return;
-				}
-				else if (query.getTradeStatus().equals(TradeStatus.CLOSED)) {
-					fail(pay, "交易已关闭");
-					return;
-				}
-				else {
-					log.error("交易查询返回异常! tradeNo:{}, 返回信息: {}", pay.getTradeNo(), query);
-				}
+		try {
+			if (isAli) {
+				query = PaymentQuery.of(aliManager.getAll(pay.getConfigMark()), pay);
+			}
+			else {
+				query = new PaymentQuery().setStatus(PaymentQuery.Status.UNKNOWN);
+			}
+		}
+		catch (AlipayApiException e) {
+			log.error("查询交易时发生异常! tradeNo: {}", pay.getTradeNo(), e);
+			query = null;
+		}
+
+		if (query != null) {
+			switch (query.getStatus()) {
+			case SUCCESS:
+				success(pay, query.getAmount());
+				return;
+			case CLOSED:
+				fail(pay, "交易已关闭");
+				return;
+			case WAIT:
+				// 不打印日志
+				break;
+			default:
+				log.error("交易状态异常! tradeNo:{}, 返回信息: {}", pay.getTradeNo(), query);
 			}
 		}
 

@@ -106,6 +106,10 @@ public enum ResponseCode {
 	 * 支付关键配置缺失, 请检查!
 	 */
 	PAYMENT_CONFIG_ERROR(233019, "支付关键配置缺失, 请检查!"),
+	/**
+	 * 支付配置已被禁用!
+	 */
+	PAYMENT_CONFIG_DISABLED(233020, "支付配置已被禁用!"),
 
 	;
 
