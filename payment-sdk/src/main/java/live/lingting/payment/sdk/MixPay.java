@@ -80,6 +80,7 @@ public class MixPay {
 		model.setSubject(subject);
 		model.setMode(Mode.QR);
 		model.setMark(mark);
+		model.setNotifyUrl(getNotifyUrl());
 		return realPay(model);
 	}
 
@@ -97,6 +98,7 @@ public class MixPay {
 		model.setCurrency(currency);
 		model.setMode(Mode.TRANSFER);
 		model.setMark(mark);
+		model.setNotifyUrl(getNotifyUrl());
 		return realPay(model);
 	}
 
@@ -106,7 +108,6 @@ public class MixPay {
 	 * @author lingting 2021-07-14 17:34
 	 */
 	public MixRealPayResponse realPay(MixRealPayModel model) throws MixException {
-		model.setNotifyUrl(getNotifyUrl());
 		MixRealPayRequest request = new MixRealPayRequest();
 		request.setModel(model);
 		return getClient().execute(request);
