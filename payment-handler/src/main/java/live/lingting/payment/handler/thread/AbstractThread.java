@@ -4,6 +4,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.LongSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.InitializingBean;
  * @author lingting 2021/6/10 17:23
  */
 public abstract class AbstractThread<E> extends Thread implements InitializingBean {
+
+	protected static LongSupplier sleepTime = () -> TimeUnit.MINUTES.toMillis(1);
 
 	@Override
 	public void run() {
@@ -35,13 +38,17 @@ public abstract class AbstractThread<E> extends Thread implements InitializingBe
 		}
 	}
 
+	public static void setSleepTime(LongSupplier supplier) {
+		sleepTime = supplier;
+	}
+
 	/**
-	 * 休眠时长, 单位: 分钟
+	 * 休眠时长, 单位: 毫秒
 	 *
 	 * @author lingting 2021-06-10 17:27
 	 */
 	public Long getSleepTime() {
-		return TimeUnit.MINUTES.toMillis(1);
+		return sleepTime.getAsLong();
 	}
 
 	/**
