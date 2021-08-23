@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TableConstants {
 
-	public static final String TN_PAY = "pay";
+	public static final String TN_PAY = "lingting_payment_pay";
 
 	public static final String FIELD_PROJECT_ID = "project_id";
 
