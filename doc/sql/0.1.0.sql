@@ -131,3 +131,11 @@ DELIMITER ;
 CALL scan_va();
 DROP PROCEDURE scan_va;
 DROP PROCEDURE scan_p;
+
+ALTER TABLE `lingting_payment_config`
+    ADD COLUMN `create_by` varchar(50) DEFAULT '' COMMENT '创建人信息',
+    ADD COLUMN `update_by` varchar(50) DEFAULT '' COMMENT '更新人信息';
+
+ALTER TABLE `lingting_payment_project`
+    ADD COLUMN `create_by` varchar(50) DEFAULT '' COMMENT '创建人信息',
+    ADD COLUMN `update_by` varchar(50) DEFAULT '' COMMENT '更新人信息';

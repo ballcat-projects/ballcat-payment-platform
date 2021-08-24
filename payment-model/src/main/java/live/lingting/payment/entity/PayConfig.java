@@ -70,6 +70,10 @@ public class PayConfig {
 	@ApiModelProperty("是否删除")
 	private Long deleted;
 
+	private String updateBy;
+
+	private String createBy;
+
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
 

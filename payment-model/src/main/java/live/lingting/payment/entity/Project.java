@@ -62,6 +62,10 @@ public class Project implements Serializable {
 	@TableField(typeHandler = ScopeTypeHandler.class)
 	private Set<ProjectScope> scope;
 
+	private String updateBy;
+
+	private String createBy;
+
 	@TableField(fill = FieldFill.INSERT)
 	private LocalDateTime createTime;
 
