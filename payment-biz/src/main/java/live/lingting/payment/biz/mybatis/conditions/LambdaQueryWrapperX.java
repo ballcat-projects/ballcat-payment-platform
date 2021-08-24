@@ -1,7 +1,7 @@
 package live.lingting.payment.biz.mybatis.conditions;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.text.CharSequenceUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper;
@@ -144,17 +144,23 @@ public class LambdaQueryWrapperX<T> extends AbstractLambdaWrapper<T, LambdaQuery
 
 	// ======= 分界线，以上 copy 自 mybatis-plus 源码 =====
 
-	public LambdaQueryWrapperX<T> jsonContains(SFunction<T, ?> column, Object val) {
+	public LambdaQueryWrapperX<T> jsonContains(SFunction<T, ?> column, Object... val) {
 		return jsonContains(true, column, val);
 	}
 
-	public LambdaQueryWrapperX<T> jsonContains(boolean condition, SFunction<T, ?> column, Object val) {
-		doIt(condition, () -> " JSON_CONTAINS",
-				() -> CharSequenceUtil.format("({}, '\"{}\"') ", columnToString(column), val));
+	public LambdaQueryWrapperX<T> jsonContains(boolean condition, SFunction<T, ?> column, Object... val) {
+		doIt(condition, () -> " JSON_CONTAINS", () -> {
+			StringBuilder builder = new StringBuilder("(").append(columnToString(column));
+			for (Object v : val) {
+				builder.append(", '\"").append(Convert.toStr(v)).append("\"'");
+			}
+
+			return builder.append(")").toString();
+		});
 		return this;
 	}
 
-	public LambdaQueryWrapperX<T> jsonContainsIfPresent(SFunction<T, ?> column, Object val) {
+	public LambdaQueryWrapperX<T> jsonContainsIfPresent(SFunction<T, ?> column, Object... val) {
 		return jsonContains(isPresent(val), column, val);
 	}
 
