@@ -83,7 +83,7 @@ public interface PayMapper extends BaseMapper<Pay> {
 	 * @return live.lingting.payment.Page<live.lingting.payment.entity.Pay>
 	 * @author lingting 2021-06-07 11:05
 	 */
-	@Select("select *, (select p.name from lingting_payment_project p where  p.id=lpp.project_id) as project_name from `lingting_payment_pay` lpp ")
+	@Select("select *, (select p.name from lingting_payment_project p where  p.id=lpp.project_id) as project_name from `lingting_payment_pay` lpp ${ew.customSqlSegment}")
 	IPage<PayVO> listVo(IPage<Pay> page, @Param(Constants.WRAPPER) Wrapper<Pay> wrapper);
 
 	/**

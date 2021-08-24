@@ -69,7 +69,7 @@ public interface VirtualAddressMapper extends BaseMapper<VirtualAddress> {
 			+ "va_id = va.id ), ']' ) AS project_ids,\n"
 			+ "CONCAT('[\"',(SELECT GROUP_CONCAT( `name` SEPARATOR '\", \"' ) FROM `lingting_payment_project` p WHERE "
 			+ "p.id IN ( SELECT project_id FROM lingting_payment_virtual_address_project WHERE va_id = va.id )),'\"]')"
-			+ " AS project_names \n" + "FROM `lingting_payment_virtual_address` va ")
+			+ " AS project_names \n" + "FROM `lingting_payment_virtual_address` va ${ew.customSqlSegment}")
 	@Result(column = "project_ids", property = "projectIds", typeHandler = VirtualAddressVO.ProjectIdsTypeHandler.class)
 	@Result(column = "project_names", property = "projectNames",
 			typeHandler = VirtualAddressVO.ProjectNamesTypeHandler.class)
