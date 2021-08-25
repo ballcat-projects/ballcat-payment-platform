@@ -70,8 +70,10 @@ public class PayConfig {
 	@ApiModelProperty("是否删除")
 	private Long deleted;
 
+	@TableField(fill = FieldFill.INSERT_UPDATE)
 	private String updateBy;
 
+	@TableField(fill = FieldFill.INSERT)
 	private String createBy;
 
 	@TableField(fill = FieldFill.INSERT)
