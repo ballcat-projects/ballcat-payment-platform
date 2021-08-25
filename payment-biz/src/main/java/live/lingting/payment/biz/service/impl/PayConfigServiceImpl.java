@@ -2,11 +2,11 @@ package live.lingting.payment.biz.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import live.lingting.payment.Page;
+import live.lingting.payment.biz.Redis;
 import live.lingting.payment.biz.mapper.PayConfigMapper;
 import live.lingting.payment.biz.mybatis.WrappersX;
 import live.lingting.payment.biz.mybatis.conditions.LambdaQueryWrapperX;
@@ -17,17 +17,16 @@ import live.lingting.payment.dto.PayConfigUpdateDTO;
 import live.lingting.payment.entity.PayConfig;
 import live.lingting.payment.enums.ResponseCode;
 import live.lingting.payment.exception.PaymentException;
-import live.lingting.payment.pay.ThirdPay;
 import live.lingting.payment.sdk.enums.ThirdPart;
 
 /**
  * @author lingting 2021/8/10 11:04
  */
 @Service
+@RequiredArgsConstructor
 public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig> implements PayConfigService {
 
-	@Autowired
-	protected List<AbstractThirdManager<? extends ThirdPay>> managers;
+	private final Redis redis;
 
 	@Override
 	public List<PayConfig> listByThird(ThirdPart third) {
@@ -62,7 +61,7 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 		PayConfig config = dto.toEntity();
 		valid(config);
 		save(config);
-		reload(dto.getMark(), dto.getThirdPart());
+		reload(dto.getThirdPart());
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 		config.setMark(oldConfig.getMark());
 		valid(config);
 		updateById(config);
-		reload(config.getMark(), config.getThirdPart());
+		reload(config.getThirdPart());
 	}
 
 	@Override
@@ -83,21 +82,8 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 		removeById(id);
 	}
 
-	private void reload(String mark, ThirdPart tp) {
-		if (!CollectionUtils.isEmpty(managers)) {
-			for (AbstractThirdManager<? extends ThirdPay> manager : managers) {
-				// 仅更新指定第三方
-				if (!tp.equals(manager.getThird())) {
-					continue;
-				}
-				try {
-					manager.reload(mark);
-				}
-				catch (Exception e) {
-					log.error("重新加载支付配置异常! 标识: {}" + mark, e);
-				}
-			}
-		}
+	private void reload(ThirdPart tp) {
+		redis.set(AbstractThirdManager.getConfigUpdateKey(tp), Long.toString(System.currentTimeMillis()));
 	}
 
 	private void valid(PayConfig config) throws PaymentException {

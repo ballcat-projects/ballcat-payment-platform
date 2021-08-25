@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import live.lingting.payment.biz.Redis;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.PayConfigService;
 import live.lingting.payment.entity.PayConfig;
@@ -20,18 +21,26 @@ import live.lingting.payment.sdk.enums.ThirdPart;
  */
 public abstract class AbstractThirdManager<T extends ThirdPay> {
 
+	private static final String CONFIG_UPDATE_KEY = "live:lingting:payment:config:";
+
 	@Autowired
 	protected PayConfigService service;
 
 	@Autowired
 	protected PaymentConfig paymentConfig;
 
-	private boolean init = false;
+	@Autowired
+	protected Redis redis;
+
+	/**
+	 * 用于标记是否更新
+	 */
+	private String updateVal;
 
 	/**
 	 * 可正常使用的
 	 */
-	private final Map<String, T> cache = new ConcurrentHashMap<>(16);
+	private final Map<String, T> normal = new ConcurrentHashMap<>(16);
 
 	/**
 	 * 禁用的
@@ -44,7 +53,11 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 	private final Map<String, T> deleted = new ConcurrentHashMap<>(16);
 
 	public void reload() {
-		synchronized (cache) {
+		synchronized (normal) {
+			// 防止并发下, 一次更新, 多次重新加载
+			if (updateVal.equals(redis.get(getConfigUpdateKey(getThird())))) {
+				return;
+			}
 			List<String> marks = new ArrayList<>(16);
 			// 正常和被禁用
 			List<PayConfig> list = service.listByThird(getThird());
@@ -57,7 +70,7 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 			for (PayConfig config : list) {
 				put(config.getMark(), config);
 			}
-			init = true;
+			updateVal = redis.get(getConfigUpdateKey(getThird()));
 		}
 	}
 
@@ -71,12 +84,17 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 		}
 	}
 
-	public T get(String mark) throws PaymentException {
-		// map 为空, 且未进行初始化
-		if (cache.isEmpty() && !init) {
+	private void init() {
+		// 更新标记不存在或者与缓存不一致
+		if (updateVal == null || !updateVal.equals(redis.get(getConfigUpdateKey(getThird())))) {
 			reload();
 		}
-		T t = cache.get(mark);
+	}
+
+	public T get(String mark) throws PaymentException {
+		// 初始化
+		init();
+		T t = normal.get(mark);
 		if (t == null) {
 			if (disabled.containsKey(mark)) {
 				throw new PaymentException(ResponseCode.PAYMENT_CONFIG_DISABLED);
@@ -97,12 +115,10 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 	 * @author lingting 2021-08-20 17:19
 	 */
 	public T getAll(String mark) throws PaymentException {
-		// map 为空, 且未进行初始化
-		if (cache.isEmpty() && !init) {
-			reload();
-		}
+		// 初始化
+		init();
 		// 获取正常的
-		T t = cache.get(mark);
+		T t = normal.get(mark);
 
 		// 禁用的
 		if (t == null) {
@@ -146,15 +162,32 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 		// 删除
 		if (config.getDeleted() > 0) {
 			deleted.put(key, t);
+			// 从正常和禁用中移除
+			normal.remove(key);
+			disabled.remove(key);
 		}
 		// 禁用
 		else if (config.getDisabled()) {
 			disabled.put(key, t);
+			// 从正常和删除中移除
+			normal.remove(key);
+			deleted.remove(key);
 		}
 		// 正常
 		else {
-			cache.put(config.getMark(), t);
+			normal.put(config.getMark(), t);
+			// 从删除和禁用中移除
+			deleted.remove(key);
+			disabled.remove(key);
 		}
+	}
+
+	/**
+	 * 获取配置更新key
+	 * @author lingting 2021-08-25 22:08
+	 */
+	public static String getConfigUpdateKey(ThirdPart tp) {
+		return CONFIG_UPDATE_KEY + tp.name();
 	}
 
 }
