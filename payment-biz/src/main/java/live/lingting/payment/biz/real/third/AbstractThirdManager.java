@@ -148,7 +148,7 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 			deleted.put(key, t);
 		}
 		// 禁用
-		else if (!config.getDisabled()) {
+		else if (config.getDisabled()) {
 			disabled.put(key, t);
 		}
 		// 正常
