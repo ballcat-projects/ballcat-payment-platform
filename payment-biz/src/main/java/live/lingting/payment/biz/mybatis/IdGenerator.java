@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import live.lingting.payment.entity.Pay;
 import live.lingting.payment.util.ClassUtils;
 
@@ -20,7 +19,6 @@ import live.lingting.payment.util.ClassUtils;
  * @author lingting 2021/4/7 15:25
  */
 @Slf4j
-@Component
 public class IdGenerator implements IdentifierGenerator {
 
 	/**
@@ -87,9 +85,8 @@ public class IdGenerator implements IdentifierGenerator {
 			return MAP.get(entity.getClass());
 		}
 		TableName tableName = AnnotationUtil.getAnnotation(entity.getClass(), TableName.class);
-		int hashCode = tableName.value().hashCode();
-		// 初始
-		String hash = String.valueOf(hashCode).substring(0, 1);
+		String hash = String.valueOf(Math.abs(tableName.value().hashCode()));
+		hash = hash.substring(0, 1);
 		MAP.put(entity.getClass(), hash);
 		return hash;
 
