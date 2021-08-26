@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import live.lingting.payment.biz.Redis;
 import live.lingting.payment.biz.config.PaymentConfig;
 import live.lingting.payment.biz.service.PayConfigService;
@@ -22,6 +23,8 @@ import live.lingting.payment.sdk.enums.ThirdPart;
 public abstract class AbstractThirdManager<T extends ThirdPay> {
 
 	private static final String CONFIG_UPDATE_KEY = "live:lingting:payment:config:";
+
+	public static final String NULL_VAL = "NL";
 
 	@Autowired
 	protected PayConfigService service;
@@ -55,7 +58,8 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 	public void reload() {
 		synchronized (normal) {
 			// 防止并发下, 一次更新, 多次重新加载
-			if (updateVal.equals(redis.get(getConfigUpdateKey(getThird())))) {
+			String cacheVal = getCache();
+			if (updateVal != null && updateVal.equals(cacheVal)) {
 				return;
 			}
 			List<String> marks = new ArrayList<>(16);
@@ -70,7 +74,7 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 			for (PayConfig config : list) {
 				put(config.getMark(), config);
 			}
-			updateVal = redis.get(getConfigUpdateKey(getThird()));
+			updateVal = cacheVal;
 		}
 	}
 
@@ -85,10 +89,15 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 	}
 
 	private void init() {
-		// 更新标记不存在或者与缓存不一致
-		if (updateVal == null || !updateVal.equals(redis.get(getConfigUpdateKey(getThird())))) {
+		if (updateVal == null) {
 			reload();
 		}
+		// 更新标记与缓存值一致
+		if (updateVal.equals(getCache())) {
+			return;
+		}
+
+		reload();
 	}
 
 	public T get(String mark) throws PaymentException {
@@ -188,6 +197,11 @@ public abstract class AbstractThirdManager<T extends ThirdPay> {
 	 */
 	public static String getConfigUpdateKey(ThirdPart tp) {
 		return CONFIG_UPDATE_KEY + tp.name();
+	}
+
+	public String getCache() {
+		String val = redis.get(getConfigUpdateKey(getThird()));
+		return StringUtils.hasText(val) ? val : NULL_VAL;
 	}
 
 }
