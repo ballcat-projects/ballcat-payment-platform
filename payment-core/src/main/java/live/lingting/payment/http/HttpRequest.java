@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
  * @author lingting 2021/7/12 16:16
  */
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class HttpRequest {
 
 	@Setter
@@ -41,6 +43,22 @@ public abstract class HttpRequest {
 	 * @author lingting 2021-07-12 16:28
 	 */
 	public abstract HttpResponse exec();
+
+	public boolean hasHeader(HttpHeader header) {
+		return hasHeader(header.getVal());
+	}
+
+	public boolean hasHeader(String name) {
+		return getHeaders().containsKey(name);
+	}
+
+	public String getHeader(HttpHeader header) {
+		return getHeader(header.getVal());
+	}
+
+	public String getHeader(String name) {
+		return getHeaders().get(name);
+	}
 
 	public void setBody(String body) {
 		this.body = body;

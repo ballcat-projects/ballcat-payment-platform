@@ -1,7 +1,9 @@
 package live.lingting.payment.http;
 
 import cn.hutool.http.HttpUtil;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -9,6 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpPost extends HttpRequest {
 
 	public static HttpPost of(String url) {

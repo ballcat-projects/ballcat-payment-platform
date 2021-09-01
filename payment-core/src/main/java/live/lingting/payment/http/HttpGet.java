@@ -1,10 +1,13 @@
 package live.lingting.payment.http;
 
 import cn.hutool.http.HttpUtil;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author lingting 2021/8/4 下午6:59
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class HttpGet extends HttpRequest {
 
 	public static HttpGet of(String url) {
