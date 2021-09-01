@@ -7,15 +7,18 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import live.lingting.payment.http.HttpGet;
 import live.lingting.payment.http.HttpHeader;
+import live.lingting.payment.http.HttpMethod;
 import live.lingting.payment.http.HttpPost;
-import live.lingting.payment.util.JacksonUtils;
+import live.lingting.payment.http.HttpRequest;
 import live.lingting.payment.sdk.constant.SdkConstants;
 import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.sdk.model.MixModel;
 import live.lingting.payment.sdk.request.MixRequest;
 import live.lingting.payment.sdk.response.MixResponse;
 import live.lingting.payment.sdk.util.MixUtils;
+import live.lingting.payment.util.JacksonUtils;
 
 /**
  * @author lingting 2021/6/7 20:00
@@ -44,7 +47,7 @@ public class DefaultMixClient implements MixClient {
 		}
 	}
 
-	private <M extends MixModel, R extends MixResponse<?>> R request(MixRequest<M, R> request) throws MixException {
+	protected <M extends MixModel, R extends MixResponse<?>> R request(MixRequest<M, R> request) throws MixException {
 
 		final M model = request.getModel();
 		if (model == null) {
@@ -61,30 +64,60 @@ public class DefaultMixClient implements MixClient {
 		return getResponse(request, params);
 	}
 
-	private <M extends MixModel, R extends MixResponse<?>> R getResponse(MixRequest<M, R> request,
+	protected <M extends MixModel, R extends MixResponse<?>> R getResponse(MixRequest<M, R> request,
+			Map<String, String> params) {
+		HttpRequest hr = getRequest(request, params);
+
+		// 不存在UA则添加一个sdk的UA
+		if (!hr.hasHeader(HttpHeader.USER_AGENT)) {
+			hr.header(HttpHeader.USER_AGENT, "live-lingting-sdk");
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("[MixPay请求数据] url: {}, Content-Type: {}, body: {}", hr.getUrl(),
+					hr.getHeader(HttpHeader.CONTENT_TYPE), hr.getBody());
+		}
+
+		final String resStr = hr.exec().getBody();
+
+		if (log.isDebugEnabled()) {
+			log.debug("[MixPay请求返回数据] url: {}, Content-Type: {}, body: {}", hr.getUrl(),
+					hr.getHeader(HttpHeader.CONTENT_TYPE), resStr);
+		}
+		return request.convert(resStr);
+	}
+
+	protected <M extends MixModel, R extends MixResponse<?>> HttpRequest getRequest(MixRequest<M, R> request,
+			Map<String, String> params) {
+		if (request.getMethod().equals(HttpMethod.GET)) {
+			return handlerGetRequest(request, params);
+		}
+		else {
+			return handlerPostRequest(request, params);
+		}
+	}
+
+	protected <M extends MixModel, R extends MixResponse<?>> HttpRequest handlerGetRequest(MixRequest<M, R> request,
+			Map<String, String> params) {
+		HttpGet get = HttpGet.of(getUrlStr(request), request.getProperties());
+		final String body = JacksonUtils.toJson(params);
+		get.setBody(body);
+		return get;
+	}
+
+	protected <M extends MixModel, R extends MixResponse<?>> HttpRequest handlerPostRequest(MixRequest<M, R> request,
 			Map<String, String> params) {
 		HttpPost post = HttpPost.of(getUrlStr(request), request.getProperties());
 
 		final String type = SdkConstants.HTTP_TYPE_JSON;
 		post.header(HttpHeader.ACCEPT, type);
-		post.header("User-Agent", "live-lingting-sdk");
-		post.header("Content-Type", type);
+		post.header(HttpHeader.CONTENT_TYPE, type);
 		final String body = JacksonUtils.toJson(params);
 		post.setBody(body);
-
-		if (log.isDebugEnabled()) {
-			log.debug("[MixPay请求数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, body);
-		}
-
-		final String resStr = post.exec().getBody();
-
-		if (log.isDebugEnabled()) {
-			log.debug("[MixPay请求返回数据] url: {}, Content-Type: {}, body: {}", post.getUrl(), type, resStr);
-		}
-		return request.convert(resStr);
+		return post;
 	}
 
-	private <M extends MixModel, R extends MixResponse<?>> String getUrlStr(MixRequest<M, R> request) {
+	protected <M extends MixModel, R extends MixResponse<?>> String getUrlStr(MixRequest<M, R> request) {
 		String url = getServerUrl();
 
 		if (!url.endsWith(FORWARD_SLASH)) {

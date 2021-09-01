@@ -7,11 +7,12 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import lombok.Setter;
+import live.lingting.payment.http.HttpMethod;
 import live.lingting.payment.http.HttpProperties;
-import live.lingting.payment.util.JacksonUtils;
 import live.lingting.payment.sdk.exception.MixRequestParamsValidException;
 import live.lingting.payment.sdk.model.MixModel;
 import live.lingting.payment.sdk.response.MixResponse;
+import live.lingting.payment.util.JacksonUtils;
 
 /**
  * @author lingting 2021/6/7 17:33
@@ -23,6 +24,12 @@ public abstract class AbstractMixRequest<M extends MixModel, R extends MixRespon
 	private static final Map<Class<?>, Type> CACHE = new ConcurrentHashMap<>(16);
 
 	private M model;
+
+	@Override
+	public HttpMethod getMethod() {
+		// 默认使用post
+		return HttpMethod.POST;
+	}
 
 	@Override
 	public Map<String, String> getParams() throws MixRequestParamsValidException {

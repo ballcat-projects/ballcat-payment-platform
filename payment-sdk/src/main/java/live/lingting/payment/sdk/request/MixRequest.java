@@ -1,6 +1,7 @@
 package live.lingting.payment.sdk.request;
 
 import java.util.Map;
+import live.lingting.payment.http.HttpMethod;
 import live.lingting.payment.http.HttpProperties;
 import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.sdk.model.MixModel;
@@ -17,6 +18,13 @@ public interface MixRequest<M extends MixModel, R extends MixResponse<?>> {
 	 * @author lingting 2021-06-07 20:48
 	 */
 	String getPath();
+
+	/**
+	 * 获取http请求方式
+	 * @return live.lingting.payment.http.HttpMethod
+	 * @author lingting 2021-09-01 14:35
+	 */
+	HttpMethod getMethod();
 
 	/**
 	 * 获取参数基础数据
