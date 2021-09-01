@@ -66,6 +66,9 @@ public class PayConfig {
 	@ApiModelProperty("微信-商户key")
 	private String wxMchKey;
 
+	@ApiModelProperty("银行卡-卡号")
+	private String bankCard;
+
 	@TableLogic
 	@ApiModelProperty("是否删除")
 	private Long deleted;

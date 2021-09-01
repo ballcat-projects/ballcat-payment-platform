@@ -10,6 +10,7 @@ import live.lingting.payment.sdk.enums.Mode;
 import live.lingting.payment.sdk.enums.SdkContract;
 import live.lingting.payment.sdk.enums.ThirdPart;
 import live.lingting.payment.sdk.exception.MixException;
+import live.lingting.payment.sdk.model.MixBankModel;
 import live.lingting.payment.sdk.model.MixForciblyFailModel;
 import live.lingting.payment.sdk.model.MixForciblyRetryModel;
 import live.lingting.payment.sdk.model.MixQueryModel;
@@ -18,6 +19,7 @@ import live.lingting.payment.sdk.model.MixRealPayModel;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
 import live.lingting.payment.sdk.model.MixVirtualRetryModel;
 import live.lingting.payment.sdk.model.MixVirtualSubmitModel;
+import live.lingting.payment.sdk.request.MixBankRequest;
 import live.lingting.payment.sdk.request.MixForciblyFailRequest;
 import live.lingting.payment.sdk.request.MixForciblyRetryRequest;
 import live.lingting.payment.sdk.request.MixQueryRequest;
@@ -26,6 +28,7 @@ import live.lingting.payment.sdk.request.MixRealPayRequest;
 import live.lingting.payment.sdk.request.MixVirtualPayRequest;
 import live.lingting.payment.sdk.request.MixVirtualRetryRequest;
 import live.lingting.payment.sdk.request.MixVirtualSubmitRequest;
+import live.lingting.payment.sdk.response.MixBankResponse;
 import live.lingting.payment.sdk.response.MixForciblyFailResponse;
 import live.lingting.payment.sdk.response.MixForciblyRetryResponse;
 import live.lingting.payment.sdk.response.MixQueryResponse;
@@ -170,6 +173,19 @@ public class MixPay {
 
 	public MixVirtualRetryResponse virtualRetry(MixVirtualRetryModel model) throws MixException {
 		MixVirtualRetryRequest request = new MixVirtualRetryRequest();
+		request.setModel(model);
+		return getClient().execute(request);
+	}
+
+	public MixBankResponse bank(String mark, ThirdPart tp) throws MixException {
+		MixBankModel model = new MixBankModel();
+		model.setMark(mark);
+		model.setTp(tp);
+		return bank(model);
+	}
+
+	public MixBankResponse bank(MixBankModel model) throws MixException {
+		MixBankRequest request = new MixBankRequest();
 		request.setModel(model);
 		return getClient().execute(request);
 	}

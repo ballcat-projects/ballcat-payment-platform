@@ -46,6 +46,8 @@ public class SdkConstants {
 
 	public static final String MIX_RATE_PATH = "rate";
 
+	public static final String MIX_BANK = "bank";
+
 	/**
 	 * -------------------------------HTTP-----------------------------------------
 	 */

@@ -57,6 +57,9 @@ public class MixRealPayModel extends MixModel {
 		else if (!StringUtils.hasText(getMark())) {
 			msg = "支付配置标识不能为空";
 		}
+		else if (ThirdPart.BC_UNKNOWN.equals(getThirdPart())) {
+			msg = "该第三方不支持支付操作";
+		}
 		else if (Mode.QR.equals(getMode())) {
 			if (getAmount() == null || getAmount().compareTo(BigDecimal.ZERO) < 1) {
 				msg = "支付金额异常";

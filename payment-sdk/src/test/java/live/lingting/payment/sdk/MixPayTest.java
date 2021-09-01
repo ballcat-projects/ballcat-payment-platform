@@ -9,6 +9,7 @@ import live.lingting.payment.sdk.enums.Chain;
 import live.lingting.payment.sdk.enums.Currency;
 import live.lingting.payment.sdk.enums.SdkContract;
 import live.lingting.payment.sdk.enums.ThirdPart;
+import live.lingting.payment.sdk.response.MixBankResponse;
 import live.lingting.payment.sdk.response.MixQueryResponse;
 import live.lingting.payment.sdk.response.MixRateResponse;
 import live.lingting.payment.sdk.response.MixRealPayResponse;
@@ -73,6 +74,12 @@ class MixPayTest {
 		String hash = "";
 		mixVirtualRetryResponse = mixPay.virtualRetry(tradeNo, "", hash);
 		System.out.println(mixVirtualRetryResponse.toString());
+	}
+
+	@Test
+	void bank() throws Exception {
+		MixBankResponse bank = mixPay.bank("test", ThirdPart.BC_UNKNOWN);
+		System.out.println(bank.getCard());
 	}
 
 	@Test

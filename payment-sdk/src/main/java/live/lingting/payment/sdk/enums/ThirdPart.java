@@ -18,6 +18,10 @@ public enum ThirdPart {
 	 * ALI
 	 */
 	ALI,
+	/**
+	 * 银行卡 - 未知银行
+	 */
+	BC_UNKNOWN,
 
 	;
 
