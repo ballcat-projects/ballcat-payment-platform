@@ -96,6 +96,7 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 
 			if (baseMapper.selectCount(baseMapper.getWrapper(va)) > 0) {
 				address.setDesc("已存在相同地址!");
+				continue;
 			}
 
 			try {
