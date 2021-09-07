@@ -60,6 +60,11 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 	public void create(PayConfigCreateDTO dto) throws PaymentException {
 		PayConfig config = dto.toEntity();
 		valid(config);
+		// 重复校验
+		if (getByMarkAndThird(dto.getMark(), dto.getThirdPart()) != null) {
+			throw new PaymentException(ResponseCode.PAYMENT_CONFIG_EXIST);
+		}
+
 		save(config);
 		reload(dto.getThirdPart());
 	}

@@ -110,6 +110,10 @@ public enum ResponseCode {
 	 * 支付配置已被禁用!
 	 */
 	PAYMENT_CONFIG_DISABLED(233020, "支付配置已被禁用!"),
+	/**
+	 * 已存在相同支付配置!
+	 */
+	PAYMENT_CONFIG_EXIST(233020, "已存在相同支付配置!"),
 
 	;
 
