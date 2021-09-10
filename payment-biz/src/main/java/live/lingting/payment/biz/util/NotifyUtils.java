@@ -1,4 +1,4 @@
-package live.lingting.payment.util;
+package live.lingting.payment.biz.util;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingQueue;
@@ -8,6 +8,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.experimental.UtilityClass;
+import live.lingting.payment.biz.runnable.NotifyRunnable;
+import live.lingting.payment.entity.Notify;
 
 /**
  * @author lingting 2021/6/15 9:49
@@ -58,8 +60,8 @@ public class NotifyUtils {
 		return now.plusMinutes(TIMES[count - 1]);
 	}
 
-	public static void run(Runnable runnable) {
-		executor.execute(runnable);
+	public static void run(Notify notify) {
+		executor.execute(new NotifyRunnable(notify));
 	}
 
 }
