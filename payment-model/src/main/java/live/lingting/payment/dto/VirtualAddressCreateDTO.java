@@ -24,7 +24,7 @@ public class VirtualAddressCreateDTO {
 	private Chain chain;
 
 	@ApiModelProperty("可以使用地址的项目ID")
-	private List<Integer> ids;
+	private List<Integer> projectIds;
 
 	@ApiModelProperty("地址新增详情")
 	@NotEmpty(message = "地址不能为空")

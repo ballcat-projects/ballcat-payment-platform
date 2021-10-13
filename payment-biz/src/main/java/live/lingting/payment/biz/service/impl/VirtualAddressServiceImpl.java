@@ -106,7 +106,7 @@ public class VirtualAddressServiceImpl extends ServiceImpl<VirtualAddressMapper,
 					address.setDesc("保存失败!");
 				}
 				// 添加关联
-				service.insert(va.getId(), dto.getIds());
+				service.insert(va.getId(), dto.getProjectIds());
 			}
 			catch (Exception e) {
 				address.setSuccess(false);
