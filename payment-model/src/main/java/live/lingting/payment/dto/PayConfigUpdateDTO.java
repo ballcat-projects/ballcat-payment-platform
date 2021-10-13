@@ -3,7 +3,9 @@ package live.lingting.payment.dto;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 import live.lingting.payment.entity.PayConfig;
 
@@ -50,11 +52,18 @@ public class PayConfigUpdateDTO {
 	@ApiModelProperty("微信-商户key")
 	private String wxMchKey;
 
+	@ApiModelProperty("开户行")
+	private String bank;
+
+	@ApiModelProperty("银行卡-卡号")
+	private String cardNumber;
+
 	public PayConfig toEntity() {
 		return new PayConfig().setId(getId()).setDisabled(getDisabled()).setAliAppId(getAliAppId())
 				.setAliPrivateKey(getAliPrivateKey()).setAliPayPublicKey(getAliPayPublicKey())
 				.setAliFormat(getAliFormat()).setAliCharset(getAliCharset()).setAliSignType(getAliSignType())
-				.setWxAppId(getWxAppId()).setWxMchId(getWxMchId()).setWxMchKey(getWxMchKey());
+				.setWxAppId(getWxAppId()).setWxMchId(getWxMchId()).setWxMchKey(getWxMchKey()).setBank(getBank())
+				.setCardNumber(getCardNumber());
 	}
 
 }

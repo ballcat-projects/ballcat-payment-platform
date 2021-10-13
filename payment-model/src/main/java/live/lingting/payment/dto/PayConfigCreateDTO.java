@@ -2,8 +2,10 @@ package live.lingting.payment.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
 import lombok.Data;
 import live.lingting.payment.entity.PayConfig;
 import live.lingting.payment.sdk.enums.ThirdPart;
@@ -16,7 +18,7 @@ import live.lingting.payment.sdk.enums.ThirdPart;
 public class PayConfigCreateDTO {
 
 	@ApiModelProperty("标识")
-	@NotEmpty(message = "支付配置标识不能为空!")
+	@NotEmpty(message = "支付配置不能为空!")
 	private String mark;
 
 	@NotNull(message = "请选择所属第三方!")
@@ -54,12 +56,18 @@ public class PayConfigCreateDTO {
 	@ApiModelProperty("微信-商户key")
 	private String wxMchKey;
 
+	@ApiModelProperty("开户行")
+	private String bank;
+
+	@ApiModelProperty("银行卡-卡号")
+	private String cardNumber;
+
 	public PayConfig toEntity() {
 		return new PayConfig().setMark(getMark()).setThirdPart(getThirdPart()).setDisabled(getDisabled())
 				.setAliAppId(getAliAppId()).setAliPrivateKey(getAliPrivateKey())
 				.setAliPayPublicKey(getAliPayPublicKey()).setAliFormat(getAliFormat()).setAliCharset(getAliCharset())
 				.setAliSignType(getAliSignType()).setWxAppId(getWxAppId()).setWxMchId(getWxMchId())
-				.setWxMchKey(getWxMchKey());
+				.setWxMchKey(getWxMchKey()).setBank(getBank()).setCardNumber(getCardNumber());
 	}
 
 }

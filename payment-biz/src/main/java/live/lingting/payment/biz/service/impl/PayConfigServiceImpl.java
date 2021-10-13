@@ -19,6 +19,8 @@ import live.lingting.payment.enums.ResponseCode;
 import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.ThirdPart;
 
+import static live.lingting.payment.enums.ResponseCode.UNKNOWN_THIRD_PARTY;
+
 /**
  * @author lingting 2021/8/10 11:04
  */
@@ -42,7 +44,7 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 				// 被删除
 				.gt(PayConfig::getDeleted, 0)
 
-		;
+				;
 		return list(wrapper);
 	}
 
@@ -93,11 +95,17 @@ public class PayConfigServiceImpl extends ServiceImpl<PayConfigMapper, PayConfig
 
 	private void valid(PayConfig config) throws PaymentException {
 		switch (config.getThirdPart()) {
-		case WX:
-			validWx(config);
-			break;
-		default:
-			validAli(config);
+			case WX:
+				validWx(config);
+				break;
+			case ALI:
+				validAli(config);
+				break;
+			case BC_UNKNOWN:
+				// TODO 银行卡校验
+				break;
+			default:
+				throw new PaymentException(UNKNOWN_THIRD_PARTY);
 		}
 	}
 
