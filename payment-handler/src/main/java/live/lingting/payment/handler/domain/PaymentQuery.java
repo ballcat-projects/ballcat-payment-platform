@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import live.lingting.payment.ali.AliPay;
 import live.lingting.payment.ali.domain.AliPayQuery;
 import live.lingting.payment.ali.enums.TradeStatus;
@@ -16,6 +18,7 @@ import live.lingting.payment.wx.response.WxPayOrderQueryResponse;
  * @author lingting 2021/8/19 11:21
  */
 @Data
+@Slf4j
 @Accessors(chain = true)
 public class PaymentQuery {
 
@@ -39,7 +42,15 @@ public class PaymentQuery {
 	private Object raw;
 
 	public static PaymentQuery of(AliPay aliPay, Pay pay) throws AlipayApiException {
-		AliPayQuery aliPayQuery = aliPay.query(pay.getTradeNo());
+		AliPayQuery aliPayQuery;
+
+		if (StringUtils.hasText(pay.getThirdPartTradeNo())) {
+			aliPayQuery = aliPay.query(null, pay.getThirdPartTradeNo());
+		}
+		else {
+			aliPayQuery = aliPay.query(pay.getTradeNo());
+		}
+
 		PaymentQuery query = new PaymentQuery().setThirdTradeNo(aliPayQuery.getTradeNo())
 				.setAmount(aliPayQuery.getAmount()).setRaw(aliPayQuery);
 
