@@ -141,4 +141,6 @@ ALTER TABLE `lingting_payment_project`
     ADD COLUMN `update_by` varchar(50) DEFAULT '' COMMENT '更新人信息';
 
 ALTER TABLE `lingting_payment_config`
-    ADD COLUMN `bank_card` varchar(25) DEFAULT '' COMMENT '银行卡号';
+    ADD COLUMN `bank`        varchar(25) DEFAULT '' COMMENT '开户行',
+    ADD COLUMN `card_number` varchar(25) DEFAULT '' COMMENT '银行卡号'
+;
