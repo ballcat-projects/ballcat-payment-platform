@@ -44,7 +44,8 @@ public class VirtualManager {
 	 * @author lingting 2021-06-07 22:50
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project) throws PaymentException {
+	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project) throws PaymentException, MixException {
+		model.valid();
 		final Pay pay = payService.virtualCreate(model, project);
 		final MixVirtualPayResponse.Data data = new MixVirtualPayResponse.Data();
 		data.setAddress(pay.getAddress());
@@ -54,7 +55,8 @@ public class VirtualManager {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public void submit(MixVirtualSubmitModel model) throws PaymentException {
+	public void submit(MixVirtualSubmitModel model) throws PaymentException, MixException {
+		model.valid();
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非虚拟支付 或者 非等待支付状态
 		if (!pay.getCurrency().getVirtual() || !PayStatus.WAIT.equals(pay.getStatus())) {
@@ -70,7 +72,8 @@ public class VirtualManager {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public MixVirtualRetryResponse.Data retry(MixVirtualRetryModel model) throws PaymentException {
+	public MixVirtualRetryResponse.Data retry(MixVirtualRetryModel model) throws PaymentException, MixException {
+		model.valid();
 		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
 		// 非失败支付 或 重试结束时间小于等于当前时间
 		if (!PayStatus.RETRY.equals(pay.getStatus()) || pay.getRetryEndTime().compareTo(LocalDateTime.now()) < 1) {

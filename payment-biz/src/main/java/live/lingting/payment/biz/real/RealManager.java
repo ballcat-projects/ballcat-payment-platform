@@ -19,6 +19,7 @@ import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.Mode;
 import live.lingting.payment.sdk.enums.NotifyStatus;
 import live.lingting.payment.sdk.enums.PayStatus;
+import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.sdk.model.MixRealPayModel;
 import live.lingting.payment.sdk.response.MixRealPayResponse;
 import live.lingting.payment.wx.WxPay;
@@ -39,7 +40,8 @@ public class RealManager {
 
 	@Transactional(rollbackFor = Exception.class)
 	public MixRealPayResponse.Data pay(Project project, MixRealPayModel model)
-			throws AlipayApiException, PaymentException {
+			throws AlipayApiException, PaymentException, MixException {
+		model.valid();
 		Pay pay = new Pay().setProjectId(project.getId()).setProjectTradeNo(model.getProjectTradeNo())
 				.setThirdPartTradeNo(model.getMode().equals(Mode.TRANSFER) ? model.getThirdPartTradeNo() : "")
 				.setStatus(PayStatus.WAIT)
@@ -68,7 +70,8 @@ public class RealManager {
 		}
 	}
 
-	private MixRealPayResponse.Data aliPay(Pay pay, MixRealPayModel model) throws AlipayApiException, PaymentException {
+	private MixRealPayResponse.Data aliPay(Pay pay, MixRealPayModel model) throws AlipayApiException, PaymentException, MixException {
+		model.valid();
 		MixRealPayResponse.Data data = new MixRealPayResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
 		if (model.getMode().equals(Mode.QR)) {
@@ -90,7 +93,8 @@ public class RealManager {
 		return data;
 	}
 
-	private MixRealPayResponse.Data wxPay(Pay pay, MixRealPayModel model) throws PaymentException {
+	private MixRealPayResponse.Data wxPay(Pay pay, MixRealPayModel model) throws PaymentException, MixException {
+		model.valid();
 		MixRealPayResponse.Data data = new MixRealPayResponse.Data();
 		data.setTradeNo(pay.getTradeNo());
 		if (model.getMode().equals(Mode.QR)) {
