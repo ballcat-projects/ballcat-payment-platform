@@ -186,6 +186,27 @@ public interface PayMapper extends BaseMapper<Pay> {
 	}
 
 	/**
+	 * 虚拟货币支付重新提交
+	 * @param tradeNo 交易号
+	 * @param hash 新hash
+	 * @return boolean
+	 * @author lingting 2021-06-10 10:56
+	 */
+	default boolean virtualRetrySubmit(String tradeNo, String hash) {
+		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
+				// 限定支付信息
+				.eq(Pay::getTradeNo, tradeNo)
+				// 如果hash值不为空, 则更新hash
+				.set(StringUtils.hasText(hash), Pay::getThirdPartTradeNo, hash)
+				// 通知状态更新为等待通知
+				.set(Pay::getNotifyStatus, NotifyStatus.WAIT)
+				// 状态更新为等待支付
+				.set(Pay::getStatus, PayStatus.WAIT);
+
+		return SqlHelper.retBool(update(null, wrapper));
+	}
+
+	/**
 	 * 对指定支付进行通知上锁
 	 * @param pay 支付信息
 	 * @return boolean

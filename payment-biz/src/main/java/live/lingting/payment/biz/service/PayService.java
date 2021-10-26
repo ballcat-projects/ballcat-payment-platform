@@ -109,6 +109,15 @@ public interface PayService extends IService<Pay> {
 	boolean virtualRetry(Pay pay, String hash) throws PaymentException;
 
 	/**
+	 * 虚拟货币支付 重新提交
+	 * @param pay 支付信息
+	 * @param hash 新hash
+	 * @return boolean
+	 * @author lingting 2021-10-26 17:01
+	 */
+	boolean virtualRetrySubmit(Pay pay, String hash) throws PaymentException;
+
+	/**
 	 * 对指定支付进行通知上锁
 	 * @param pay 支付信息
 	 * @return boolean

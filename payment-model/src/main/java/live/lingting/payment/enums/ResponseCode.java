@@ -114,6 +114,10 @@ public enum ResponseCode {
 	 * 已存在相同支付配置!
 	 */
 	PAYMENT_CONFIG_EXIST(233020, "已存在相同支付配置!"),
+	/**
+	 * 重新提交失败
+	 */
+	RETRY_SUBMIT_FAIL(233021, "重新提交失败!"),
 
 	;
 

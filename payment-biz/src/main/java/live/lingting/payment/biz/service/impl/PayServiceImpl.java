@@ -157,6 +157,19 @@ public class PayServiceImpl extends ServiceImpl<PayMapper, Pay> implements PaySe
 	}
 
 	@Override
+	public boolean virtualRetrySubmit(Pay pay, String hash) throws PaymentException {
+		// 第二次请求的hash与第一次提交的一致
+		if (hash.equals(pay.getThirdPartTradeNo())) {
+			hash = "";
+		}
+		if (StringUtils.hasText(hash)) {
+			validateThirdTradeNo(pay, hash);
+		}
+
+		return baseMapper.virtualRetrySubmit(pay.getTradeNo(), hash);
+	}
+
+	@Override
 	public boolean notifying(Pay pay) {
 		return baseMapper.notifying(pay);
 	}
@@ -172,7 +185,7 @@ public class PayServiceImpl extends ServiceImpl<PayMapper, Pay> implements PaySe
 				// thirdTradeNo
 				.eq(Pay::getThirdPartTradeNo, thirdTradeNo)
 				// 限制状态
-				.in(Pay::getStatus, PayStatus.WAIT, PayStatus.SUCCESS);
+				.in(Pay::getStatus, PayStatus.WAIT, PayStatus.RETRY, PayStatus.SUCCESS);
 
 		if (baseMapper.selectCount(wrapper) > 0) {
 			throw new PaymentException(ResponseCode.TRADE_NO_EXIST);

@@ -15,8 +15,10 @@ import live.lingting.payment.entity.Project;
 import live.lingting.payment.enums.ResponseCode;
 import live.lingting.payment.exception.PaymentException;
 import live.lingting.payment.sdk.enums.PayStatus;
+import live.lingting.payment.sdk.exception.MixException;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
 import live.lingting.payment.sdk.model.MixVirtualRetryModel;
+import live.lingting.payment.sdk.model.MixVirtualRetrySubmitModel;
 import live.lingting.payment.sdk.model.MixVirtualSubmitModel;
 import live.lingting.payment.sdk.response.MixVirtualPayResponse;
 import live.lingting.payment.sdk.response.MixVirtualRetryResponse;
@@ -44,7 +46,8 @@ public class VirtualManager {
 	 * @author lingting 2021-06-07 22:50
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project) throws PaymentException, MixException {
+	public MixVirtualPayResponse.Data pay(MixVirtualPayModel model, Project project)
+			throws PaymentException, MixException {
 		model.valid();
 		final Pay pay = payService.virtualCreate(model, project);
 		final MixVirtualPayResponse.Data data = new MixVirtualPayResponse.Data();
@@ -90,6 +93,15 @@ public class VirtualManager {
 		data.setTradeNo(pay.getTradeNo());
 		data.setRetryEndTime(pay.getRetryEndTime());
 		return data;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public void retrySubmit(MixVirtualRetrySubmitModel model) throws PaymentException, MixException {
+		model.valid();
+		Pay pay = payService.getByNo(model.getTradeNo(), model.getProjectTradeNo());
+		if (!payService.virtualRetrySubmit(pay, model.getHash())) {
+			throw new PaymentException(ResponseCode.RETRY_SUBMIT_FAIL);
+		}
 	}
 
 	@Transactional(rollbackFor = Exception.class)

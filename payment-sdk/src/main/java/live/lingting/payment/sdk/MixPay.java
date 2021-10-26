@@ -18,6 +18,7 @@ import live.lingting.payment.sdk.model.MixRateModel;
 import live.lingting.payment.sdk.model.MixRealPayModel;
 import live.lingting.payment.sdk.model.MixVirtualPayModel;
 import live.lingting.payment.sdk.model.MixVirtualRetryModel;
+import live.lingting.payment.sdk.model.MixVirtualRetrySubmitModel;
 import live.lingting.payment.sdk.model.MixVirtualSubmitModel;
 import live.lingting.payment.sdk.request.MixBankRequest;
 import live.lingting.payment.sdk.request.MixForciblyFailRequest;
@@ -27,6 +28,7 @@ import live.lingting.payment.sdk.request.MixRateRequest;
 import live.lingting.payment.sdk.request.MixRealPayRequest;
 import live.lingting.payment.sdk.request.MixVirtualPayRequest;
 import live.lingting.payment.sdk.request.MixVirtualRetryRequest;
+import live.lingting.payment.sdk.request.MixVirtualRetrySubmitRequest;
 import live.lingting.payment.sdk.request.MixVirtualSubmitRequest;
 import live.lingting.payment.sdk.response.MixBankResponse;
 import live.lingting.payment.sdk.response.MixForciblyFailResponse;
@@ -36,6 +38,7 @@ import live.lingting.payment.sdk.response.MixRateResponse;
 import live.lingting.payment.sdk.response.MixRealPayResponse;
 import live.lingting.payment.sdk.response.MixVirtualPayResponse;
 import live.lingting.payment.sdk.response.MixVirtualRetryResponse;
+import live.lingting.payment.sdk.response.MixVirtualRetrySubmitResponse;
 import live.lingting.payment.sdk.response.MixVirtualSubmitResponse;
 
 /**
@@ -177,6 +180,28 @@ public class MixPay {
 		return getClient().execute(request);
 	}
 
+	public MixVirtualRetrySubmitResponse virtualRetrySubmit(String tradeNo, String projectTradeNo, String hash)
+			throws MixException {
+		MixVirtualRetrySubmitModel model = new MixVirtualRetrySubmitModel();
+		model.setTradeNo(tradeNo);
+		model.setProjectTradeNo(projectTradeNo);
+		model.setHash(hash);
+		return virtualRetrySubmit(model);
+	}
+
+	public MixVirtualRetrySubmitResponse virtualRetrySubmit(MixVirtualRetrySubmitModel model) throws MixException {
+		MixVirtualRetrySubmitRequest request = new MixVirtualRetrySubmitRequest();
+		request.setModel(model);
+		return getClient().execute(request);
+	}
+
+	/**
+	 * 银行卡查询
+	 * @param mark 支付配置标识
+	 * @param tp 第三方
+	 * @return live.lingting.payment.sdk.response.MixBankResponse
+	 * @author lingting 2021-10-26 16:56
+	 */
 	public MixBankResponse bank(String mark, ThirdPart tp) throws MixException {
 		MixBankModel model = new MixBankModel();
 		model.setMark(mark);
