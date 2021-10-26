@@ -196,6 +196,12 @@ public interface PayMapper extends BaseMapper<Pay> {
 		Wrapper<Pay> wrapper = Wrappers.<Pay>lambdaUpdate()
 				// 限定支付信息
 				.eq(Pay::getTradeNo, tradeNo)
+				// 限制为USDT
+				.in(Pay::getCurrency, Currency.VIRTUAL_LIST)
+				// 限定已提交hash
+				.ne(Pay::getThirdPartTradeNo, "")
+				// 限定状态
+				.in(Pay::getStatus, PayStatus.RETRY, PayStatus.FAIL)
 				// 如果hash值不为空, 则更新hash
 				.set(StringUtils.hasText(hash), Pay::getThirdPartTradeNo, hash)
 				// 通知状态更新为等待通知
