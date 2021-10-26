@@ -38,6 +38,8 @@ public class SdkConstants {
 
 	public static final String MIX_RETRY_PAY_PATH = "pay/virtual/retry";
 
+	public static final String MIX_RETRY_SUBMIT_PAY_PATH = "pay/virtual/retry/submit";
+
 	public static final String MIX_FORCIBLY_RETRY_PATH = "forcibly/retry";
 
 	public static final String MIX_FORCIBLY_FAIL_PATH = "forcibly/fail";

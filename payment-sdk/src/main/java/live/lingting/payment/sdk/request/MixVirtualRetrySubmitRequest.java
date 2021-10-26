@@ -20,7 +20,7 @@ public class MixVirtualRetrySubmitRequest
 
 	@Override
 	public String getPath() {
-		return SdkConstants.MIX_RETRY_PAY_PATH;
+		return SdkConstants.MIX_RETRY_SUBMIT_PAY_PATH;
 	}
 
 }
