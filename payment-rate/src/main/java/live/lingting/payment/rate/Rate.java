@@ -5,14 +5,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 import live.lingting.payment.sdk.enums.Currency;
 
 /**
  * @author lingting 2021/6/11 15:53
  */
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class Rate {
 

@@ -1,5 +1,6 @@
 package live.lingting.payment.rate;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,6 +23,12 @@ public class RateConfiguration {
 	@ConditionalOnProperty(prefix = "mix.rate.yy", name = "code")
 	public YyRate yyRate() {
 		return new YyRate(properties.getYy());
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(Rate.class)
+	public Rate lingtingRate(List<BaseRate> rates) {
+		return new Rate(rates);
 	}
 
 }
