@@ -160,4 +160,8 @@ public class NotifyRunnable implements Runnable {
 		return JacksonUtils.toJson(callback);
 	}
 
+	public String getId() {
+		return notify.getId().toString();
+	}
+
 }
