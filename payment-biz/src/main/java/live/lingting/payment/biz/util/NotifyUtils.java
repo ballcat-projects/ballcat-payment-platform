@@ -38,8 +38,8 @@ public class NotifyUtils {
 				TimeUnit.SECONDS,
 				// 等待任务存放队列 - 队列最大值
 				// 这样配置. 当积压任务数量为 队列最大值 时. 会创建新线程来执行任务. 直到线程总数达到 最大线程数
-				// 需要及时处理. 队列设置为0.
-				new LinkedBlockingQueue<>(0),
+				// 需要及时处理. 队列设置为1.
+				new LinkedBlockingQueue<>(1),
 				// 新线程创建工厂 - LinkedBlockingQueue 不支持线程优先级. 所以直接新增线程就可以了
 				runnable -> {
 					if (runnable instanceof NotifyRunnable) {
